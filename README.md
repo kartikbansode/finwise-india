@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
@@ -34,3 +35,53 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+=======
+# FinWise India
+
+FinWise India is a finance management platform built for Indian freelancers, consultants, agencies, and small businesses.
+
+## Features
+
+* Income Tracking
+* Expense Tracking
+* Invoice Management
+* Tax Center
+* GST Tracking
+* Investment Tracking
+* Financial Dashboard
+* User Onboarding
+* Secure Authentication with Supabase
+
+## Tech Stack
+
+* Next.js 15/16
+* TypeScript
+* Tailwind CSS
+* Supabase
+* Recharts
+* Lucide Icons
+
+## Setup
+
+Clone the repository:
+
+npm install
+
+Create .env.local:
+
+NEXT_PUBLIC_SUPABASE_URL=YOUR_URL
+
+NEXT_PUBLIC_SUPABASE_ANON_KEY=YOUR_KEY
+
+Run:
+
+npm run dev
+
+Open:
+
+http://localhost:3000
+
+## Version
+
+v1.0.0 Initial Release
+>>>>>>> daeff229f5bf72ad168cc9a857a1d1817b86c33c

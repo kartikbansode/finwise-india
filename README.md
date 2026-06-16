@@ -1,6 +1,12 @@
 # FinWise India
 
-> Smart Finance & Tax Management Platform for Indian Freelancers, Consultants, Agencies & Small Businesses
+>**Version:** 1.0.0
+>
+>**Release Date:** June 16, 2026
+
+
+---
+Smart Finance & Tax Management Platform for Indian Freelancers, Consultants, Agencies & Small Businesses
 
 ---
 

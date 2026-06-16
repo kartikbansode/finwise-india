@@ -1,6 +1,5 @@
 -- ============================================================
 -- FinWise India — Database Schema
--- Paste this entire file into Supabase SQL Editor and click RUN
 -- ============================================================
 
 -- 1. PROFILES TABLE
@@ -108,8 +107,3 @@ create trigger on_auth_user_created
   after insert on auth.users
   for each row execute procedure public.handle_new_user();
 
--- ============================================================
--- DONE. After running this, go to Table Editor in Supabase
--- to confirm all 4 tables appear: profiles, income_entries,
--- expense_entries, subscriptions
--- ============================================================

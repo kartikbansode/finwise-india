@@ -1,36 +1,217 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# FinWise India
+
+> Smart Finance & Tax Management Platform for Indian Freelancers, Consultants, Agencies & Small Businesses
+
+---
+
+## About
+
+FinWise India is a modern finance management platform designed specifically for Indian freelancers, consultants, creators, agencies, and small businesses.
+
+The platform helps users:
+
+- Track Income
+- Monitor Expenses
+- Analyze Cash Flow
+- Manage Invoices
+- Track Investments
+- Understand Business Performance
+- Estimate Taxes & GST
+
+---
+
+## Features
+
+### 📊 Dashboard
+
+- Financial Overview
+- Revenue Tracking
+- Expense Analytics
+- Business Insights
+
+### 💰 Income Tracking
+
+- Add Income Sources
+- Revenue History
+- Monthly Analysis
+
+### 💸 Expense Management
+
+- Track Expenses
+- Categorize Spending
+- Expense Reports
+
+### 🧾 Invoice Tracker
+
+- Create Invoices
+- Manage Client Records
+- Track Invoice Status
+- Payment Monitoring
+
+### 🧮 Tax Center
+
+- Tax Estimation
+- GST Support
+- Tax Planning
+
+### ⚙️ Settings
+
+- Profile Management
+- Business Information
+- Tax Preferences
+
+---
+
+## Tech Stack
+
+### Frontend
+
+- Next.js
+- React
+- TypeScript
+- Tailwind CSS
+- ShadCN UI
+
+### Backend
+
+- Supabase
+- PostgreSQL
+
+### Authentication
+
+- Supabase Auth
+- Google Login
+
+### Charts
+
+- Recharts
+
+---
 
 ## Getting Started
 
-First, run the development server:
+### Clone Repository
+
+```bash
+git clone https://github.com/kartikbansode/finwise-india.git
+```
+
+### Install Dependencies
+
+```bash
+npm install
+```
+
+### Create Environment File
+
+Create:
+
+```env
+.env.local
+```
+
+Add:
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=YOUR_SUPABASE_URL
+NEXT_PUBLIC_SUPABASE_ANON_KEY=YOUR_SUPABASE_ANON_KEY
+```
+
+### Run Project
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```text
+http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## ⚠️ Copyright & Usage Notice
 
-To learn more about Next.js, take a look at the following resources:
+> Copyright © 2026 Kartik Bansode.
+>
+> All Rights Reserved.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+This repository contains proprietary software.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+You may **NOT**:
 
-## Deploy on Vercel
+- Copy this project
+- Reuse the source code
+- Redistribute the project
+- Sell the project
+- Use the project commercially
+- Create derivative works
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+without explicit written permission from the author.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Unauthorized use, reproduction, or distribution is strictly prohibited.
+
+---
+
+## Contact
+
+**Kartik Bansode**
+
+GitHub: https://github.com/kartikbansode
+
+Email: bansodekartik00@gmail.com 
+
+Repository: https://github.com/kartikbansode/finwise-india
+
+For licensing, collaboration, or business inquiries, please contact the author.
+
+---
+
+## Disclaimer
+
+FinWise India is intended for financial management and educational purposes only.
+
+This software does not provide legal, tax, accounting, or investment advice.
+
+Users should consult qualified professionals before making important financial or tax-related decisions.
+
+---
+
+## ❤️ Built With
+
+- Next.js
+- React
+- TypeScript
+- Tailwind CSS
+- Supabase
+- PostgreSQL
+
+---
+
+---
+
+## Development Status
+
+> **FinWise India is currently under active development.**
+
+This project is in its early stages and features may change, improve, or be replaced in future releases.
+
+### Important Notice
+
+While every effort has been made to ensure accuracy, FinWise India may:
+
+- Contain bugs or unexpected behavior
+- Produce incorrect financial calculations
+- Produce incorrect tax estimates
+- Produce inaccurate GST calculations
+- Contain incomplete features
+- Generate incorrect financial insights
+
+Users should **not rely solely on this software** for making important financial, tax, legal, accounting, or investment decisions.
+
+Always verify calculations independently and consult a qualified Chartered Accountant (CA), tax professional, accountant, or financial advisor before taking any action based on information provided by this application.
+
+The author shall not be held responsible for any financial loss, tax liability, penalties, damages, or consequences resulting from the use of this software.
+
+Thank you for using FinWise India and helping improve the platform through feedback and testing.

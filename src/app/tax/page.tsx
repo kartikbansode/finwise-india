@@ -53,9 +53,6 @@ export default function TaxPage() {
       0,
     );
 
-    setMonthlyIncome(totalIncome);
-    setMonthlyExpenses(totalExpenses);
-
     const projectedAnnual = totalIncome * 12;
 
     setAnnualIncome(projectedAnnual);
@@ -156,21 +153,22 @@ p-5
                   : "Normal"}
             </h2>
           </div>
-        </div>
-
-        <div
-          className="
+          <div
+            className="
   rounded-xl
   border border-amber-500/30
   bg-amber-500/10
   p-5
   "
-        >
-          <p className="text-gray-500 dark:text-gray-400 text-sm">GST Status</p>
+          >
+            <p className="text-gray-500 dark:text-gray-400 text-sm">
+              GST Status
+            </p>
 
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mt-2">
-            {profile?.gst_registered ? "Registered" : "Not Registered"}
-          </h2>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mt-2">
+              {profile?.gst_registered ? "Registered" : "Not Registered"}
+            </h2>
+          </div>
         </div>
 
         <div className="grid md:grid-cols-2 gap-4 mb-8">
@@ -185,9 +183,9 @@ p-6"
             </h3>
 
             <div className="space-y-2">
-              <p>
+              <p className="text-gray-700 dark:text-gray-300">
                 Annual Turnover:
-                <span className="font-medium ml-2">
+                <span className="font-medium ml-2 text-gray-900 dark:text-white">
                   ₹{annualIncome.toLocaleString("en-IN")}
                 </span>
               </p>
@@ -205,14 +203,14 @@ p-6"
             </h3>
 
             <div className="space-y-2">
-              <p>
+              <p className="text-gray-700 dark:text-gray-300">
                 Current Method:
-                <span className="font-medium ml-2">{profile?.tax_method}</span>
+                <span className="font-medium ml-2 text-gray-900 dark:text-white">{profile?.tax_method}</span>
               </p>
 
-              <p>
+              <p className="text-gray-700 dark:text-gray-300">
                 Taxable Income:
-                <span className="font-medium ml-2">
+                <span className="font-medium ml-2 text-gray-900 dark:text-white">
                   ₹{taxableIncome.toLocaleString("en-IN")}
                 </span>
               </p>

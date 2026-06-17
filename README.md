@@ -2,7 +2,7 @@
 
 >**Version:** 1.2.0 ( Complete Dark Mode support )
 >
->**Release Date:** June 17, 2026
+>**Release Date:** June 18, 2026
 
 
 ---

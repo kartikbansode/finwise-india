@@ -302,22 +302,33 @@ py-3
             </p>
           </div>
 
-          <div className="pt-4 border-t border-gray-200 dark:border-zinc-800">
+          <div className="pt-6 border-t border-gray-200 dark:border-zinc-800">
             <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
               Site Settings
             </h2>
 
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1 mb-4">
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
               Customize your FinWise experience.
             </p>
 
-            <div className="flex items-center justify-between">
+            <div
+              className="
+    mt-5
+    rounded-xl
+    border border-gray-200 dark:border-zinc-800
+    bg-gray-50 dark:bg-zinc-950
+    p-4
+    flex
+    items-center
+    justify-between
+    "
+            >
               <div>
                 <h3 className="font-medium text-gray-900 dark:text-white">
                   Dark Mode
                 </h3>
 
-                <p className="text-sm text-gray-500 dark:text-gray-400">
+                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
                   Switch between light and dark appearance.
                 </p>
               </div>

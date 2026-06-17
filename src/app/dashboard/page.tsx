@@ -210,7 +210,7 @@ export default function DashboardPage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-          <div className="bg-white rounded-xl border p-5">
+          <div className="bg-emerald-50 border-emerald-200 rounded-xl border p-5">
             <p className="text-xs text-gray-500 uppercase">Monthly Profit</p>
 
             <p className="text-2xl font-bold text-emerald-600 mt-1">
@@ -218,7 +218,7 @@ export default function DashboardPage() {
             </p>
           </div>
 
-          <div className="bg-white rounded-xl border p-5">
+          <div className="bg-blue-50 border-blue-200 rounded-xl border p-5">
             <p className="text-xs text-gray-500 uppercase">Savings Rate</p>
 
             <p className="text-2xl font-bold text-blue-600 mt-1">
@@ -226,7 +226,7 @@ export default function DashboardPage() {
             </p>
           </div>
 
-          <div className="bg-white rounded-xl border p-5">
+          <div className="bg-amber-50 border-amber-200 rounded-xl border p-5">
             <p className="text-xs text-gray-500 uppercase">Tax Reserve</p>
 
             <p className="text-2xl font-bold text-amber-600 mt-1">
@@ -234,7 +234,7 @@ export default function DashboardPage() {
             </p>
           </div>
 
-          <div className="bg-white rounded-xl border p-5">
+          <div className="bg-purple-50 border-purple-200 rounded-xl border p-5">
             <p className="text-xs text-gray-500 uppercase">Expense Ratio</p>
 
             <p className="text-2xl font-bold text-purple-600 mt-1">
@@ -349,6 +349,24 @@ export default function DashboardPage() {
             <p className="text-sm text-red-600 mt-1">
               Record business expenses
             </p>
+          </Link>
+
+          <Link
+            href="/invoices"
+            className="bg-blue-50 border border-blue-200 rounded-xl p-5 hover:shadow-md transition-all"
+          >
+            <p className="font-semibold text-blue-700">Invoices</p>
+
+            <p className="text-sm text-blue-600 mt-1">Manage invoices</p>
+          </Link>
+
+          <Link
+            href="/tax-center"
+            className="bg-amber-50 border border-amber-200 rounded-xl p-5 hover:shadow-md transition-all"
+          >
+            <p className="font-semibold text-amber-700">Tax Center</p>
+
+            <p className="text-sm text-amber-600 mt-1">View tax obligations</p>
           </Link>
         </div>
 

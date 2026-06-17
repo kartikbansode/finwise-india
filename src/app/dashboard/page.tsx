@@ -243,11 +243,6 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        <div className="mb-6 w-full hiddenscrollbar">
-          <IncomeTrendChart income={monthlyIncome} />
-          <ExpensePieChart data={expenseData} />
-        </div>
-
         {monthlyExpenses > monthlyIncome && (
           <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-6">
             <p className="font-medium text-red-700">
@@ -255,6 +250,11 @@ export default function DashboardPage() {
             </p>
           </div>
         )}
+
+        <div className="mb-6 w-full hiddenscrollbar">
+          <IncomeTrendChart income={monthlyIncome} />
+          <ExpensePieChart data={expenseData} />
+        </div>
 
         {/* Tax Method */}
         <div className="bg-white rounded-xl border p-5 mb-6">

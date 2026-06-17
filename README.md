@@ -1,14 +1,27 @@
 # FinWise India
 
->**Version:** 1.0.0
+>**Version:** 1.0.1
 >
->**Release Date:** June 16, 2026
+>**Release Date:** June 17, 2026
 
 
 ---
 Smart Finance & Tax Management Platform for Indian Freelancers, Consultants, Agencies & Small Businesses
 
 ---
+
+## What's new in v1.0.1
+
+- Fixed onboarding flash
+- Fixed dashboard loading flash
+- Added homepage session detection
+- Improved login and signup redirects
+- Improved logout flow
+- Protected authenticated routes
+- Improved session persistence experience
+
+---
+
 
 ## About
 

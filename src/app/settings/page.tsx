@@ -108,7 +108,7 @@ space-y-6
 "
         >
           <div>
-            <div className="border-b border-gray-200 dark:border-zinc-800 pb-6">
+            <div className="pb-4 mb-6">
               <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
                 Personal Information
               </h2>
@@ -117,24 +117,26 @@ space-y-6
                 Manage your profile information.
               </p>
             </div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Full name
+
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Full Name
             </label>
+
             <input
               type="text"
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
               className="
-w-full
-bg-white dark:bg-zinc-950
-border border-gray-300 dark:border-zinc-700
-text-gray-900 dark:text-white
-rounded-xl
-px-4 py-3
-focus:outline-none
-focus:ring-2
-focus:ring-emerald-500
-"
+      w-full
+      bg-white dark:bg-zinc-950
+      border border-gray-300 dark:border-zinc-700
+      text-gray-900 dark:text-white
+      rounded-xl
+      px-4 py-3
+      focus:outline-none
+      focus:ring-2
+      focus:ring-emerald-500
+    "
             />
           </div>
 

@@ -79,23 +79,48 @@ export default function SettingsPage() {
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-gray-50 p-10">
-        <p className="text-gray-500">Loading...</p>
+      <main className="ml-64 min-h-screen bg-gray-50 dark:bg-zinc-950 p-10">
+        <p className="text-gray-500 dark:text-gray-400">Loading...</p>
       </main>
     );
   }
 
   return (
-    <main className="min-h-screen bg-gray-50 p-6 md:p-10">
-      <div className="w-full max-w-5xl">
-        <h1 className="text-2xl font-bold text-gray-900 mb-6">Settings</h1>
+    <main className="ml-64 min-h-screen bg-gray-50 dark:bg-zinc-950 p-6 md:p-10">
+      <div className="w-full">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
+          Settings
+        </h1>
+
+        <p className="text-gray-500 dark:text-gray-400 mb-6">
+          Manage your tax preferences, GST information and business profile.
+        </p>
 
         <form
           onSubmit={handleSave}
-          className="bg-white rounded-xl border border-gray-200 p-6 space-y-6"
+          className="
+bg-white dark:bg-zinc-900
+border border-gray-200 dark:border-zinc-800
+rounded-xl
+p-6
+space-y-6
+"
         >
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              className="
+w-full
+bg-white dark:bg-zinc-950
+border border-gray-300 dark:border-zinc-700
+text-gray-900 dark:text-white
+rounded-lg
+px-3 py-2
+text-sm
+focus:outline-none
+focus:ring-2
+focus:ring-emerald-500
+"
+            >
               Full name
             </label>
             <input
@@ -107,21 +132,21 @@ export default function SettingsPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               I am a
             </label>
             <div className="grid grid-cols-2 gap-3">
               <button
                 type="button"
                 onClick={() => setUserType("freelancer")}
-                className={`border rounded-lg px-4 py-3 text-sm font-medium ${userType === "freelancer" ? "border-emerald-600 bg-emerald-50 text-emerald-700" : "border-gray-300 text-gray-600"}`}
+                className={`border rounded-lg px-4 py-3 text-sm font-medium ${userType === "freelancer" ? "border-emerald-600 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400" : "border-gray-300 dark:border-zinc-700 text-gray-600 dark:text-gray-400"}`}
               >
                 Freelancer
               </button>
               <button
                 type="button"
                 onClick={() => setUserType("business")}
-                className={`border rounded-lg px-4 py-3 text-sm font-medium ${userType === "business" ? "border-emerald-600 bg-emerald-50 text-emerald-700" : "border-gray-300 text-gray-600"}`}
+                className={`border rounded-lg px-4 py-3 text-sm font-medium ${userType === "business" ? "border-emerald-600 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400" : "border-gray-300 dark:border-zinc-700 text-gray-600 dark:text-gray-400"}`}
               >
                 Business owner
               </button>
@@ -129,21 +154,21 @@ export default function SettingsPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Tax regime
             </label>
             <div className="grid grid-cols-2 gap-3">
               <button
                 type="button"
                 onClick={() => setTaxRegime("new")}
-                className={`border rounded-lg px-4 py-3 text-sm font-medium ${taxRegime === "new" ? "border-emerald-600 bg-emerald-50 text-emerald-700" : "border-gray-300 text-gray-600"}`}
+                className={`border rounded-lg px-4 py-3 text-sm font-medium ${taxRegime === "new" ? "border-emerald-600 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400" : "border-gray-300 dark:border-zinc-700 text-gray-600 dark:text-gray-400"}`}
               >
                 New regime
               </button>
               <button
                 type="button"
                 onClick={() => setTaxRegime("old")}
-                className={`border rounded-lg px-4 py-3 text-sm font-medium ${taxRegime === "old" ? "border-emerald-600 bg-emerald-50 text-emerald-700" : "border-gray-300 text-gray-600"}`}
+                className={`border rounded-lg px-4 py-3 text-sm font-medium ${taxRegime === "old" ? "border-emerald-600 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400" : "border-gray-300 dark:border-zinc-700 text-gray-600 dark:text-gray-400"}`}
               >
                 Old regime
               </button>
@@ -151,7 +176,7 @@ export default function SettingsPage() {
           </div>
 
           <div className="flex items-center justify-between">
-            <label className="text-sm font-medium text-gray-700">
+            <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
               GST registered?
             </label>
             <button
@@ -165,14 +190,21 @@ export default function SettingsPage() {
             </button>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Tax Method
             </label>
 
             <select
               value={taxMethod}
               onChange={(e) => setTaxMethod(e.target.value)}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2"
+              className="
+w-full
+bg-white dark:bg-zinc-950
+border border-gray-300 dark:border-zinc-700
+text-gray-900 dark:text-white
+rounded-lg
+px-3 py-2
+"
             >
               <option value="normal">Normal Taxation</option>
 
@@ -181,12 +213,12 @@ export default function SettingsPage() {
               <option value="44ad">Section 44AD (Businesses)</option>
             </select>
 
-            <p className="text-xs text-gray-500 mt-2">
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
               Choose how your taxable income should be calculated.
             </p>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Estimated monthly expenses (₹)
             </label>
             <input
@@ -195,37 +227,47 @@ export default function SettingsPage() {
               onChange={(e) => setMonthlyExpenseEstimate(e.target.value)}
               className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
             />
-            <p className="text-xs text-gray-500 mt-1">
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
               Used to calculate your safe-to-spend amount.
             </p>
           </div>
           <div>
-  <label className="block text-sm font-medium mb-1">
-    GST Number
-  </label>
+            <label className="block text-sm font-medium mb-1">GST Number</label>
 
-  <input
-    value={gstNumber}
-    onChange={(e) =>
-      setGstNumber(e.target.value)
-    }
-    className="w-full border rounded-xl px-4 py-3"
-  />
-</div>
+            <input
+              value={gstNumber}
+              onChange={(e) => setGstNumber(e.target.value)}
+              className="
+w-full
+bg-white dark:bg-zinc-950
+border border-gray-300 dark:border-zinc-700
+text-gray-900 dark:text-white
+rounded-xl
+px-4
+py-3
+"
+            />
+          </div>
 
-<div>
-  <label className="block text-sm font-medium mb-1">
-    Company Address
-  </label>
+          <div>
+            <label className="block text-sm font-medium mb-1">
+              Company Address
+            </label>
 
-  <textarea
-    value={companyAddress}
-    onChange={(e) =>
-      setCompanyAddress(e.target.value)
-    }
-    className="w-full border rounded-xl px-4 py-3"
-  />
-</div>
+            <textarea
+              value={companyAddress}
+              onChange={(e) => setCompanyAddress(e.target.value)}
+              className="
+w-full
+bg-white dark:bg-zinc-950
+border border-gray-300 dark:border-zinc-700
+text-gray-900 dark:text-white
+rounded-xl
+px-4
+py-3
+"
+            />
+          </div>
           <button
             type="submit"
             disabled={saving}
@@ -234,7 +276,7 @@ export default function SettingsPage() {
             {saving ? "Saving..." : "Save settings"}
           </button>
           {saved && (
-            <span className="ml-3 text-sm text-emerald-600">
+            <span className="ml-3 text-sm text-emerald-600 dark:text-emerald-400">
               Saved successfully
             </span>
           )}

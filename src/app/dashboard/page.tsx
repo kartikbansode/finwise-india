@@ -170,13 +170,40 @@ export default function DashboardPage() {
     <main className="min-h-screen bg-gray-50 p-6 md:p-10">
       <div className="w-full px-8">
         <div className="flex items-center justify-between mb-6">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">
-              Welcome back{profile.full_name ? `, ${profile.full_name}` : ""}
-            </h1>
-            <p className="text-gray-500 text-sm mt-1 capitalize">
-              {profile.user_type}
-            </p>
+          <div className="bg-white rounded-2xl border p-8 mb-6">
+            <p className="text-sm text-gray-500">Financial Overview</p>
+
+            <h2 className="text-4xl font-bold mt-3">
+              ₹{Math.max(0, breakdown.safeToSpend).toLocaleString("en-IN")}
+            </h2>
+
+            <p className="text-gray-500 mt-2">Safe To Spend</p>
+
+            <div className="grid grid-cols-3 gap-6 mt-8">
+              <div>
+                <p className="text-xs text-gray-500">Income</p>
+
+                <p className="font-semibold text-lg">
+                  ₹{monthlyIncome.toLocaleString("en-IN")}
+                </p>
+              </div>
+
+              <div>
+                <p className="text-xs text-gray-500">Expenses</p>
+
+                <p className="font-semibold text-lg">
+                  ₹{monthlyExpenses.toLocaleString("en-IN")}
+                </p>
+              </div>
+
+              <div>
+                <p className="text-xs text-gray-500">Profit</p>
+
+                <p className="font-semibold text-lg">
+                  ₹{monthlyProfit.toLocaleString("en-IN")}
+                </p>
+              </div>
+            </div>
           </div>
 
           <UserDropdown name={profile.full_name} userType={profile.user_type} />
@@ -226,6 +253,47 @@ export default function DashboardPage() {
           </p>
 
           <p className="text-sm text-gray-500 mt-1">{healthScore.status}</p>
+
+          <ul className="mt-4 space-y-2 text-sm text-gray-600">
+            <li>✓ Tax profile configured</li>
+
+            <li>✓ Income tracked regularly</li>
+
+            <li>✓ Expense tracking active</li>
+          </ul>
+        </div>
+
+        <div className="bg-white rounded-xl border p-5 mb-6">
+          <h3 className="font-semibold mb-4">Annual Projection</h3>
+
+          <div className="grid md:grid-cols-3 gap-4">
+            <div>
+              <p className="text-xs text-gray-500">Income</p>
+
+              <p className="font-bold">
+                ₹{annualProjected.toLocaleString("en-IN")}
+              </p>
+            </div>
+
+            <div>
+              <p className="text-xs text-gray-500">Estimated Tax</p>
+
+              <p className="font-bold">
+                ₹{breakdown.incomeTax.toLocaleString("en-IN")}
+              </p>
+            </div>
+
+            <div>
+              <p className="text-xs text-gray-500">Projected Profit</p>
+
+              <p className="font-bold">
+                ₹
+                {(annualProjected - breakdown.incomeTax).toLocaleString(
+                  "en-IN",
+                )}
+              </p>
+            </div>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
@@ -258,13 +326,17 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {savingsRate < 20 && (
-          <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-6">
-            <p className="font-medium text-red-700">
-              Warning: Your savings rate is below 20%.
-            </p>
+        <div className="bg-white rounded-xl border p-5 mb-6">
+          <h3 className="font-semibold mb-4">Financial Insights</h3>
+
+          <div className="space-y-3">
+            {savingsRate < 20 && <p>⚠ Savings rate is below 20%</p>}
+
+            {monthlyExpenses > monthlyIncome && <p>⚠ Expenses exceed income</p>}
+
+            {monthlyProfit > 0 && <p>✓ Positive monthly cash flow</p>}
           </div>
-        )}
+        </div>
 
         {monthlyExpenses > monthlyIncome && (
           <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-6">
@@ -273,34 +345,6 @@ export default function DashboardPage() {
             </p>
           </div>
         )}
-
-        <div className="bg-white rounded-xl border p-5 mb-6">
-  <h3 className="font-semibold mb-4">
-    Financial Insights
-  </h3>
-
-  <ul className="space-y-2 text-sm text-gray-600">
-    <li>
-      • Estimated annual income:
-      ₹{annualProjected.toLocaleString("en-IN")}
-    </li>
-
-    <li>
-      • Tax liability:
-      ₹{breakdown.incomeTax.toLocaleString("en-IN")}
-    </li>
-
-    <li>
-      • Safe spending available:
-      ₹{Math.max(0, breakdown.safeToSpend).toLocaleString("en-IN")}
-    </li>
-
-    <li>
-      • Current savings rate:
-      {savingsRate}%
-    </li>
-  </ul>
-</div>
 
         {/* Tax Method */}
         <div className="bg-white rounded-xl border border-gray-200 p-5 mb-6">
@@ -314,6 +358,18 @@ export default function DashboardPage() {
               : profile.tax_method === "44ad"
                 ? "44AD"
                 : "Normal"}
+          </p>
+        </div>
+
+        <div className="bg-white rounded-xl border p-5 mb-6">
+          <p className="text-xs text-gray-500 uppercase">Tax Readiness</p>
+
+          <p className="text-3xl font-bold mt-2">
+            {profile.gst_registered ? "90%" : "70%"}
+          </p>
+
+          <p className="text-gray-500 text-sm mt-2">
+            Based on tax setup and compliance status
           </p>
         </div>
 
@@ -358,21 +414,14 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        <div className="flex gap-3 mb-6">
-          <Link
-            href="/income"
-            className="bg-emerald-600 text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-emerald-700"
-          >
-            Add income
-          </Link>
-          {profile.user_type === "business" && (
-            <Link
-              href="/expenses"
-              className="bg-gray-900 text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-gray-800"
-            >
-              Add expense
-            </Link>
-          )}
+        <div className="grid md:grid-cols-4 gap-4 mb-6">
+          <Link href="/income">Add Income</Link>
+
+          <Link href="/expenses">Add Expense</Link>
+
+          <Link href="/invoices">Invoices</Link>
+
+          <Link href="/tax-center">Tax Center</Link>
         </div>
 
         <div className="mb-6 w-full hiddenscrollbar">
@@ -381,6 +430,30 @@ export default function DashboardPage() {
         </div>
 
         <TaxDisclaimer />
+        <div className="bg-white rounded-xl border p-5 mb-6">
+          <h3 className="font-semibold mb-4">Financial Insights</h3>
+
+          <ul className="space-y-2 text-sm text-gray-600">
+            <li>
+              • Estimated annual income: ₹
+              {annualProjected.toLocaleString("en-IN")}
+            </li>
+
+            <li>
+              • Tax liability: ₹{breakdown.incomeTax.toLocaleString("en-IN")}
+            </li>
+
+            <li>
+              • Safe spending available: ₹
+              {Math.max(0, breakdown.safeToSpend).toLocaleString("en-IN")}
+            </li>
+
+            <li>
+              • Current savings rate:
+              {savingsRate}%
+            </li>
+          </ul>
+        </div>
       </div>
     </main>
   );

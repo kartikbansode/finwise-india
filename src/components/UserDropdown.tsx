@@ -58,14 +58,14 @@ hover:shadow-md transition
 
       {open && (
         <div
-  className="
-  absolute right-0 mt-2 w-56
+          className="
+  absolute right-0 mt-2 w-64
   bg-white dark:bg-zinc-900
   border border-gray-200 dark:border-zinc-800
   rounded-xl shadow-lg
   z-50 overflow-hidden
 "
->
+        >
           <button
             onClick={() => router.push("/settings")}
             className="
@@ -89,7 +89,25 @@ hover:bg-gray-50 dark:hover:bg-zinc-800
             <User size={16} />
             Profile
           </button>
-          <ThemeToggle />
+          <div
+            className="
+  px-4 py-3
+  flex items-center justify-between
+  border-t border-gray-200 dark:border-zinc-800
+  "
+          >
+            <div>
+              <p className="text-sm font-medium text-gray-900 dark:text-white">
+                Dark Mode
+              </p>
+
+              <p className="text-xs text-gray-500 dark:text-gray-400">
+                Toggle appearance
+              </p>
+            </div>
+
+            <ThemeToggle />
+          </div>
 
           <div className="border-t border-gray-200 dark:border-zinc-800" />
 

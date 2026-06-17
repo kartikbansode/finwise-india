@@ -104,13 +104,14 @@ export default function DashboardPage() {
   }, []);
   if (checkingAuth || loading) {
     return (
-      <main className="min-h-screen flex items-center justify-center bg-gray-50">
+      <main className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-zinc-950">
         <div className="text-center">
           <div className="w-12 h-12 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
 
           <h2 className="text-xl font-semibold">Loading your workspace...</h2>
 
-          <p className="text-gray-500 mt-2">Please wait a moment.</p>
+          <p className="text-gray-500
+dark:text-gray-400 mt-2">Please wait a moment.</p>
         </div>
       </main>
     );
@@ -118,7 +119,7 @@ export default function DashboardPage() {
 
   if (!profile) {
     return (
-      <main className="min-h-screen bg-gray-50 p-10">
+      <main className="min-h-screen bg-gray-50 dark:bg-zinc-950 p-10">
         <p className="text-gray-700">Please complete your settings first.</p>
         <Link href="/settings" className="text-emerald-600 underline">
           Go to settings
@@ -167,21 +168,29 @@ export default function DashboardPage() {
   const nextDue = getNextAdvanceTaxDueDate();
 
   return (
-    <main className="min-h-screen bg-gray-50 p-6 md:p-10">
+    <main className="min-h-screen bg-gray-50 dark:bg-zinc-950 p-6 md:p-10">
       <div className="w-full">
         <div className="flex flex-col lg:flex-row lg:justify-between lg:items-start gap-6 mb-6">
-          <div className="bg-white rounded-2xl border p-8 lg:max-w-2xl">
-            <p className="text-sm text-gray-500">Financial Overview</p>
+          <div
+            className="bg-white
+dark:bg-zinc-900
+border
+dark:border-zinc-800 rounded-2xl border p-8 lg:max-w-2xl"
+          >
+            <p className="text-sm text-gray-500
+dark:text-gray-400">Financial Overview</p>
 
             <h2 className="text-4xl font-bold mt-3">
               ₹{Math.max(0, breakdown.safeToSpend).toLocaleString("en-IN")}
             </h2>
 
-            <p className="text-gray-500 mt-2">Available Balance</p>
+            <p className="text-gray-500
+dark:text-gray-400 mt-2">Available Balance</p>
 
             <div className="grid grid-cols-3 gap-6 mt-8">
               <div>
-                <p className="text-xs text-gray-500">Income</p>
+                <p className="text-xs text-gray-500
+dark:text-gray-400">Income</p>
 
                 <p className="font-semibold text-lg">
                   ₹{monthlyIncome.toLocaleString("en-IN")}
@@ -189,7 +198,8 @@ export default function DashboardPage() {
               </div>
 
               <div>
-                <p className="text-xs text-gray-500">Expenses</p>
+                <p className="text-xs text-gray-500
+dark:text-gray-400">Expenses</p>
 
                 <p className="font-semibold text-lg">
                   ₹{monthlyExpenses.toLocaleString("en-IN")}
@@ -197,7 +207,8 @@ export default function DashboardPage() {
               </div>
 
               <div>
-                <p className="text-xs text-gray-500">Profit</p>
+                <p className="text-xs text-gray-500
+dark:text-gray-400">Profit</p>
 
                 <p className="font-semibold text-lg">
                   ₹{monthlyProfit.toLocaleString("en-IN")}
@@ -210,8 +221,10 @@ export default function DashboardPage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-          <div className="bg-emerald-50 border-emerald-200 rounded-xl border p-5">
-            <p className="text-xs text-gray-500 uppercase">Monthly Profit</p>
+          <div className="bg-emerald-50
+dark:bg-emerald-900/30 border-emerald-200 rounded-xl border p-5">
+            <p className="text-xs text-gray-500
+dark:text-gray-400 uppercase">Monthly Profit</p>
 
             <p className="text-2xl font-bold text-emerald-600 mt-1">
               ₹{monthlyProfit.toLocaleString("en-IN")}
@@ -219,7 +232,8 @@ export default function DashboardPage() {
           </div>
 
           <div className="bg-blue-50 border-blue-200 rounded-xl border p-5">
-            <p className="text-xs text-gray-500 uppercase">Savings Rate</p>
+            <p className="text-xs text-gray-500
+dark:text-gray-400 uppercase">Savings Rate</p>
 
             <p className="text-2xl font-bold text-blue-600 mt-1">
               {savingsRate}%
@@ -227,7 +241,8 @@ export default function DashboardPage() {
           </div>
 
           <div className="bg-amber-50 border-amber-200 rounded-xl border p-5">
-            <p className="text-xs text-gray-500 uppercase">Tax Reserve</p>
+            <p className="text-xs text-gray-500
+dark:text-gray-400 uppercase">Tax Reserve</p>
 
             <p className="text-2xl font-bold text-amber-600 mt-1">
               ₹{taxReserve.toLocaleString("en-IN")}
@@ -235,7 +250,8 @@ export default function DashboardPage() {
           </div>
 
           <div className="bg-purple-50 border-purple-200 rounded-xl border p-5">
-            <p className="text-xs text-gray-500 uppercase">Expense Ratio</p>
+            <p className="text-xs text-gray-500
+dark:text-gray-400 uppercase">Expense Ratio</p>
 
             <p className="text-2xl font-bold text-purple-600 mt-1">
               {expenseRatio}%
@@ -257,12 +273,18 @@ export default function DashboardPage() {
         </div>
 
         {/* Tax Method */}
-        <div className="bg-white rounded-xl border p-5 mb-6">
+        <div
+          className="bg-white
+dark:bg-zinc-900
+border
+dark:border-zinc-800 rounded-xl border p-5 mb-6"
+        >
           <h3 className="font-semibold mb-4">Tax Configuration</h3>
 
           <div className="grid md:grid-cols-4 gap-4">
             <div>
-              <p className="text-xs text-gray-500">Method</p>
+              <p className="text-xs text-gray-500
+dark:text-gray-400">Method</p>
 
               <p className="font-semibold">
                 {profile.tax_method === "44ada"
@@ -274,13 +296,15 @@ export default function DashboardPage() {
             </div>
 
             <div>
-              <p className="text-xs text-gray-500">Regime</p>
+              <p className="text-xs text-gray-500
+dark:text-gray-400">Regime</p>
 
               <p className="font-semibold capitalize">{profile.tax_regime}</p>
             </div>
 
             <div>
-              <p className="text-xs text-gray-500">GST</p>
+              <p className="text-xs text-gray-500
+dark:text-gray-400">GST</p>
 
               <p className="font-semibold">
                 {profile.gst_registered ? "Registered" : "Not Registered"}
@@ -291,27 +315,51 @@ export default function DashboardPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
           {profile.gst_registered && (
-            <div className="bg-white rounded-xl border border-gray-200 p-5">
+            <div
+              className="bg-white
+dark:bg-zinc-900
+border
+dark:border-zinc-800 rounded-xl border border-gray-200 p-5"
+            >
               <p className="text-sm font-medium text-gray-700 mb-1">
                 GST collected this month
               </p>
-              <p className="text-xl font-semibold text-gray-900">
+              <p
+                className="text-xl font-semibold text-gray-900
+dark:text-white"
+              >
                 ₹{breakdown.gstAmount.toLocaleString("en-IN")}
               </p>
             </div>
           )}
-          <div className="bg-white rounded-xl border border-gray-200 p-5">
+          <div
+            className="bg-white
+dark:bg-zinc-900
+border
+dark:border-zinc-800 rounded-xl border border-gray-200 p-5"
+          >
             <p className="text-sm font-medium text-gray-700 mb-1">
               Next advance tax due
             </p>
-            <p className="text-xl font-semibold text-gray-900">{nextDue}</p>
-            <p className="text-xs text-gray-500 mt-1">
+            <p
+              className="text-xl font-semibold text-gray-900
+dark:text-white"
+            >
+              {nextDue}
+            </p>
+            <p className="text-xs text-gray-500
+dark:text-gray-400 mt-1">
               Est. ₹{breakdown.advanceTaxThisQuarter.toLocaleString("en-IN")}{" "}
               this installment
             </p>
           </div>
           {profile.user_type === "business" && (
-            <div className="bg-white rounded-xl border border-gray-200 p-5">
+            <div
+              className="bg-white
+dark:bg-zinc-900
+border
+dark:border-zinc-800 rounded-xl border border-gray-200 p-5"
+            >
               <p className="text-sm font-medium text-gray-700 mb-1">
                 Expenses this month
               </p>
@@ -320,11 +368,19 @@ export default function DashboardPage() {
               </p>
             </div>
           )}
-          <div className="bg-white rounded-xl border border-gray-200 p-5">
+          <div
+            className="bg-white
+dark:bg-zinc-900
+border
+dark:border-zinc-800 rounded-xl border border-gray-200 p-5"
+          >
             <p className="text-sm font-medium text-gray-700 mb-1">
               Net profit this month
             </p>
-            <p className="text-xl font-semibold text-gray-900">
+            <p
+              className="text-xl font-semibold text-gray-900
+dark:text-white"
+            >
               ₹{(monthlyIncome - monthlyExpenses).toLocaleString("en-IN")}
             </p>
           </div>
@@ -333,9 +389,11 @@ export default function DashboardPage() {
         <div className="grid md:grid-cols-4 gap-4 mb-6">
           <Link
             href="/income"
-            className="bg-emerald-50 border border-emerald-200 rounded-xl p-5 hover:shadow-md transition-all"
+            className="bg-emerald-50
+dark:bg-emerald-900/30 border border-emerald-200 rounded-xl p-5 hover:shadow-md transition-all"
           >
-            <p className="font-semibold text-emerald-700">Add Income</p>
+            <p className="font-semibold text-emerald-700
+dark:text-emerald-400">Add Income</p>
 
             <p className="text-sm text-emerald-600 mt-1">Record new income</p>
           </Link>

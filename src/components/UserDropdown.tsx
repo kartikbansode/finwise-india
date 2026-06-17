@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ChevronDown, Settings, LogOut, User } from "lucide-react";
 import { createClient } from "@/lib/supabase";
+import ThemeToggle from "./ThemeToggle";
 
 interface Props {
   name: string;
@@ -62,6 +63,7 @@ export default function UserDropdown({ name, userType }: Props) {
             <User size={16} />
             Profile
           </button>
+          <ThemeToggle />
 
           <div className="border-t" />
 

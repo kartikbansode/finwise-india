@@ -361,7 +361,7 @@ export default function DashboardPage() {
           </Link>
 
           <Link
-            href="/tax-center"
+            href="/tax"
             className="bg-amber-50 border border-amber-200 rounded-xl p-5 hover:shadow-md transition-all"
           >
             <p className="font-semibold text-amber-700">Tax Center</p>

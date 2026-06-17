@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { createClient } from '@/lib/supabase';
-import TaxDisclaimer from '@/components/TaxDisclaimer';
+import { useEffect, useState } from "react";
+import { createClient } from "@/lib/supabase";
+import TaxDisclaimer from "@/components/TaxDisclaimer";
 
 interface IncomeEntry {
   id: string;
@@ -13,29 +13,38 @@ interface IncomeEntry {
   notes: string | null;
 }
 
-const CATEGORIES = ['design', 'development', 'consulting', 'writing', 'marketing', 'other'];
+const CATEGORIES = [
+  "design",
+  "development",
+  "consulting",
+  "writing",
+  "marketing",
+  "other",
+];
 
 export default function IncomePage() {
   const supabase = createClient();
   const [entries, setEntries] = useState<IncomeEntry[]>([]);
   const [loading, setLoading] = useState(true);
-  const [clientName, setClientName] = useState('');
-  const [amount, setAmount] = useState('');
-  const [category, setCategory] = useState('other');
-  const [entryDate, setEntryDate] = useState(new Date().toISOString().split('T')[0]);
-  const [notes, setNotes] = useState('');
+  const [clientName, setClientName] = useState("");
+  const [amount, setAmount] = useState("");
+  const [category, setCategory] = useState("other");
+  const [entryDate, setEntryDate] = useState(
+    new Date().toISOString().split("T")[0],
+  );
+  const [notes, setNotes] = useState("");
   const [saving, setSaving] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   async function loadEntries() {
     const { data: userData } = await supabase.auth.getUser();
     if (!userData.user) return;
 
     const { data, error } = await supabase
-      .from('income_entries')
-      .select('*')
-      .eq('user_id', userData.user.id)
-      .order('entry_date', { ascending: false });
+      .from("income_entries")
+      .select("*")
+      .eq("user_id", userData.user.id)
+      .order("entry_date", { ascending: false });
 
     if (!error && data) setEntries(data);
     setLoading(false);
@@ -47,44 +56,46 @@ export default function IncomePage() {
 
   async function handleAdd(e: React.FormEvent) {
     e.preventDefault();
-    setError('');
+    setError("");
 
     if (!clientName.trim() || !amount || Number(amount) <= 0) {
-      setError('Please enter a valid client name and amount.');
+      setError("Please enter a valid client name and amount.");
       return;
     }
 
     setSaving(true);
     const { data: userData } = await supabase.auth.getUser();
     if (!userData.user) {
-      setError('You must be logged in.');
+      setError("You must be logged in.");
       setSaving(false);
       return;
     }
 
-    const { error: insertError } = await supabase.from('income_entries').insert({
-      user_id: userData.user.id,
-      client_name: clientName.trim(),
-      amount: Number(amount),
-      category,
-      entry_date: entryDate,
-      notes: notes.trim() || null,
-    });
+    const { error: insertError } = await supabase
+      .from("income_entries")
+      .insert({
+        user_id: userData.user.id,
+        client_name: clientName.trim(),
+        amount: Number(amount),
+        category,
+        entry_date: entryDate,
+        notes: notes.trim() || null,
+      });
 
     if (insertError) {
-      setError('Something went wrong. Please try again.');
+      setError("Something went wrong. Please try again.");
     } else {
-      setClientName('');
-      setAmount('');
-      setNotes('');
-      setCategory('other');
+      setClientName("");
+      setAmount("");
+      setNotes("");
+      setCategory("other");
       await loadEntries();
     }
     setSaving(false);
   }
 
   async function handleDelete(id: string) {
-    await supabase.from('income_entries').delete().eq('id', id);
+    await supabase.from("income_entries").delete().eq("id", id);
     await loadEntries();
   }
 
@@ -92,28 +103,39 @@ export default function IncomePage() {
     .filter((e) => {
       const d = new Date(e.entry_date);
       const now = new Date();
-      return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+      return (
+        d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear()
+      );
     })
     .reduce((sum, e) => sum + Number(e.amount), 0);
 
   return (
-    <main className="min-h-screen bg-gray-50 p-6 md:p-10">
-      <div className="w-full max-w-5xl">
-        <h1 className="text-2xl font-bold text-gray-900">Income</h1>
-        <p className="text-gray-500 mt-1 mb-6">
-          Total this month:{' '}
+    <main className="ml-64 min-h-screen bg-gray-50 dark:bg-zinc-950 p-6 md:p-10">
+      <div className="w-full">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+          Income
+        </h1>
+        <p className="text-gray-500 dark:text-gray-400 mt-1 mb-6">
+          Total this month:{" "}
           <span className="font-semibold text-emerald-700">
-            ₹{totalThisMonth.toLocaleString('en-IN')}
+            ₹{totalThisMonth.toLocaleString("en-IN")}
           </span>
         </p>
 
         <form
           onSubmit={handleAdd}
-          className="bg-white rounded-xl border border-gray-200 p-5 mb-8 space-y-4"
+          className="
+bg-white dark:bg-zinc-900
+border border-gray-200 dark:border-zinc-800
+rounded-xl
+p-5
+mb-8
+space-y-4
+"
         >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Client name
               </label>
               <input
@@ -121,11 +143,22 @@ export default function IncomePage() {
                 value={clientName}
                 onChange={(e) => setClientName(e.target.value)}
                 placeholder="e.g. Acme Corp"
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                className="
+w-full
+bg-white dark:bg-zinc-950
+border border-gray-300 dark:border-zinc-700
+text-gray-900 dark:text-white
+rounded-lg
+px-3 py-2
+text-sm
+focus:outline-none
+focus:ring-2
+focus:ring-emerald-500
+"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Amount received (₹)
               </label>
               <input
@@ -133,17 +166,39 @@ export default function IncomePage() {
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
                 placeholder="50000"
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                className="
+w-full
+bg-white dark:bg-zinc-950
+border border-gray-300 dark:border-zinc-700
+text-gray-900 dark:text-white
+rounded-lg
+px-3 py-2
+text-sm
+focus:outline-none
+focus:ring-2
+focus:ring-emerald-500
+"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Category
               </label>
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                className="
+w-full
+bg-white dark:bg-zinc-950
+border border-gray-300 dark:border-zinc-700
+text-gray-900 dark:text-white
+rounded-lg
+px-3 py-2
+text-sm
+focus:outline-none
+focus:ring-2
+focus:ring-emerald-500
+"
               >
                 {CATEGORIES.map((c) => (
                   <option key={c} value={c}>
@@ -153,19 +208,30 @@ export default function IncomePage() {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Date received
               </label>
               <input
                 type="date"
                 value={entryDate}
                 onChange={(e) => setEntryDate(e.target.value)}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                className="
+w-full
+bg-white dark:bg-zinc-950
+border border-gray-300 dark:border-zinc-700
+text-gray-900 dark:text-white
+rounded-lg
+px-3 py-2
+text-sm
+focus:outline-none
+focus:ring-2
+focus:ring-emerald-500
+"
               />
             </div>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Notes (optional)
             </label>
             <input
@@ -173,7 +239,18 @@ export default function IncomePage() {
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               placeholder="Invoice #102, project name, etc."
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              className="
+w-full
+bg-white dark:bg-zinc-950
+border border-gray-300 dark:border-zinc-700
+text-gray-900 dark:text-white
+rounded-lg
+px-3 py-2
+text-sm
+focus:outline-none
+focus:ring-2
+focus:ring-emerald-500
+"
             />
           </div>
 
@@ -184,18 +261,27 @@ export default function IncomePage() {
             disabled={saving}
             className="bg-emerald-600 text-white px-5 py-2 rounded-lg text-sm font-medium hover:bg-emerald-700 disabled:opacity-50"
           >
-            {saving ? 'Saving...' : 'Add income'}
+            {saving ? "Saving..." : "Add income"}
           </button>
         </form>
 
-        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+        <div
+          className="
+  bg-white dark:bg-zinc-900
+  border border-gray-200 dark:border-zinc-800
+  rounded-xl
+  overflow-hidden
+"
+        >
           {loading ? (
-            <p className="p-5 text-sm text-gray-500">Loading...</p>
+            <p className="p-5 text-sm dark:text-gray-400">Loading...</p>
           ) : entries.length === 0 ? (
-            <p className="p-5 text-sm text-gray-500">No income logged yet.</p>
+            <p className="p-5 text-sm dark:text-gray-400">
+              No income logged yet.
+            </p>
           ) : (
             <table className="w-full text-sm">
-              <thead className="bg-gray-50 text-left text-gray-500">
+              <thead className="bg-gray-50 dark:bg-zinc-800 text-left dark:text-gray-400">
                 <tr>
                   <th className="px-4 py-3 font-medium">Client</th>
                   <th className="px-4 py-3 font-medium">Category</th>
@@ -206,14 +292,24 @@ export default function IncomePage() {
               </thead>
               <tbody>
                 {entries.map((entry) => (
-                  <tr key={entry.id} className="border-t border-gray-100">
-                    <td className="px-4 py-3 text-gray-900">{entry.client_name}</td>
-                    <td className="px-4 py-3 text-gray-500 capitalize">{entry.category}</td>
-                    <td className="px-4 py-3 text-gray-500">
-                      {new Date(entry.entry_date).toLocaleDateString('en-IN')}
+                  <tr
+                    key={entry.id}
+                    className="
+  border-t border-gray-100 dark:border-zinc-800
+  hover:bg-gray-50 dark:hover:bg-zinc-800/50
+  "
+                  >
+                    <td className="px-4 py-3 text-gray-900 dark:text-white">
+                      {entry.client_name}
                     </td>
-                    <td className="px-4 py-3 text-right font-medium text-gray-900">
-                      ₹{Number(entry.amount).toLocaleString('en-IN')}
+                    <td className="px-4 py-3 dark:text-gray-400 capitalize">
+                      {entry.category}
+                    </td>
+                    <td className="px-4 py-3 dark:text-gray-400">
+                      {new Date(entry.entry_date).toLocaleDateString("en-IN")}
+                    </td>
+                    <td className="px-4 py-3 text-right font-medium text-gray-900 dark:text-white">
+                      ₹{Number(entry.amount).toLocaleString("en-IN")}
                     </td>
                     <td className="px-4 py-3 text-right">
                       <button
@@ -228,7 +324,8 @@ export default function IncomePage() {
               </tbody>
             </table>
           )}
-        </div><TaxDisclaimer />
+        </div>
+        <TaxDisclaimer />
       </div>
     </main>
   );

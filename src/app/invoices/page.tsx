@@ -59,32 +59,59 @@ export default function InvoicesPage() {
   }
 
   return (
-    <main className="p-8">
+    <main className="ml-64 min-h-screen bg-gray-50 dark:bg-zinc-950 p-8">
       <div className="flex justify-between items-center mb-8">
         <div>
-          <h2 className="text-xl font-semibold">Invoice Tracker</h2>
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+            Invoice Tracker
+          </h2>
 
-          <p className="text-gray-500 text-sm">
+          <p className="text-gray-500 dark:text-gray-400 text-sm">
             Track invoice status and payments
           </p>
         </div>
 
         <Link
           href="/invoices/new"
-          className="bg-emerald-600 text-white px-5 py-3 rounded-xl"
+          className="
+bg-emerald-600
+hover:bg-emerald-700
+text-white
+px-5
+py-3
+rounded-xl
+font-medium
+transition
+"
         >
           + New Invoice
         </Link>
       </div>
 
-      <div className="bg-white rounded-2xl border p-6">
+      <div
+        className="
+  bg-white dark:bg-zinc-900
+  border border-gray-200 dark:border-zinc-800
+  rounded-2xl
+  p-6
+"
+      >
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-3xl font-bold">Invoices</h1>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+            Invoices
+          </h1>
 
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="border rounded-xl px-4 py-2 bg-white"
+            className="
+bg-white dark:bg-zinc-950
+border border-gray-300 dark:border-zinc-700
+text-gray-900 dark:text-white
+rounded-xl
+px-4
+py-2
+"
           >
             <option value="all">All Invoices</option>
             <option value="draft">Draft</option>
@@ -94,27 +121,27 @@ export default function InvoicesPage() {
           </select>
         </div>
         <div className="grid md:grid-cols-4 gap-4 mb-6">
-          <div className="border rounded-xl p-5 bg-gray-50">
-            <p className="text-gray-500 text-sm">Total</p>
+          <div className="rounded-xl border border-blue-500/30 bg-blue-500/10 p-5">
+            <p className="text-gray-500 dark:text-gray-400 text-sm">Total</p>
             <p className="text-2xl font-bold">{invoices.length}</p>
           </div>
 
-          <div className="border rounded-xl p-5 bg-gray-50">
-            <p className="text-gray-500 text-sm">Paid</p>
+          <div className="rounded-xl border border-green-500/30 bg-green-500/10 p-5">
+            <p className="text-gray-500 dark:text-gray-400 text-sm">Paid</p>
             <p className="text-2xl font-bold text-green-600">
               {invoices.filter((i) => i.status === "paid").length}
             </p>
           </div>
 
-          <div className="border rounded-xl p-5 bg-gray-50">
-            <p className="text-gray-500 text-sm">Pending</p>
+          <div className="rounded-xl border border-yellow-500/30 bg-yellow-500/10 p-5">
+            <p className="text-gray-500 dark:text-gray-400 text-sm">Pending</p>
             <p className="text-2xl font-bold text-yellow-600">
               {invoices.filter((i) => i.status === "pending").length}
             </p>
           </div>
 
-          <div className="border rounded-xl p-5 bg-gray-50">
-            <p className="text-gray-500 text-sm">Draft</p>
+          <div className="rounded-xl border border-zinc-500/30 bg-zinc-500/10 p-5">
+            <p className="text-gray-500 dark:text-gray-400 text-sm">Draft</p>
             <p className="text-2xl font-bold text-gray-600">
               {invoices.filter((i) => i.status === "draft").length}
             </p>
@@ -122,12 +149,14 @@ export default function InvoicesPage() {
         </div>
 
         {loading ? (
-          <div className="p-8">Loading...</div>
+          <div className="p-8 text-gray-500 dark:text-gray-400">Loading...</div>
         ) : invoices.length === 0 ? (
-          <div className="p-12 text-center">No invoices yet.</div>
+          <div className="p-12 text-center text-gray-500 dark:text-gray-400">
+            No invoices yet.
+          </div>
         ) : (
-          <table className="w-full">
-            <thead className="border-b bg-gray-50">
+          <table className="w-full text-sm">
+            <thead className="border-b border-gray-200 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-800">
               <tr>
                 <th className="p-4 text-left">Invoice</th>
 
@@ -149,14 +178,22 @@ export default function InvoicesPage() {
                     : invoice.status === statusFilter,
                 )
                 .map((invoice) => (
-                  <tr key={invoice.id} className="border-b">
-                    <td className="p-4 font-medium">
+                  <tr
+                    key={invoice.id}
+                    className="
+  border-b border-gray-100 dark:border-zinc-800
+  hover:bg-gray-50 dark:hover:bg-zinc-800/50
+"
+                  >
+                    <td className="p-4 font-medium text-gray-900 dark:text-white">
                       {invoice.invoice_number}
                     </td>
 
-                    <td className="p-4">{invoice.client_name}</td>
+                    <td className="p-4 text-gray-700 dark:text-gray-300">
+                      {invoice.client_name}
+                    </td>
 
-                    <td className="p-4">
+                    <td className="p-4 font-semibold text-gray-900 dark:text-white">
                       ₹{Number(invoice.total_amount).toLocaleString("en-IN")}
                     </td>
 
@@ -167,7 +204,8 @@ export default function InvoicesPage() {
                           updateStatus(invoice.id, e.target.value)
                         }
                         className={`
-      px-3 py-2 rounded-lg border text-sm font-medium
+      px-3 py-2 rounded-lg border text-sm font-medium dark:bg-zinc-900
+dark:border-zinc-700
       ${
         invoice.status === "paid"
           ? "bg-green-50 text-green-700 border-green-200"
@@ -189,14 +227,14 @@ export default function InvoicesPage() {
                     <td className="p-4 text-right">
                       <Link
                         href={`/invoices/${invoice.id}`}
-                        className="text-emerald-600 mr-4"
+                        className="text-emerald-600 hover:text-emerald-500 mr-4"
                       >
                         View
                       </Link>
 
                       <button
                         onClick={() => deleteInvoice(invoice.id)}
-                        className="text-red-600"
+                        className="text-red-500 hover:text-red-400"
                       >
                         Delete
                       </button>

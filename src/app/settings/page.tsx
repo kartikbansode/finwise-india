@@ -123,9 +123,7 @@ space-y-6
             <input
               type="text"
               value={fullName}
-              onChange={(e) => setFullName(e.target.value)}git add .
-git commit -m "v1.1.1 dark mode implementation"
-git push
+              onChange={(e) => setFullName(e.target.value)}
               className="
 w-full
 bg-white dark:bg-zinc-950

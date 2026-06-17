@@ -21,148 +21,109 @@ export default function OnboardingPage() {
   const [gstRegistered, setGstRegistered] = useState(false);
   const [taxRegime, setTaxRegime] = useState("new");
   const [taxMethod, setTaxMethod] = useState("normal");
-  const [monthlyExpenseEstimate, setMonthlyExpenseEstimate] =
-    useState("20000");
+  const [monthlyExpenseEstimate, setMonthlyExpenseEstimate] = useState("20000");
 
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    loadProfile();
-  }, []);
-
   async function loadProfile() {
     try {
-      const { data: userData } =
-        await supabase.auth.getUser();
+      const { data: userData } = await supabase.auth.getUser();
 
       if (!userData.user) {
         router.replace("/login");
         return;
       }
 
-      const { data } =
-        await supabase
-          .from("profiles")
-          .select("*")
-          .eq("id", userData.user.id)
-          .maybeSingle();
+      const { data } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", userData.user.id)
+        .maybeSingle();
 
-      if (
-        data?.onboarding_completed
-      ) {
+      if (data?.onboarding_completed) {
         router.replace("/dashboard");
         return;
       }
 
+      setCheckingProfile(false);
+
       if (data) {
-        setFullName(
-          data.full_name || ""
-        );
+        setFullName(data.full_name || "");
 
-        setCompanyName(
-          data.company_name || ""
-        );
+        setCompanyName(data.company_name || "");
 
-        setPhone(
-          data.phone || ""
-        );
+        setPhone(data.phone || "");
 
-        setCity(
-          data.city || ""
-        );
+        setCity(data.city || "");
 
-        setStateName(
-          data.state || ""
-        );
+        setStateName(data.state || "");
 
-        setUserType(
-          data.user_type ||
-            "freelancer"
-        );
+        setUserType(data.user_type || "freelancer");
 
-        setGstRegistered(
-          data.gst_registered ||
-            false
-        );
+        setGstRegistered(data.gst_registered || false);
 
-        setTaxRegime(
-          data.tax_regime ||
-            "new"
-        );
+        setTaxRegime(data.tax_regime || "new");
 
-        setTaxMethod(
-          data.tax_method ||
-            "normal"
-        );
+        setTaxMethod(data.tax_method || "normal");
 
         setMonthlyExpenseEstimate(
-          String(
-            data.monthly_expense_estimate ||
-              20000
-          )
+          String(data.monthly_expense_estimate || 20000),
         );
       }
     } finally {
       setCheckingProfile(false);
     }
   }
+  useEffect(() => {
+    async function init() {
+      await loadProfile();
+    }
+
+    init();
+  }, []);
 
   async function handleContinue() {
     setError("");
 
     if (!fullName.trim()) {
-      setError(
-        "Please enter your full name."
-      );
+      setError("Please enter your full name.");
       return;
     }
 
     setLoading(true);
 
-    const { data: userData } =
-      await supabase.auth.getUser();
+    const { data: userData } = await supabase.auth.getUser();
 
     if (!userData.user) {
       setLoading(false);
       return;
     }
 
-    const { error } =
-      await supabase
-        .from("profiles")
-        .upsert({
-          id: userData.user.id,
+    const { error } = await supabase.from("profiles").upsert({
+      id: userData.user.id,
 
-          full_name: fullName,
+      full_name: fullName,
 
-          company_name:
-            companyName,
+      company_name: companyName,
 
-          phone,
+      phone,
 
-          city,
+      city,
 
-          state: stateName,
+      state: stateName,
 
-          user_type: userType,
+      user_type: userType,
 
-          gst_registered:
-            gstRegistered,
+      gst_registered: gstRegistered,
 
-          tax_regime:
-            taxRegime,
+      tax_regime: taxRegime,
 
-          tax_method:
-            taxMethod,
+      tax_method: taxMethod,
 
-          monthly_expense_estimate:
-            Number(
-              monthlyExpenseEstimate
-            ),
+      monthly_expense_estimate: Number(monthlyExpenseEstimate),
 
-          onboarding_completed:
-            true,
-        });
+      onboarding_completed: true,
+    });
 
     if (error) {
       setError(error.message);
@@ -179,9 +140,31 @@ export default function OnboardingPage() {
         <div className="text-center">
           <div className="w-10 h-10 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin mx-auto" />
 
-          <p className="mt-4 text-gray-500">
-            Loading...
-          </p>
+          <p className="mt-4 text-gray-500">Loading...</p>
+        </div>
+      </main>
+    );
+  }
+
+  if (checkingProfile) {
+    return (
+      <main className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-xl font-semibold">Loading your workspace...</h2>
+
+          <p className="text-gray-500 mt-2">Please wait...</p>
+        </div>
+      </main>
+    );
+  }
+
+  if (checkingProfile) {
+    return (
+      <main className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-xl font-semibold">Loading your dashboard...</h2>
+
+          <p className="text-gray-500 mt-2">Please wait a moment.</p>
         </div>
       </main>
     );
@@ -189,17 +172,12 @@ export default function OnboardingPage() {
 
   return (
     <main className="min-h-screen bg-gray-50 flex items-center justify-center p-6">
-
       <div className="w-full max-w-3xl bg-white rounded-3xl border border-gray-200 shadow-lg p-8">
-
         <div className="mb-8">
-          <h1 className="text-3xl font-bold">
-            Welcome to FinWise
-          </h1>
+          <h1 className="text-3xl font-bold">Welcome to FinWise</h1>
 
           <p className="text-gray-500 mt-2">
-            Let's personalize your
-            finance workspace.
+            Let's personalize your finance workspace.
           </p>
         </div>
 
@@ -210,35 +188,22 @@ export default function OnboardingPage() {
         )}
 
         <div className="grid md:grid-cols-2 gap-5">
-
           <div>
-            <label className="block text-sm font-medium mb-1">
-              Full Name
-            </label>
+            <label className="block text-sm font-medium mb-1">Full Name</label>
 
             <input
               value={fullName}
-              onChange={(e) =>
-                setFullName(
-                  e.target.value
-                )
-              }
+              onChange={(e) => setFullName(e.target.value)}
               className="w-full border rounded-xl px-4 py-3"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">
-              Phone
-            </label>
+            <label className="block text-sm font-medium mb-1">Phone</label>
 
             <input
               value={phone}
-              onChange={(e) =>
-                setPhone(
-                  e.target.value
-                )
-              }
+              onChange={(e) => setPhone(e.target.value)}
               className="w-full border rounded-xl px-4 py-3"
             />
           </div>
@@ -250,11 +215,7 @@ export default function OnboardingPage() {
 
             <input
               value={companyName}
-              onChange={(e) =>
-                setCompanyName(
-                  e.target.value
-                )
-              }
+              onChange={(e) => setCompanyName(e.target.value)}
               className="w-full border rounded-xl px-4 py-3"
             />
           </div>
@@ -266,142 +227,84 @@ export default function OnboardingPage() {
 
             <input
               type="number"
-              value={
-                monthlyExpenseEstimate
-              }
-              onChange={(e) =>
-                setMonthlyExpenseEstimate(
-                  e.target.value
-                )
-              }
+              value={monthlyExpenseEstimate}
+              onChange={(e) => setMonthlyExpenseEstimate(e.target.value)}
               className="w-full border rounded-xl px-4 py-3"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">
-              City
-            </label>
+            <label className="block text-sm font-medium mb-1">City</label>
 
             <input
               value={city}
-              onChange={(e) =>
-                setCity(
-                  e.target.value
-                )
-              }
+              onChange={(e) => setCity(e.target.value)}
               className="w-full border rounded-xl px-4 py-3"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">
-              State
-            </label>
+            <label className="block text-sm font-medium mb-1">State</label>
 
             <input
               value={stateName}
-              onChange={(e) =>
-                setStateName(
-                  e.target.value
-                )
-              }
+              onChange={(e) => setStateName(e.target.value)}
               className="w-full border rounded-xl px-4 py-3"
             />
           </div>
-
         </div>
 
         <div className="mt-6">
-          <label className="block text-sm font-medium mb-2">
-            User Type
-          </label>
+          <label className="block text-sm font-medium mb-2">User Type</label>
 
           <select
             value={userType}
-            onChange={(e) =>
-              setUserType(
-                e.target.value
-              )
-            }
+            onChange={(e) => setUserType(e.target.value)}
             className="w-full border rounded-xl px-4 py-3"
           >
-            <option value="freelancer">
-              Freelancer
-            </option>
+            <option value="freelancer">Freelancer</option>
 
-            <option value="business">
-              Business Owner
-            </option>
+            <option value="business">Business Owner</option>
           </select>
         </div>
 
         <div className="mt-6">
-          <label className="block text-sm font-medium mb-2">
-            Tax Regime
-          </label>
+          <label className="block text-sm font-medium mb-2">Tax Regime</label>
 
           <select
             value={taxRegime}
-            onChange={(e) =>
-              setTaxRegime(
-                e.target.value
-              )
-            }
+            onChange={(e) => setTaxRegime(e.target.value)}
             className="w-full border rounded-xl px-4 py-3"
           >
-            <option value="new">
-              New Regime
-            </option>
+            <option value="new">New Regime</option>
 
-            <option value="old">
-              Old Regime
-            </option>
+            <option value="old">Old Regime</option>
           </select>
         </div>
 
         <div className="mt-6">
-          <label className="block text-sm font-medium mb-2">
-            Tax Method
-          </label>
+          <label className="block text-sm font-medium mb-2">Tax Method</label>
 
           <select
             value={taxMethod}
-            onChange={(e) =>
-              setTaxMethod(
-                e.target.value
-              )
-            }
+            onChange={(e) => setTaxMethod(e.target.value)}
             className="w-full border rounded-xl px-4 py-3"
           >
-            <option value="normal">
-              Normal Taxation
-            </option>
+            <option value="normal">Normal Taxation</option>
 
-            <option value="44ada">
-              Section 44ADA
-            </option>
+            <option value="44ada">Section 44ADA</option>
 
-            <option value="44ad">
-              Section 44AD
-            </option>
+            <option value="44ad">Section 44AD</option>
           </select>
         </div>
 
         <div className="mt-6 flex items-center justify-between border rounded-xl p-4">
-
-          <span className="font-medium">
-            GST Registered
-          </span>
+          <span className="font-medium">GST Registered</span>
 
           <input
             type="checkbox"
             checked={gstRegistered}
-            onChange={() =>
-              setGstRegistered(
-                !gstRegistered
-              )
-            }
+            onChange={() => setGstRegistered(!gstRegistered)}
           />
         </div>
 
@@ -410,13 +313,9 @@ export default function OnboardingPage() {
           disabled={loading}
           className="w-full mt-8 bg-emerald-600 text-white py-4 rounded-xl font-semibold hover:bg-emerald-700 disabled:opacity-50"
         >
-          {loading
-            ? "Saving..."
-            : "Continue to Dashboard"}
+          {loading ? "Saving..." : "Continue to Dashboard"}
         </button>
-
       </div>
-
     </main>
   );
 }

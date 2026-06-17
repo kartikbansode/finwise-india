@@ -21,6 +21,7 @@ import TaxDisclaimer from "@/components/TaxDisclaimer";
 export default function DashboardPage() {
   const supabase = createClient();
   const [loading, setLoading] = useState(true);
+  const [checkingAuth, setCheckingAuth] = useState(true);
   const [monthlyIncome, setMonthlyIncome] = useState(0);
   const [monthlyExpenses, setMonthlyExpenses] = useState(0);
   const [expenseData, setExpenseData] = useState<any[]>([]);
@@ -70,8 +71,6 @@ export default function DashboardPage() {
       );
       setMonthlyIncome(incomeTotal);
 
-
-      
       const { data: expenses } = await supabase
         .from("expense_entries")
         .select("*")
@@ -123,6 +122,7 @@ export default function DashboardPage() {
       </main>
     );
   }
+  setCheckingAuth(false);
 
   const annualProjected = monthlyIncome * 12;
 
@@ -152,6 +152,20 @@ export default function DashboardPage() {
   );
 
   const nextDue = getNextAdvanceTaxDueDate();
+
+  if (checkingAuth) {
+    return (
+      <main className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <div className="w-12 h-12 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+
+          <h2 className="text-xl font-semibold">Loading your workspace...</h2>
+
+          <p className="text-gray-500 mt-2">Please wait a moment.</p>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="min-h-screen bg-gray-50 p-6 md:p-10">

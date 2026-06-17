@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 import AuthCard from "@/components/AuthCard";
@@ -12,11 +12,35 @@ export default function LoginPage() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  
 
   const [loading, setLoading] = useState(false);
 
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+
+  async function checkSession() {
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+
+    if (!session) return;
+
+    const { data } = await supabase
+      .from("profiles")
+      .select("onboarding_completed")
+      .eq("id", session.user.id)
+      .single();
+
+    if (data?.onboarding_completed) {
+      router.replace("/dashboard");
+    } else {
+      router.replace("/onboarding");
+    }
+  }
+  useEffect(() => {
+    checkSession();
+  }, []);
 
   async function login() {
     try {
@@ -24,11 +48,10 @@ export default function LoginPage() {
       setErrorMessage("");
       setSuccessMessage("");
 
-      const { data, error } =
-        await supabase.auth.signInWithPassword({
-          email,
-          password,
-        });
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
 
       if (error) {
         setErrorMessage(error.message);
@@ -37,42 +60,27 @@ export default function LoginPage() {
       }
 
       if (!data.user) {
-        setErrorMessage(
-          "Unable to login. Please try again."
-        );
+        setErrorMessage("Unable to login. Please try again.");
         setLoading(false);
         return;
       }
 
-      setSuccessMessage(
-        "Login successful. Redirecting..."
-      );
+      setSuccessMessage("Login successful. Redirecting...");
 
-      const { data: profile } =
-        await supabase
-          .from("profiles")
-          .select(
-            "onboarding_completed"
-          )
-          .eq("id", data.user.id)
-          .maybeSingle();
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("onboarding_completed")
+        .eq("id", data.user.id)
+        .maybeSingle();
 
-      if (
-        profile?.onboarding_completed
-      ) {
-        router.replace(
-          "/dashboard"
-        );
+      if (profile?.onboarding_completed) {
+        router.replace("/dashboard");
         return;
       }
 
-      router.replace(
-        "/onboarding"
-      );
+      router.replace("/onboarding");
     } catch {
-      setErrorMessage(
-        "Something went wrong."
-      );
+      setErrorMessage("Something went wrong.");
       setLoading(false);
     }
   }
@@ -80,15 +88,12 @@ export default function LoginPage() {
   async function googleLogin() {
     setErrorMessage("");
 
-    const { error } =
-      await supabase.auth.signInWithOAuth({
-        provider: "google",
-        options: {
-          redirectTo:
-            window.location.origin +
-            "/onboarding",
-        },
-      });
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: window.location.origin + "/onboarding",
+      },
+    });
 
     if (error) {
       setErrorMessage(error.message);
@@ -97,9 +102,7 @@ export default function LoginPage() {
 
   return (
     <main className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-white to-emerald-50 p-6">
-
       <div className="w-full max-w-md">
-
         {errorMessage && (
           <div className="mb-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl">
             {errorMessage}
@@ -121,9 +124,7 @@ export default function LoginPage() {
           onLogin={login}
           onGoogle={googleLogin}
         />
-
       </div>
-
     </main>
   );
 }

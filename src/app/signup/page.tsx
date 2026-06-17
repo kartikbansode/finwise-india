@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase";
 
 export default function SignupPage() {
@@ -18,6 +18,30 @@ export default function SignupPage() {
 
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+
+  async function checkSession() {
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+
+    if (!session) return;
+
+    const { data } = await supabase
+      .from("profiles")
+      .select("onboarding_completed")
+      .eq("id", session.user.id)
+      .single();
+
+    if (data?.onboarding_completed) {
+      router.replace("/dashboard");
+    } else {
+      router.replace("/onboarding");
+    }
+  }
+
+  useEffect(() => {
+    checkSession();
+  }, []);
 
   async function handleSignup() {
     try {
@@ -41,11 +65,10 @@ export default function SignupPage() {
 
       setLoading(true);
 
-      const { data, error } =
-        await supabase.auth.signUp({
-          email,
-          password,
-        });
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+      });
 
       if (error) {
         setError(error.message);
@@ -54,34 +77,24 @@ export default function SignupPage() {
       }
 
       if (!data.user) {
-        setError(
-          "Unable to create account."
-        );
+        setError("Unable to create account.");
         setLoading(false);
         return;
       }
 
-      await supabase
-        .from("profiles")
-        .upsert({
-          id: data.user.id,
-          full_name: fullName,
-          onboarding_completed: false,
-        });
+      await supabase.from("profiles").upsert({
+        id: data.user.id,
+        full_name: fullName,
+        onboarding_completed: false,
+      });
 
-      setSuccess(
-        "Account created successfully."
-      );
+      setSuccess("Account created successfully.");
 
       setTimeout(() => {
-        router.replace(
-          "/onboarding"
-        );
+        router.replace("/onboarding");
       }, 800);
     } catch {
-      setError(
-        "Something went wrong."
-      );
+      setError("Something went wrong.");
     } finally {
       setLoading(false);
     }
@@ -90,15 +103,12 @@ export default function SignupPage() {
   async function googleSignup() {
     setError("");
 
-    const { error } =
-      await supabase.auth.signInWithOAuth({
-        provider: "google",
-        options: {
-          redirectTo:
-            window.location.origin +
-            "/onboarding",
-        },
-      });
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: window.location.origin + "/onboarding",
+      },
+    });
 
     if (error) {
       setError(error.message);
@@ -107,13 +117,9 @@ export default function SignupPage() {
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-emerald-50 flex items-center justify-center p-6">
-
       <div className="w-full max-w-md bg-white rounded-3xl shadow-xl border border-gray-200 p-8">
-
         <div className="text-center">
-          <h1 className="text-3xl font-bold">
-            Create Account
-          </h1>
+          <h1 className="text-3xl font-bold">Create Account</h1>
 
           <p className="text-gray-500 mt-2">
             Start managing your finances smarter.
@@ -133,56 +139,37 @@ export default function SignupPage() {
         )}
 
         <div className="space-y-4 mt-6">
-
           <div>
-            <label className="block text-sm font-medium mb-1">
-              Full Name
-            </label>
+            <label className="block text-sm font-medium mb-1">Full Name</label>
 
             <input
               type="text"
               value={fullName}
-              onChange={(e) =>
-                setFullName(
-                  e.target.value
-                )
-              }
+              onChange={(e) => setFullName(e.target.value)}
               className="w-full border rounded-xl px-4 py-3"
               placeholder="John Doe"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">
-              Email
-            </label>
+            <label className="block text-sm font-medium mb-1">Email</label>
 
             <input
               type="email"
               value={email}
-              onChange={(e) =>
-                setEmail(
-                  e.target.value
-                )
-              }
+              onChange={(e) => setEmail(e.target.value)}
               className="w-full border rounded-xl px-4 py-3"
               placeholder="john@example.com"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">
-              Password
-            </label>
+            <label className="block text-sm font-medium mb-1">Password</label>
 
             <input
               type="password"
               value={password}
-              onChange={(e) =>
-                setPassword(
-                  e.target.value
-                )
-              }
+              onChange={(e) => setPassword(e.target.value)}
               className="w-full border rounded-xl px-4 py-3"
               placeholder="********"
             />
@@ -196,11 +183,7 @@ export default function SignupPage() {
             <input
               type="password"
               value={confirmPassword}
-              onChange={(e) =>
-                setConfirmPassword(
-                  e.target.value
-                )
-              }
+              onChange={(e) => setConfirmPassword(e.target.value)}
               className="w-full border rounded-xl px-4 py-3"
               placeholder="********"
             />
@@ -211,9 +194,7 @@ export default function SignupPage() {
             disabled={loading}
             className="w-full bg-emerald-600 text-white py-3 rounded-xl font-medium hover:bg-emerald-700 disabled:opacity-50"
           >
-            {loading
-              ? "Creating Account..."
-              : "Create Account"}
+            {loading ? "Creating Account..." : "Create Account"}
           </button>
 
           <button
@@ -223,24 +204,17 @@ export default function SignupPage() {
             <div className="w-5 h-5 rounded-full bg-white border flex items-center justify-center text-xs font-bold">
               G
             </div>
-
             Continue with Google
           </button>
-
         </div>
 
         <p className="text-center text-sm text-gray-500 mt-6">
           Already have an account?{" "}
-          <Link
-            href="/login"
-            className="text-emerald-600 font-medium"
-          >
+          <Link href="/login" className="text-emerald-600 font-medium">
             Sign In
           </Link>
         </p>
-
       </div>
-
     </main>
   );
 }

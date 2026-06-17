@@ -16,7 +16,7 @@ export default function SettingsPage() {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [gstNumber, setGstNumber] = useState("");
-
+  import ThemeToggle from "@/components/ThemeToggle";
   const [companyAddress, setCompanyAddress] = useState("");
 
   useEffect(() => {
@@ -107,6 +107,15 @@ space-y-6
 "
         >
           <div>
+            <div className="border-b border-gray-200 dark:border-zinc-800 pb-6">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+                Personal Information
+              </h2>
+
+              <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                Manage your profile information.
+              </p>
+            </div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Full name
             </label>
@@ -138,6 +147,15 @@ space-y-6
                 Business owner
               </button>
             </div>
+          </div>
+          <div className="pt-4 border-t border-gray-200 dark:border-zinc-800">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+              Tax Preferences
+            </h2>
+
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+              Configure GST and taxation settings.
+            </p>
           </div>
 
           <div>
@@ -226,6 +244,15 @@ py-3
               Used to calculate your safe-to-spend amount.
             </p>
           </div>
+          <div className="pt-4 border-t border-gray-200 dark:border-zinc-800">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+              Company Information
+            </h2>
+
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+              Information used on invoices and reports.
+            </p>
+          </div>
           <div>
             <label className="block text-sm font-medium mb-1">GST Number</label>
 
@@ -263,18 +290,52 @@ py-3
 "
             />
           </div>
-          <button
-            type="submit"
-            disabled={saving}
-            className="bg-emerald-600 text-white px-5 py-2 rounded-lg text-sm font-medium hover:bg-emerald-700 disabled:opacity-50"
-          >
-            {saving ? "Saving..." : "Save settings"}
-          </button>
-          {saved && (
-            <span className="ml-3 text-sm text-emerald-600 dark:text-emerald-400">
-              Saved successfully
-            </span>
-          )}
+          <div className="pt-4 border-t border-gray-200 dark:border-zinc-800">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+              Site Settings
+            </h2>
+
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1 mb-4">
+              Customize your FinWise experience.
+            </p>
+
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="font-medium text-gray-900 dark:text-white">
+                  Dark Mode
+                </h3>
+
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  Switch between light and dark appearance.
+                </p>
+              </div>
+
+              <ThemeToggle />
+            </div>
+          </div>
+          <div className="pt-6 border-t border-gray-200 dark:border-zinc-800">
+            <button
+              type="submit"
+              disabled={saving}
+              className="
+    bg-emerald-600
+    hover:bg-emerald-700
+    text-white
+    px-6
+    py-3
+    rounded-xl
+    font-medium
+    "
+            >
+              {saving ? "Saving..." : "Save Settings"}
+            </button>
+
+            {saved && (
+              <span className="ml-4 text-emerald-600 dark:text-emerald-400">
+                ✓ Settings saved successfully
+              </span>
+            )}
+          </div>
         </form>
         <TaxDisclaimer />
       </div>

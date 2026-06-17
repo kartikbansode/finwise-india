@@ -1,7 +1,8 @@
 export default function PrivacyPolicyPage() {
   return (
-    <div
-      className="
+    <main className="ml-64 min-h-screen bg-gray-50 dark:bg-zinc-950 p-8 md:p-12">
+      <div
+        className="
 max-w-5xl
 mx-auto
 bg-white dark:bg-zinc-900
@@ -9,8 +10,7 @@ border border-gray-200 dark:border-zinc-800
 rounded-2xl
 p-8 md:p-12
 "
-    >
-      <main className="ml-64 min-h-screen bg-gray-50 dark:bg-zinc-950 p-8 md:p-12">
+      >
         <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-3">
           Privacy Policy
         </h1>
@@ -145,7 +145,7 @@ p-8 md:p-12
             </p>
           </section>
         </div>
-      </main>
-    </div>
+      </div>
+    </main>
   );
 }

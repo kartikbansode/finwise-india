@@ -62,10 +62,12 @@ export default function Sidebar() {
   }
 
   return (
-    <div className="w-64 h-screen bg-white
+    <div
+      className="w-64 h-screen bg-white
 dark:bg-zinc-950
 border-r
-dark:border-zinc-800 fixed left-0 top-0 flex flex-col">
+dark:border-zinc-800 fixed left-0 top-0 flex flex-col"
+    >
       <div className="p-6 border-b">
         <h1 className="font-bold text-xl">FinWise India</h1>
       </div>

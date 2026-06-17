@@ -168,7 +168,7 @@ export default function DashboardPage() {
 
   return (
     <main className="min-h-screen bg-gray-50 p-6 md:p-10">
-      <div className="w-full px-8">
+      <div className="max-w-7xl mx-auto">
         <div className="flex flex-col lg:flex-row lg:justify-between lg:items-start gap-6 mb-6">
           <div className="bg-white rounded-2xl border p-8 lg:max-w-2xl">
             <p className="text-sm text-gray-500">Financial Overview</p>
@@ -177,7 +177,7 @@ export default function DashboardPage() {
               ₹{Math.max(0, breakdown.safeToSpend).toLocaleString("en-IN")}
             </h2>
 
-            <p className="text-gray-500 mt-2">Safe To Spend</p>
+            <p className="text-gray-500 mt-2">Available Balance</p>
 
             <div className="grid grid-cols-3 gap-6 mt-8">
               <div>
@@ -207,13 +207,6 @@ export default function DashboardPage() {
           </div>
 
           <UserDropdown name={profile.full_name} userType={profile.user_type} />
-          <p className="text-xs text-gray-400 mt-1">
-            {new Date().toLocaleDateString("en-IN", {
-              day: "numeric",
-              month: "long",
-              year: "numeric",
-            })}
-          </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
@@ -250,87 +243,9 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        <div className="bg-white rounded-xl border border-gray-200 p-5 mb-6">
-          <p className="text-xs text-gray-500 uppercase tracking-wide">
-            Financial Health
-          </p>
-
-          <p className="text-3xl font-bold text-emerald-600 mt-2">
-            {healthScore.score}/100
-          </p>
-
-          <p className="text-sm text-gray-500 mt-1">{healthScore.status}</p>
-
-          <div className="grid md:grid-cols-3 gap-4 mt-5 text-sm">
-            <div className="bg-gray-50 rounded-lg p-3">✓ Tax Setup</div>
-
-            <div className="bg-gray-50 rounded-lg p-3">✓ Income Tracking</div>
-
-            <div className="bg-gray-50 rounded-lg p-3">✓ Expense Tracking</div>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-xl border p-5 mb-6">
-          <h3 className="font-semibold mb-4">Annual Projection</h3>
-
-          <div className="grid md:grid-cols-4 gap-4">
-            <div>
-              <p className="text-xs text-gray-500">Income</p>
-
-              <p className="font-bold">
-                ₹{annualProjected.toLocaleString("en-IN")}
-              </p>
-            </div>
-
-            <div>
-              <p className="text-xs text-gray-500">Estimated Tax</p>
-
-              <p className="font-bold">
-                ₹{breakdown.incomeTax.toLocaleString("en-IN")}
-              </p>
-            </div>
-
-            <div>
-              <p className="text-xs text-gray-500">Projected Profit</p>
-
-              <p className="font-bold">
-                ₹
-                {(annualProjected - breakdown.incomeTax).toLocaleString(
-                  "en-IN",
-                )}
-              </p>
-            </div>
-            <div>
-              <p className="text-xs text-gray-500">Effective Tax Rate</p>
-
-              <p className="font-bold">
-                {annualProjected > 0
-                  ? Math.round((breakdown.incomeTax / annualProjected) * 100)
-                  : 0}
-                %
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="space-y-3">
-          {savingsRate < 20 && (
-            <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
-              Savings rate is below 20%
-            </div>
-          )}
-
-          {monthlyExpenses > monthlyIncome && (
-            <div className="bg-red-50 border border-red-200 rounded-lg p-3">
-              Expenses exceed income
-            </div>
-          )}
-
-          {monthlyProfit > 0 && (
-            <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-3">
-              Positive monthly cash flow
-            </div>
-          )}
+        <div className="mb-6 w-full hiddenscrollbar">
+          <IncomeTrendChart income={monthlyIncome} />
+          <ExpensePieChart data={expenseData} />
         </div>
 
         {monthlyExpenses > monthlyIncome && (
@@ -369,14 +284,6 @@ export default function DashboardPage() {
 
               <p className="font-semibold">
                 {profile.gst_registered ? "Registered" : "Not Registered"}
-              </p>
-            </div>
-
-            <div>
-              <p className="text-xs text-gray-500">Readiness</p>
-
-              <p className="font-semibold text-emerald-600">
-                {profile.gst_registered ? "90%" : "70%"}
               </p>
             </div>
           </div>
@@ -461,11 +368,6 @@ export default function DashboardPage() {
 
             <p className="text-sm text-gray-500 mt-1">View tax obligations</p>
           </Link>
-        </div>
-
-        <div className="mb-6 w-full hiddenscrollbar">
-          <IncomeTrendChart income={monthlyIncome} />
-          <ExpensePieChart data={expenseData} />
         </div>
 
         <TaxDisclaimer />

@@ -390,12 +390,30 @@ export default function DashboardPage() {
             <p className="font-semibold">Add Income</p>
             <p className="text-sm text-gray-500">Record new income</p>
           </Link>
-
-          <Link href="/expenses">Add Expense</Link>
-
-          <Link href="/invoices">Invoices</Link>
-
-          <Link href="/tax-center">Tax Center</Link>
+          <div className="grid md:grid-cols-4 gap-4 mb-6">
+          <Link
+            href="/expenses"
+            className="bg-white border rounded-xl p-5 hover:border-emerald-500 transition"
+          >
+            <p className="font-semibold">Add Expense</p>
+            <p className="text-sm text-gray-500">Record new expense</p>
+          </Link>
+          <div className="grid md:grid-cols-4 gap-4 mb-6">
+          <Link
+            href="/invoices"
+            className="bg-white border rounded-xl p-5 hover:border-emerald-500 transition"
+          >
+            <p className="font-semibold">Invoices</p>
+            <p className="text-sm text-gray-500">Manage invoices</p>
+          </Link>
+          <div className="grid md:grid-cols-4 gap-4 mb-6">
+          <Link
+            href="/tax-center"
+            className="bg-white border rounded-xl p-5 hover:border-emerald-500 transition"
+          >
+            <p className="font-semibold">Tax Center</p>
+            <p className="text-sm text-gray-500">Manage tax-related tasks</p>
+          </Link>
         </div>
 
         <div className="mb-6 w-full hiddenscrollbar">

@@ -87,7 +87,7 @@ export default function SettingsPage() {
 
   return (
     <main className="ml-64 min-h-screen bg-gray-50 dark:bg-zinc-950 p-6 md:p-10">
-      <div className="w-full">
+      <div className="max-w-4xl">
         <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
           Settings
         </h1>
@@ -107,20 +107,7 @@ space-y-6
 "
         >
           <div>
-            <label
-              className="
-w-full
-bg-white dark:bg-zinc-950
-border border-gray-300 dark:border-zinc-700
-text-gray-900 dark:text-white
-rounded-lg
-px-3 py-2
-text-sm
-focus:outline-none
-focus:ring-2
-focus:ring-emerald-500
-"
-            >
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Full name
             </label>
             <input
@@ -222,10 +209,21 @@ px-3 py-2
               Estimated monthly expenses (₹)
             </label>
             <input
-              type="number"
-              value={monthlyExpenseEstimate}
-              onChange={(e) => setMonthlyExpenseEstimate(e.target.value)}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              type="text"
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+              className="
+  w-full
+  bg-white dark:bg-zinc-950
+  border border-gray-300 dark:border-zinc-700
+  text-gray-900 dark:text-white
+  rounded-lg
+  px-3 py-2
+  text-sm
+  focus:outline-none
+  focus:ring-2
+  focus:ring-emerald-500
+"
             />
             <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
               Used to calculate your safe-to-spend amount.

@@ -44,29 +44,51 @@ export default function InvoiceViewPage() {
   }
 
   if (!invoice) {
-    return <main className="p-8">Loading...</main>;
+    return (
+      <main className="ml-64 min-h-screen bg-gray-50 dark:bg-zinc-950 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-10 h-10 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+
+          <p className="text-gray-500 dark:text-gray-400">Loading Invoice...</p>
+        </div>
+      </main>
+    );
   }
 
   return (
-    <main className="p-8">
-      <div className="bg-white max-w-[210mm] mx-auto p-12">
+    <main className="ml-64 min-h-screen bg-gray-50 dark:bg-zinc-950 p-8">
+      <div
+        className="
+bg-white dark:bg-zinc-900
+max-w-[210mm]
+mx-auto
+p-12
+rounded-2xl
+shadow-sm
+border border-gray-200 dark:border-zinc-800
+"
+      >
         {/* <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold">Invoice</h1>
         </div>*/}
 
         <div className="border-b pb-8 flex justify-between items-start">
           <div>
-            <h1 className="text-4xl font-bold tracking-tight">
+            <h1 className="text-4xl font-bold tracking-tight text-gray-900 dark:text-white">
               {invoice.company_name}
             </h1>
 
-            <p className="mt-3 text-gray-600">{invoice.company_address}</p>
+            <p className="mt-3 text-gray-600 dark:text-gray-400">
+              {invoice.company_address}
+            </p>
 
             <p className="mt-2 text-sm">GSTIN: {invoice.company_gst || "-"}</p>
           </div>
 
           <div className="text-right">
-            <h2 className="text-3xl font-bold">TAX INVOICE</h2>
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
+              TAX INVOICE
+            </h2>
 
             <div className="mt-5 space-y-2 text-sm">
               <p>
@@ -111,17 +133,31 @@ export default function InvoiceViewPage() {
           </div>
         </div>
 
-        <div className="overflow-hidden border rounded-2xl">
+        <div
+          className="
+overflow-hidden
+border border-gray-200 dark:border-zinc-800
+rounded-2xl
+"
+        >
           <table className="w-full">
             <thead>
-              <tr className="bg-gray-50">
-                <th className="text-left px-6 py-4">Description</th>
+              <tr className="bg-gray-50 dark:bg-zinc-950">
+                <th className="text-left px-6 py-4 text-gray-700 dark:text-gray-300">
+                  Description
+                </th>
 
-                <th className="text-left px-6 py-4">Qty</th>
+                <th className="text-left px-6 py-4 text-gray-700 dark:text-gray-300">
+                  Qty
+                </th>
 
-                <th className="text-left px-6 py-4">Rate</th>
+                <th className="text-left px-6 py-4 text-gray-700 dark:text-gray-300">
+                  Rate
+                </th>
 
-                <th className="text-left px-6 py-4">GST</th>
+                <th className="text-left px-6 py-4 text-gray-700 dark:text-gray-300">
+                  GST
+                </th>
 
                 <th className="text-right px-6 py-4">Amount</th>
               </tr>
@@ -133,7 +169,10 @@ export default function InvoiceViewPage() {
                   Number(item.quantity) * Number(item.unit_price);
 
                 return (
-                  <tr key={item.id} className="border-t">
+                  <tr
+                    key={item.id}
+                    className="border-t border-gray-200 dark:border-zinc-800"
+                  >
                     <td className="px-6 py-4">{item.description}</td>
 
                     <td className="px-6 py-4">{item.quantity}</td>
@@ -174,10 +213,22 @@ export default function InvoiceViewPage() {
               <span>{formatCurrency(invoice.discount || 0)}</span>
             </div>
 
-            <div className="border-t mt-4 pt-4 flex justify-between text-3xl font-bold">
+            <div
+              className="
+border-t border-gray-200 dark:border-zinc-800
+mt-4
+pt-4
+flex justify-between
+text-3xl
+font-bold
+text-gray-900 dark:text-white
+"
+            >
               <span>Total</span>
 
-              <span>{formatCurrency(invoice.total_amount)}</span>
+              <span className="text-emerald-600 dark:text-emerald-400">
+                {formatCurrency(invoice.total_amount)}
+              </span>
             </div>
           </div>
         </div>
@@ -185,17 +236,19 @@ export default function InvoiceViewPage() {
         <div className="mt-14 border-t pt-8">
           <h3 className="font-semibold text-lg mb-4">Payment Information</h3>
 
-          <p className="text-gray-600">
+          <p className="text-gray-600 dark:text-gray-400">
             Payment is due on or before {invoice.due_date || "the due date"}.
           </p>
         </div>
 
-        <div className="flex justify-between mb-10">
+        <div className="grid md:grid-cols-2 gap-10 mb-10">
           {invoice.notes && (
             <div className="mt-10">
               <h3 className="font-semibold mb-2">Notes</h3>
 
-              <p className="text-gray-600">{invoice.notes}</p>
+              <p className="text-gray-600 dark:text-gray-400">
+                {invoice.notes}
+              </p>
             </div>
           )}
 
@@ -203,7 +256,9 @@ export default function InvoiceViewPage() {
             <div className="mt-10">
               <h3 className="font-semibold mb-2">Terms & Conditions</h3>
 
-              <p className="text-gray-600">{invoice.terms}</p>
+              <p className="text-gray-600 dark:text-gray-400">
+                {invoice.terms}
+              </p>
             </div>
           )}
         </div>

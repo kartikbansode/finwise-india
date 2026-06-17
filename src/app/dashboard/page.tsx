@@ -169,8 +169,8 @@ export default function DashboardPage() {
   return (
     <main className="min-h-screen bg-gray-50 p-6 md:p-10">
       <div className="w-full px-8">
-        <div className="flex items-center justify-between mb-6">
-          <div className="bg-white rounded-2xl border p-8 mb-6">
+        <div className="flex flex-col lg:flex-row lg:justify-between lg:items-start gap-6 mb-6">
+          <div className="bg-white rounded-2xl border p-8 flex-1">
             <p className="text-sm text-gray-500">Financial Overview</p>
 
             <h2 className="text-4xl font-bold mt-3">
@@ -296,36 +296,6 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-          <div className="bg-white rounded-xl border border-gray-200 p-5">
-            <p className="text-xs text-gray-500 uppercase tracking-wide">
-              Income this month
-            </p>
-            <p className="text-2xl font-bold text-gray-900 mt-1">
-              ₹{monthlyIncome.toLocaleString("en-IN")}
-            </p>
-          </div>
-          <div className="bg-white rounded-xl border border-gray-200 p-5">
-            <p className="text-xs text-gray-500 uppercase tracking-wide">
-              Tax to set aside
-            </p>
-            <p className="text-2xl font-bold text-amber-600 mt-1">
-              ₹{breakdown.incomeTax.toLocaleString("en-IN")}
-            </p>
-          </div>
-          <div className="bg-emerald-600 rounded-xl p-5">
-            <p className="text-xs text-emerald-100 uppercase tracking-wide">
-              Safe to spend
-            </p>
-            <p className="text-2xl font-bold text-white mt-1">
-              ₹{Math.max(0, breakdown.safeToSpend).toLocaleString("en-IN")}
-            </p>
-            <p className="text-xs text-emerald-100 mt-2">
-              After tax & expense reserve
-            </p>
-          </div>
-        </div>
-
         <div className="bg-white rounded-xl border p-5 mb-6">
           <h3 className="font-semibold mb-4">Financial Insights</h3>
 
@@ -359,9 +329,7 @@ export default function DashboardPage() {
                 ? "44AD"
                 : "Normal"}
           </p>
-        </div>
 
-        <div className="bg-white rounded-xl border p-5 mb-6">
           <p className="text-xs text-gray-500 uppercase">Tax Readiness</p>
 
           <p className="text-3xl font-bold mt-2">
@@ -415,7 +383,13 @@ export default function DashboardPage() {
         </div>
 
         <div className="grid md:grid-cols-4 gap-4 mb-6">
-          <Link href="/income">Add Income</Link>
+          <Link
+            href="/income"
+            className="bg-white border rounded-xl p-5 hover:border-emerald-500 transition"
+          >
+            <p className="font-semibold">Add Income</p>
+            <p className="text-sm text-gray-500">Record new income</p>
+          </Link>
 
           <Link href="/expenses">Add Expense</Link>
 
@@ -430,30 +404,6 @@ export default function DashboardPage() {
         </div>
 
         <TaxDisclaimer />
-        <div className="bg-white rounded-xl border p-5 mb-6">
-          <h3 className="font-semibold mb-4">Financial Insights</h3>
-
-          <ul className="space-y-2 text-sm text-gray-600">
-            <li>
-              • Estimated annual income: ₹
-              {annualProjected.toLocaleString("en-IN")}
-            </li>
-
-            <li>
-              • Tax liability: ₹{breakdown.incomeTax.toLocaleString("en-IN")}
-            </li>
-
-            <li>
-              • Safe spending available: ₹
-              {Math.max(0, breakdown.safeToSpend).toLocaleString("en-IN")}
-            </li>
-
-            <li>
-              • Current savings rate:
-              {savingsRate}%
-            </li>
-          </ul>
-        </div>
       </div>
     </main>
   );

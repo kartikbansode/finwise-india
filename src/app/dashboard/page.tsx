@@ -33,10 +33,6 @@ export default function DashboardPage() {
       const { data: userData } = await supabase.auth.getUser();
 
       if (!userData.user) {
-        setLoading(false);
-        return;
-      }
-      if (!userData.user) {
         router.replace("/login");
         return;
       }
@@ -49,6 +45,7 @@ export default function DashboardPage() {
       setProfile(profileData);
 
       if (!profileData?.onboarding_completed) {
+        setCheckingAuth(false);
         router.replace("/onboarding");
         return;
       }
@@ -99,15 +96,22 @@ export default function DashboardPage() {
         })),
       );
 
+      setCheckingAuth(false);
       setLoading(false);
     }
+
     load();
   }, []);
-
-  if (loading) {
+  if (checkingAuth || loading) {
     return (
-      <main className="min-h-screen bg-gray-50 p-10">
-        <p className="text-gray-500">Loading dashboard...</p>
+      <main className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <div className="w-12 h-12 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+
+          <h2 className="text-xl font-semibold">Loading your workspace...</h2>
+
+          <p className="text-gray-500 mt-2">Please wait a moment.</p>
+        </div>
       </main>
     );
   }
@@ -122,7 +126,6 @@ export default function DashboardPage() {
       </main>
     );
   }
-  setCheckingAuth(false);
 
   const annualProjected = monthlyIncome * 12;
 
@@ -152,20 +155,6 @@ export default function DashboardPage() {
   );
 
   const nextDue = getNextAdvanceTaxDueDate();
-
-  if (checkingAuth) {
-    return (
-      <main className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-center">
-          <div className="w-12 h-12 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-
-          <h2 className="text-xl font-semibold">Loading your workspace...</h2>
-
-          <p className="text-gray-500 mt-2">Please wait a moment.</p>
-        </div>
-      </main>
-    );
-  }
 
   return (
     <main className="min-h-screen bg-gray-50 p-6 md:p-10">

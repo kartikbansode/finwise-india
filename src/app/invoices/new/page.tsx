@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { createClient } from "@/lib/supabase";
@@ -48,6 +48,30 @@ export default function NewInvoicePage() {
       gst_percentage: 18,
     },
   ]);
+
+  useEffect(() => {
+    loadProfile();
+  }, []);
+
+  async function loadProfile() {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) return;
+
+    const { data } = await supabase
+      .from("profiles")
+      .select("*")
+      .eq("id", user.id)
+      .single();
+
+    if (data) {
+      setCompanyName(data.full_name || "");
+      setCompanyGST(data.gst_number || "");
+      setCompanyAddress(data.company_address || "");
+    }
+  }
 
   async function createInvoice() {
     setLoading(true);
@@ -123,8 +147,6 @@ export default function NewInvoicePage() {
       setLoading(false);
       return;
     }
-    console.log(invoice);
-    console.log(error);
 
     const invoiceItems = items
       .filter((item) => item.description.trim() !== "")
@@ -154,32 +176,57 @@ export default function NewInvoicePage() {
   }
 
   return (
-    <main className="p-8">
+    <main className="ml-64 min-h-screen bg-gray-50 dark:bg-zinc-950 p-8">
       <div className="max-w-7xl mx-auto">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold">Create Invoice</h1>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+            Create Invoice
+          </h1>
 
-          <p className="text-gray-500 mt-2">Professional GST Invoice</p>
+          <p className="text-gray-500 dark:text-gray-400 mt-2">
+            Professional GST Invoice
+          </p>
         </div>
 
         <div className="grid lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 space-y-6">
-            <div className="bg-white border rounded-2xl p-6">
-              <h2 className="font-semibold mb-6">Company Details</h2>
+            <div
+              className="bg-white dark:bg-zinc-900
+border border-gray-200 dark:border-zinc-800
+rounded-2xl
+p-6"
+            >
+              <h2 className="font-semibold text-gray-900 dark:text-white mb-6">
+                Company Details
+              </h2>
 
               <div className="grid md:grid-cols-2 gap-4">
                 <input
                   value={companyName}
                   onChange={(e) => setCompanyName(e.target.value)}
                   placeholder="Company Name"
-                  className="border rounded-xl px-4 py-3"
+                  className="
+bg-white dark:bg-zinc-950
+border border-gray-300 dark:border-zinc-700
+text-gray-900 dark:text-white
+rounded-xl
+px-4
+py-3
+"
                 />
 
                 <input
                   value={companyGST}
                   onChange={(e) => setCompanyGST(e.target.value)}
                   placeholder="GST Number"
-                  className="border rounded-xl px-4 py-3"
+                  className="
+bg-white dark:bg-zinc-950
+border border-gray-300 dark:border-zinc-700
+text-gray-900 dark:text-white
+rounded-xl
+px-4
+py-3
+"
                 />
               </div>
 
@@ -187,41 +234,84 @@ export default function NewInvoicePage() {
                 value={companyAddress}
                 onChange={(e) => setCompanyAddress(e.target.value)}
                 placeholder="Company Address"
-                className="border rounded-xl px-4 py-3 w-full mt-4"
+                className="
+w-full mt-4
+bg-white dark:bg-zinc-950
+border border-gray-300 dark:border-zinc-700
+text-gray-900 dark:text-white
+rounded-xl
+px-4
+py-3
+"
                 rows={3}
               />
             </div>
 
-            <div className="bg-white border rounded-2xl p-6">
-              <h2 className="font-semibold mb-6">Client Details</h2>
+            <div
+              className="bg-white dark:bg-zinc-900
+border border-gray-200 dark:border-zinc-800
+rounded-2xl
+p-6"
+            >
+              <h2 className="font-semibold text-gray-900 dark:text-white mb-6">
+                Client Details
+              </h2>
 
               <div className="grid md:grid-cols-2 gap-4">
                 <input
                   value={clientName}
                   onChange={(e) => setClientName(e.target.value)}
                   placeholder="Client Name"
-                  className="border rounded-xl px-4 py-3"
+                  className="
+bg-white dark:bg-zinc-950
+border border-gray-300 dark:border-zinc-700
+text-gray-900 dark:text-white
+rounded-xl
+px-4
+py-3
+"
                 />
 
                 <input
                   value={clientEmail}
                   onChange={(e) => setClientEmail(e.target.value)}
                   placeholder="Client Email"
-                  className="border rounded-xl px-4 py-3"
+                  className="
+bg-white dark:bg-zinc-950
+border border-gray-300 dark:border-zinc-700
+text-gray-900 dark:text-white
+rounded-xl
+px-4
+py-3
+"
                 />
 
                 <input
                   value={clientGST}
                   onChange={(e) => setClientGST(e.target.value)}
                   placeholder="Client GST"
-                  className="border rounded-xl px-4 py-3"
+                  className="
+bg-white dark:bg-zinc-950
+border border-gray-300 dark:border-zinc-700
+text-gray-900 dark:text-white
+rounded-xl
+px-4
+py-3
+"
                 />
 
                 <input
                   type="date"
                   value={dueDate}
                   onChange={(e) => setDueDate(e.target.value)}
-                  className="border rounded-xl px-4 py-3"
+                  className="
+bg-white dark:bg-zinc-950
+border border-gray-300 dark:border-zinc-700
+text-gray-900 dark:text-white
+rounded-xl
+px-4
+py-3
+"
                 />
               </div>
 
@@ -229,56 +319,123 @@ export default function NewInvoicePage() {
                 value={clientAddress}
                 onChange={(e) => setClientAddress(e.target.value)}
                 placeholder="Client Address"
-                className="border rounded-xl px-4 py-3 w-full mt-4"
+                className="
+w-full mt-4
+bg-white dark:bg-zinc-950
+border border-gray-300 dark:border-zinc-700
+text-gray-900 dark:text-white
+rounded-xl
+px-4
+py-3
+"
                 rows={3}
               />
             </div>
 
-            <div className="bg-white border rounded-2xl p-6">
-              <h2 className="font-semibold mb-4">Invoice Dates</h2>
+            <div
+              className="bg-white dark:bg-zinc-900
+border border-gray-200 dark:border-zinc-800
+rounded-2xl
+p-6"
+            >
+              <h2 className="font-semibold text-gray-900 dark:text-white mb-4">
+                Invoice Dates
+              </h2>
 
               <input
                 type="date"
                 value={invoiceDate}
                 onChange={(e) => setInvoiceDate(e.target.value)}
-                className="border rounded-xl px-4 py-3"
+                className="
+bg-white dark:bg-zinc-950
+border border-gray-300 dark:border-zinc-700
+text-gray-900 dark:text-white
+rounded-xl
+px-4
+py-3
+"
               />
             </div>
 
             <InvoiceItemsTable items={items} setItems={setItems} />
 
-            <div className="bg-white border rounded-2xl p-6">
-              <h2 className="font-semibold mb-4">Notes</h2>
+            <div
+              className="bg-white dark:bg-zinc-900
+border border-gray-200 dark:border-zinc-800
+rounded-2xl
+p-6"
+            >
+              <h2 className="font-semibold text-gray-900 dark:text-white mb-4">
+                Notes
+              </h2>
 
               <textarea
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
-                className="w-full border rounded-xl px-4 py-3"
+                className="
+w-full
+bg-white dark:bg-zinc-950
+border border-gray-300 dark:border-zinc-700
+text-gray-900 dark:text-white
+rounded-xl
+px-4
+py-3
+"
                 rows={4}
               />
             </div>
 
-            <div className="bg-white border rounded-2xl p-6">
-              <h2 className="font-semibold mb-4">Terms & Conditions</h2>
+            <div
+              className="bg-white dark:bg-zinc-900
+border border-gray-200 dark:border-zinc-800
+rounded-2xl
+p-6"
+            >
+              <h2 className="font-semibold text-gray-900 dark:text-white mb-4">
+                Terms & Conditions
+              </h2>
 
               <textarea
                 value={terms}
                 onChange={(e) => setTerms(e.target.value)}
-                className="w-full border rounded-xl px-4 py-3"
+                className="
+w-full
+bg-white dark:bg-zinc-950
+border border-gray-300 dark:border-zinc-700
+text-gray-900 dark:text-white
+rounded-xl
+px-4
+py-3
+"
                 rows={4}
               />
             </div>
           </div>
 
-          <div className="space-y-6">
-            <div className="bg-white border rounded-2xl p-6">
-              <label className="block mb-2 font-medium">Discount</label>
+          <div className="space-y-6 lg:sticky lg:top-8 h-fit">
+            <div
+              className="bg-white dark:bg-zinc-900
+border border-gray-200 dark:border-zinc-800
+rounded-2xl
+p-6"
+            >
+              <label className="block mb-2 font-medium text-gray-900 dark:text-white">
+                Discount
+              </label>
 
               <input
                 type="number"
                 value={discount}
                 onChange={(e) => setDiscount(Number(e.target.value))}
-                className="w-full border rounded-xl px-4 py-3"
+                className="
+w-full
+bg-white dark:bg-zinc-950
+border border-gray-300 dark:border-zinc-700
+text-gray-900 dark:text-white
+rounded-xl
+px-4
+py-3
+"
               />
             </div>
 
@@ -287,7 +444,17 @@ export default function NewInvoicePage() {
             <button
               onClick={createInvoice}
               disabled={loading}
-              className="w-full bg-emerald-600 text-white py-4 rounded-xl font-semibold"
+              className="
+w-full
+bg-emerald-600
+hover:bg-emerald-700
+text-white
+py-4
+rounded-xl
+font-semibold
+transition
+disabled:opacity-50
+"
             >
               {loading ? "Creating Invoice..." : "Create Invoice"}
             </button>

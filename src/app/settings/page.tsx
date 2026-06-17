@@ -303,13 +303,9 @@ py-3
           </div>
 
           <div className="pt-6 border-t border-gray-200 dark:border-zinc-800">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
               Site Settings
             </h2>
-
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1 mb-5">
-              Customize your FinWise experience.
-            </p>
 
             <div className="flex items-center justify-between">
               <div>
@@ -317,7 +313,7 @@ py-3
                   Dark Mode
                 </p>
 
-                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                <p className="text-xs text-gray-500 dark:text-gray-400">
                   Enable dark appearance across FinWise.
                 </p>
               </div>

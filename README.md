@@ -1,6 +1,6 @@
 # FinWise India
 
->**Version:** 1.1.0 ( Major Dashboard Changes )
+>**Version:** 1.2.0 ( Complete Dark Mode support )
 >
 >**Release Date:** June 17, 2026
 
@@ -10,23 +10,27 @@ Smart Finance & Tax Management Platform for Indian Freelancers, Consultants, Age
 
 ---
 
-## What's new in v1.1.0
+## What's new in v1.2.0
 
-- Redesigned dashboard experience
-- Financial overview section
-- Profit, savings rate and expense metrics
-- Improved tax configuration display
-- Enhanced quick actions
-- Privacy Policy & Terms & Conditions page
+- Complete Dark Mode support across the platform
+- Theme switching from Settings and User Menu
+- Company Profile Settings
+- Enhanced User Profile Management
 
-UI Improvements
-- Dashboard redesign
-- Better spacing and layout
-- Improved navigation
-- Cleaner cards and charts
+Performance Improvements
+- Faster Dashboard Loading
+- Improved Data Fetching
+- Better State Management
+- Optimized Component Rendering
 
 Bug Fixes
-- Multiple dashboard stability improvements
+- Fixed dark mode inconsistencies
+- Fixed chart responsiveness issues
+- Fixed invoice rendering issues
+- Fixed sidebar theme issues
+- Fixed card color mismatches
+- Fixed form alignment issues
+- Fixed settings page layout issues
 
 ---
 

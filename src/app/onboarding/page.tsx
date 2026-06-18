@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { ChevronDown } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase";
 
@@ -296,22 +297,38 @@ px-4 py-3
             User Type
           </label>
 
-          <select
-            value={userType}
-            onChange={(e) => setUserType(e.target.value)}
-            className="
+          <div className="relative">
+            <select
+              value={userType}
+              onChange={(e) => setUserType(e.target.value)}
+              className="
 w-full
+appearance-none
 bg-white dark:bg-zinc-950
 border border-gray-300 dark:border-zinc-700
 text-gray-900 dark:text-white
 rounded-xl
 px-4 py-3
+pr-10
 "
-          >
-            <option value="freelancer">Freelancer</option>
+            >
+              <option value="freelancer">Freelancer</option>
+              <option value="business">Business Owner</option>
+            </select>
 
-            <option value="business">Business Owner</option>
-          </select>
+            <ChevronDown
+              size={18}
+              className="
+absolute
+right-4
+top-1/2
+-transform
+-translate-y-1/2
+text-gray-500 dark:text-gray-400
+pointer-events-none
+"
+            />
+          </div>
         </div>
 
         <div className="mt-6">
@@ -319,22 +336,38 @@ px-4 py-3
             Tax Regime
           </label>
 
-          <select
-            value={taxRegime}
-            onChange={(e) => setTaxRegime(e.target.value)}
-            className="
+          <div className="relative">
+            <select
+              value={taxRegime}
+              onChange={(e) => setTaxRegime(e.target.value)}
+              className="
 w-full
+appearance-none
 bg-white dark:bg-zinc-950
 border border-gray-300 dark:border-zinc-700
 text-gray-900 dark:text-white
 rounded-xl
 px-4 py-3
+pr-10
 "
-          >
-            <option value="new">New Regime</option>
+            >
+              <option value="new">New Regime</option>
+              <option value="old">Old Regime</option>
+            </select>
 
-            <option value="old">Old Regime</option>
-          </select>
+            <ChevronDown
+              size={18}
+              className="
+absolute
+right-4
+top-1/2
+-transform
+-translate-y-1/2
+text-gray-500 dark:text-gray-400
+pointer-events-none
+"
+            />
+          </div>
         </div>
 
         <div className="mt-6">
@@ -342,24 +375,39 @@ px-4 py-3
             Tax Method
           </label>
 
-          <select
-            value={taxMethod}
-            onChange={(e) => setTaxMethod(e.target.value)}
-            className="
+          <div className="relative">
+            <select
+              value={taxMethod}
+              onChange={(e) => setTaxMethod(e.target.value)}
+              className="
 w-full
+appearance-none
 bg-white dark:bg-zinc-950
 border border-gray-300 dark:border-zinc-700
 text-gray-900 dark:text-white
 rounded-xl
 px-4 py-3
+pr-10
 "
-          >
-            <option value="normal">Normal Taxation</option>
+            >
+              <option value="normal">Normal Taxation</option>
+              <option value="44ada">Section 44ADA</option>
+              <option value="44ad">Section 44AD</option>
+            </select>
 
-            <option value="44ada">Section 44ADA</option>
-
-            <option value="44ad">Section 44AD</option>
-          </select>
+            <ChevronDown
+              size={18}
+              className="
+absolute
+right-4
+top-1/2
+-transform
+-translate-y-1/2
+text-gray-500 dark:text-gray-400
+pointer-events-none
+"
+            />
+          </div>
         </div>
 
         <div

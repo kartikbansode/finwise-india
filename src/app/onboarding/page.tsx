@@ -136,47 +136,34 @@ export default function OnboardingPage() {
 
   if (checkingProfile) {
     return (
-      <main className="min-h-screen flex items-center justify-center bg-gray-50">
+      <main className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-zinc-950">
         <div className="text-center">
           <div className="w-10 h-10 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin mx-auto" />
 
-          <p className="mt-4 text-gray-500">Loading...</p>
-        </div>
-      </main>
-    );
-  }
-
-  if (checkingProfile) {
-    return (
-      <main className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <h2 className="text-xl font-semibold">Loading your workspace...</h2>
-
-          <p className="text-gray-500 mt-2">Please wait...</p>
-        </div>
-      </main>
-    );
-  }
-
-  if (checkingProfile) {
-    return (
-      <main className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <h2 className="text-xl font-semibold">Loading your dashboard...</h2>
-
-          <p className="text-gray-500 mt-2">Please wait a moment.</p>
+          <p className="mt-4 text-gray-500 dark:text-gray-400">Loading...</p>
         </div>
       </main>
     );
   }
 
   return (
-    <main className="min-h-screen bg-gray-50 flex items-center justify-center p-6">
-      <div className="w-full max-w-3xl bg-white rounded-3xl border border-gray-200 shadow-lg p-8">
+    <main className="min-h-screen bg-gray-50 dark:bg-zinc-950 flex items-center justify-center p-6">
+      <div
+        className="
+w-full max-w-3xl
+bg-white dark:bg-zinc-900
+border border-gray-200 dark:border-zinc-800
+rounded-3xl
+shadow-lg
+p-8
+"
+      >
         <div className="mb-8">
-          <h1 className="text-3xl font-bold">Welcome to FinWise</h1>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+            Welcome to FinWise
+          </h1>
 
-          <p className="text-gray-500 mt-2">
+          <p className="text-gray-500 dark:text-gray-400 mt-2">
             Let's personalize your finance workspace.
           </p>
         </div>
@@ -189,39 +176,64 @@ export default function OnboardingPage() {
 
         <div className="grid md:grid-cols-2 gap-5">
           <div>
-            <label className="block text-sm font-medium mb-1">Full Name</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Full Name
+            </label>
 
             <input
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
-              className="w-full border rounded-xl px-4 py-3"
+              className="
+w-full
+bg-white dark:bg-zinc-950
+border border-gray-300 dark:border-zinc-700
+text-gray-900 dark:text-white
+rounded-xl
+px-4 py-3
+"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">Phone</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Phone
+            </label>
 
             <input
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
-              className="w-full border rounded-xl px-4 py-3"
+              className="
+w-full
+bg-white dark:bg-zinc-950
+border border-gray-300 dark:border-zinc-700
+text-gray-900 dark:text-white
+rounded-xl
+px-4 py-3
+"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Company Name
             </label>
 
             <input
               value={companyName}
               onChange={(e) => setCompanyName(e.target.value)}
-              className="w-full border rounded-xl px-4 py-3"
+              className="
+w-full
+bg-white dark:bg-zinc-950
+border border-gray-300 dark:border-zinc-700
+text-gray-900 dark:text-white
+rounded-xl
+px-4 py-3
+"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Monthly Expenses (₹)
             </label>
 
@@ -229,38 +241,72 @@ export default function OnboardingPage() {
               type="number"
               value={monthlyExpenseEstimate}
               onChange={(e) => setMonthlyExpenseEstimate(e.target.value)}
-              className="w-full border rounded-xl px-4 py-3"
+              className="
+w-full
+bg-white dark:bg-zinc-950
+border border-gray-300 dark:border-zinc-700
+text-gray-900 dark:text-white
+rounded-xl
+px-4 py-3
+"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">City</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              City
+            </label>
 
             <input
               value={city}
               onChange={(e) => setCity(e.target.value)}
-              className="w-full border rounded-xl px-4 py-3"
+              className="
+w-full
+bg-white dark:bg-zinc-950
+border border-gray-300 dark:border-zinc-700
+text-gray-900 dark:text-white
+rounded-xl
+px-4 py-3
+"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">State</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              State
+            </label>
 
             <input
               value={stateName}
               onChange={(e) => setStateName(e.target.value)}
-              className="w-full border rounded-xl px-4 py-3"
+              className="
+w-full
+bg-white dark:bg-zinc-950
+border border-gray-300 dark:border-zinc-700
+text-gray-900 dark:text-white
+rounded-xl
+px-4 py-3
+"
             />
           </div>
         </div>
 
         <div className="mt-6">
-          <label className="block text-sm font-medium mb-2">User Type</label>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            User Type
+          </label>
 
           <select
             value={userType}
             onChange={(e) => setUserType(e.target.value)}
-            className="w-full border rounded-xl px-4 py-3"
+            className="
+w-full
+bg-white dark:bg-zinc-950
+border border-gray-300 dark:border-zinc-700
+text-gray-900 dark:text-white
+rounded-xl
+px-4 py-3
+"
           >
             <option value="freelancer">Freelancer</option>
 
@@ -269,12 +315,21 @@ export default function OnboardingPage() {
         </div>
 
         <div className="mt-6">
-          <label className="block text-sm font-medium mb-2">Tax Regime</label>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            Tax Regime
+          </label>
 
           <select
             value={taxRegime}
             onChange={(e) => setTaxRegime(e.target.value)}
-            className="w-full border rounded-xl px-4 py-3"
+            className="
+w-full
+bg-white dark:bg-zinc-950
+border border-gray-300 dark:border-zinc-700
+text-gray-900 dark:text-white
+rounded-xl
+px-4 py-3
+"
           >
             <option value="new">New Regime</option>
 
@@ -283,12 +338,21 @@ export default function OnboardingPage() {
         </div>
 
         <div className="mt-6">
-          <label className="block text-sm font-medium mb-2">Tax Method</label>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            Tax Method
+          </label>
 
           <select
             value={taxMethod}
             onChange={(e) => setTaxMethod(e.target.value)}
-            className="w-full border rounded-xl px-4 py-3"
+            className="
+w-full
+bg-white dark:bg-zinc-950
+border border-gray-300 dark:border-zinc-700
+text-gray-900 dark:text-white
+rounded-xl
+px-4 py-3
+"
           >
             <option value="normal">Normal Taxation</option>
 
@@ -298,14 +362,33 @@ export default function OnboardingPage() {
           </select>
         </div>
 
-        <div className="mt-6 flex items-center justify-between border rounded-xl p-4">
-          <span className="font-medium">GST Registered</span>
+        <div
+          className="
+mt-6
+flex items-center justify-between
+bg-white dark:bg-zinc-950
+border border-gray-300 dark:border-zinc-700
+rounded-xl
+p-4
+"
+        >
+          <span className="font-medium text-gray-900 dark:text-white">
+            GST Registered
+          </span>
 
-          <input
-            type="checkbox"
-            checked={gstRegistered}
-            onChange={() => setGstRegistered(!gstRegistered)}
-          />
+          <button
+            type="button"
+            onClick={() => setGstRegistered(!gstRegistered)}
+            className={`w-12 h-6 rounded-full relative transition ${
+              gstRegistered ? "bg-emerald-600" : "bg-gray-300 dark:bg-zinc-700"
+            }`}
+          >
+            <span
+              className={`absolute top-1 left-1 w-4 h-4 bg-white rounded-full transition ${
+                gstRegistered ? "translate-x-6" : ""
+              }`}
+            />
+          </button>
         </div>
 
         <button

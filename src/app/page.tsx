@@ -3,8 +3,21 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
-import { Menu, X, TrendingUp, FileText, DollarSign, PieChart, Check } from "lucide-react";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  AnimatePresence,
+} from "framer-motion";
+import {
+  Menu,
+  X,
+  TrendingUp,
+  FileText,
+  DollarSign,
+  PieChart,
+  Check,
+} from "lucide-react";
 
 export default function LandingPage() {
   const [scrollY, setScrollY] = useState(0);
@@ -22,9 +35,15 @@ export default function LandingPage() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  type StatCounterProps = {
+    target: number;
+    label: string;
+    prefix?: string;
+  };
+
   // Stats counter animation
-  const StatCounter = ({ target, label, prefix = "" }) => {
-    const [count, setCount] = useState(0);
+  const StatCounter = ({ target, label, prefix = "" }: StatCounterProps) => {
+    const [count, setCount] = useState<number>(0);
 
     useEffect(() => {
       let start = 0;
@@ -48,7 +67,9 @@ export default function LandingPage() {
           {count.toLocaleString()}
           {target === 99.9 ? "%" : "+"}
         </div>
-        <p className="text-gray-600 dark:text-gray-400 text-sm md:text-base">{label}</p>
+        <p className="text-gray-600 dark:text-gray-400 text-sm md:text-base">
+          {label}
+        </p>
       </div>
     );
   };
@@ -71,13 +92,22 @@ export default function LandingPage() {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8">
-            <a href="#features" className="text-sm hover:text-emerald-600 transition">
+            <a
+              href="#features"
+              className="text-sm hover:text-emerald-600 transition"
+            >
               Features
             </a>
-            <a href="#tax" className="text-sm hover:text-emerald-600 transition">
+            <a
+              href="#tax"
+              className="text-sm hover:text-emerald-600 transition"
+            >
               Tax Center
             </a>
-            <a href="#why" className="text-sm hover:text-emerald-600 transition">
+            <a
+              href="#why"
+              className="text-sm hover:text-emerald-600 transition"
+            >
               Why FinWise
             </a>
           </div>
@@ -117,7 +147,10 @@ export default function LandingPage() {
               className="md:hidden absolute top-full left-0 right-0 bg-white dark:bg-zinc-900 border-b border-gray-200 dark:border-zinc-800"
             >
               <div className="px-4 py-4 space-y-4">
-                <a href="#features" className="block text-sm hover:text-emerald-600">
+                <a
+                  href="#features"
+                  className="block text-sm hover:text-emerald-600"
+                >
                   Features
                 </a>
                 <a href="#tax" className="block text-sm hover:text-emerald-600">
@@ -127,10 +160,16 @@ export default function LandingPage() {
                   Why FinWise
                 </a>
                 <div className="flex gap-3 pt-4">
-                  <Link href="/login" className="flex-1 text-center text-sm px-4 py-2 rounded-lg border border-gray-300 dark:border-zinc-700">
+                  <Link
+                    href="/login"
+                    className="flex-1 text-center text-sm px-4 py-2 rounded-lg border border-gray-300 dark:border-zinc-700"
+                  >
                     Login
                   </Link>
-                  <Link href="/signup" className="flex-1 text-center text-sm px-4 py-2 rounded-lg bg-emerald-600 text-white">
+                  <Link
+                    href="/signup"
+                    className="flex-1 text-center text-sm px-4 py-2 rounded-lg bg-emerald-600 text-white"
+                  >
                     Start Free
                   </Link>
                 </div>
@@ -177,7 +216,9 @@ export default function LandingPage() {
           transition={{ delay: 0.4, duration: 0.8 }}
           className="text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto mb-8 md:mb-12"
         >
-          Know exactly how much money is yours. Built for Indian freelancers, agencies, consultants, and business owners who want clarity over their finances.
+          Know exactly how much money is yours. Built for Indian freelancers,
+          agencies, consultants, and business owners who want clarity over their
+          finances.
         </motion.p>
 
         <motion.div
@@ -192,9 +233,7 @@ export default function LandingPage() {
           >
             Create Free Account
           </Link>
-          <button
-            className="px-8 md:px-10 py-4 md:py-5 border-2 border-gray-300 dark:border-zinc-700 rounded-xl md:rounded-2xl font-semibold hover:bg-gray-50 dark:hover:bg-zinc-900 transition"
-          >
+          <button className="px-8 md:px-10 py-4 md:py-5 border-2 border-gray-300 dark:border-zinc-700 rounded-xl md:rounded-2xl font-semibold hover:bg-gray-50 dark:hover:bg-zinc-900 transition">
             Watch Demo
           </button>
         </motion.div>
@@ -216,7 +255,7 @@ export default function LandingPage() {
             className="relative"
             style={{
               perspective: "1000px",
-              transformStyle: "preserve-3d"
+              transformStyle: "preserve-3d",
             }}
           >
             <div className="bg-gradient-to-br from-emerald-100 to-teal-100 dark:from-emerald-900/20 dark:to-teal-900/20 rounded-3xl md:rounded-4xl overflow-hidden border border-emerald-200 dark:border-emerald-800 shadow-2xl">
@@ -224,8 +263,12 @@ export default function LandingPage() {
               <div className="aspect-video bg-gradient-to-br from-slate-900 via-emerald-900 to-slate-900 flex items-center justify-center">
                 <div className="text-center">
                   <TrendingUp className="w-16 h-16 md:w-20 md:h-20 mx-auto text-emerald-400 mb-4 opacity-50" />
-                  <p className="text-emerald-300 text-sm md:text-base">Dashboard Preview</p>
-                  <p className="text-gray-500 text-xs md:text-sm mt-2">Upload /public/landing/hero-dashboard.webp</p>
+                  <p className="text-emerald-300 text-sm md:text-base">
+                    Dashboard Preview
+                  </p>
+                  <p className="text-gray-500 text-xs md:text-sm mt-2">
+                    Upload /public/landing/hero-dashboard.webp
+                  </p>
                 </div>
               </div>
             </div>
@@ -238,7 +281,7 @@ export default function LandingPage() {
               transition={{
                 duration: 4,
                 repeat: Infinity,
-                ease: "easeInOut"
+                ease: "easeInOut",
               }}
               className="absolute -left-4 md:-left-8 top-1/4 w-40 md:w-48 bg-white dark:bg-zinc-900 rounded-2xl p-4 md:p-6 shadow-xl border border-gray-200 dark:border-zinc-800"
             >
@@ -258,7 +301,7 @@ export default function LandingPage() {
                 duration: 4,
                 repeat: Infinity,
                 ease: "easeInOut",
-                delay: 0.5
+                delay: 0.5,
               }}
               className="absolute -right-4 md:-right-8 top-1/3 w-40 md:w-48 bg-white dark:bg-zinc-900 rounded-2xl p-4 md:p-6 shadow-xl border border-gray-200 dark:border-zinc-800"
             >
@@ -278,7 +321,7 @@ export default function LandingPage() {
                 duration: 4,
                 repeat: Infinity,
                 ease: "easeInOut",
-                delay: 1
+                delay: 1,
               }}
               className="absolute -left-4 md:-left-8 bottom-1/4 w-40 md:w-48 bg-white dark:bg-zinc-900 rounded-2xl p-4 md:p-6 shadow-xl border border-gray-200 dark:border-zinc-800"
             >
@@ -309,8 +352,10 @@ export default function LandingPage() {
       </motion.section>
 
       {/* Feature Sections - Alternating Layout */}
-      <section id="features" className="py-20 md:py-32 px-4 md:px-6 max-w-7xl mx-auto space-y-20 md:space-y-32">
-        
+      <section
+        id="features"
+        className="py-20 md:py-32 px-4 md:px-6 max-w-7xl mx-auto space-y-20 md:space-y-32"
+      >
         {/* Feature 1 */}
         <motion.div
           initial={{ opacity: 0 }}
@@ -323,15 +368,26 @@ export default function LandingPage() {
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">Track Every Rupee.</h2>
+            <h2 className="text-4xl md:text-5xl font-bold mb-6">
+              Track Every Rupee.
+            </h2>
             <p className="text-lg text-gray-600 dark:text-gray-400 mb-6">
-              See where your money comes from and where it goes. Real-time income tracking with support for all payment methods. Invoice management that doesn't feel like a burden.
+              See where your money comes from and where it goes. Real-time
+              income tracking with support for all payment methods. Invoice
+              management that doesn't feel like a burden.
             </p>
             <ul className="space-y-4">
-              {["Multiple payment channels", "Invoice OCR", "Client tracking", "Payment reminders"].map((item) => (
+              {[
+                "Multiple payment channels",
+                "Invoice OCR",
+                "Client tracking",
+                "Payment reminders",
+              ].map((item) => (
                 <li key={item} className="flex items-center gap-3">
                   <Check className="w-5 h-5 text-emerald-600 flex-shrink-0" />
-                  <span className="text-gray-700 dark:text-gray-300">{item}</span>
+                  <span className="text-gray-700 dark:text-gray-300">
+                    {item}
+                  </span>
                 </li>
               ))}
             </ul>
@@ -344,7 +400,9 @@ export default function LandingPage() {
           >
             <div className="text-center">
               <TrendingUp className="w-20 h-20 mx-auto text-emerald-600 mb-4 opacity-60" />
-              <p className="text-emerald-700 dark:text-emerald-400 font-semibold">Income Dashboard</p>
+              <p className="text-emerald-700 dark:text-emerald-400 font-semibold">
+                Income Dashboard
+              </p>
             </div>
           </motion.div>
         </motion.div>
@@ -364,7 +422,9 @@ export default function LandingPage() {
           >
             <div className="text-center">
               <FileText className="w-20 h-20 mx-auto text-blue-600 mb-4 opacity-60" />
-              <p className="text-blue-700 dark:text-blue-400 font-semibold">Tax Center</p>
+              <p className="text-blue-700 dark:text-blue-400 font-semibold">
+                Tax Center
+              </p>
             </div>
           </motion.div>
           <motion.div
@@ -373,15 +433,25 @@ export default function LandingPage() {
             transition={{ duration: 0.8 }}
             className="order-1 md:order-2"
           >
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">Know Your Tax Before Government Does.</h2>
+            <h2 className="text-4xl md:text-5xl font-bold mb-6">
+              Know Your Tax Before Government Does.
+            </h2>
             <p className="text-lg text-gray-600 dark:text-gray-400 mb-6">
-              Accurate tax calculations for 44ADA, 44AD, GST, and advance tax. Built with India's tax rules in mind. No surprises during filing.
+              Accurate tax calculations for 44ADA, 44AD, GST, and advance tax.
+              Built with India's tax rules in mind. No surprises during filing.
             </p>
             <ul className="space-y-4">
-              {["GST Management", "44ADA/44AD Support", "Advance Tax Tracker", "ITR Readiness"].map((item) => (
+              {[
+                "GST Management",
+                "44ADA/44AD Support",
+                "Advance Tax Tracker",
+                "ITR Readiness",
+              ].map((item) => (
                 <li key={item} className="flex items-center gap-3">
                   <Check className="w-5 h-5 text-blue-600 flex-shrink-0" />
-                  <span className="text-gray-700 dark:text-gray-300">{item}</span>
+                  <span className="text-gray-700 dark:text-gray-300">
+                    {item}
+                  </span>
                 </li>
               ))}
             </ul>
@@ -400,15 +470,25 @@ export default function LandingPage() {
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">Professional Invoicing Built In.</h2>
+            <h2 className="text-4xl md:text-5xl font-bold mb-6">
+              Professional Invoicing Built In.
+            </h2>
             <p className="text-lg text-gray-600 dark:text-gray-400 mb-6">
-              Create and send invoices in seconds. Built-in templates for freelancers and agencies. Track payment status automatically.
+              Create and send invoices in seconds. Built-in templates for
+              freelancers and agencies. Track payment status automatically.
             </p>
             <ul className="space-y-4">
-              {["Instant Invoice Creation", "Custom Branding", "Recurring Invoices", "Payment Tracking"].map((item) => (
+              {[
+                "Instant Invoice Creation",
+                "Custom Branding",
+                "Recurring Invoices",
+                "Payment Tracking",
+              ].map((item) => (
                 <li key={item} className="flex items-center gap-3">
                   <Check className="w-5 h-5 text-emerald-600 flex-shrink-0" />
-                  <span className="text-gray-700 dark:text-gray-300">{item}</span>
+                  <span className="text-gray-700 dark:text-gray-300">
+                    {item}
+                  </span>
                 </li>
               ))}
             </ul>
@@ -421,7 +501,9 @@ export default function LandingPage() {
           >
             <div className="text-center">
               <FileText className="w-20 h-20 mx-auto text-purple-600 mb-4 opacity-60" />
-              <p className="text-purple-700 dark:text-purple-400 font-semibold">Invoice Generator</p>
+              <p className="text-purple-700 dark:text-purple-400 font-semibold">
+                Invoice Generator
+              </p>
             </div>
           </motion.div>
         </motion.div>
@@ -447,9 +529,13 @@ export default function LandingPage() {
             className="bg-white dark:bg-zinc-900 rounded-3xl p-8 md:p-10 border border-gray-200 dark:border-zinc-800"
           >
             <div className="mb-8">
-              <label className="block text-sm font-semibold mb-3">Annual Income</label>
+              <label className="block text-sm font-semibold mb-3">
+                Annual Income
+              </label>
               <div className="relative">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-xl font-semibold">₹</span>
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-xl font-semibold">
+                  ₹
+                </span>
                 <input
                   type="range"
                   min="0"
@@ -466,9 +552,13 @@ export default function LandingPage() {
             </div>
 
             <div className="mb-8">
-              <label className="block text-sm font-semibold mb-3">Annual Expenses</label>
+              <label className="block text-sm font-semibold mb-3">
+                Annual Expenses
+              </label>
               <div className="relative">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-xl font-semibold">₹</span>
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-xl font-semibold">
+                  ₹
+                </span>
                 <input
                   type="range"
                   min="0"
@@ -513,15 +603,21 @@ export default function LandingPage() {
                 <div className="space-y-4">
                   <div className="flex justify-between py-3 border-b border-emerald-200 dark:border-emerald-800">
                     <span>Net Income</span>
-                    <span className="font-semibold">₹{(netIncome / 100000).toFixed(1)}L</span>
+                    <span className="font-semibold">
+                      ₹{(netIncome / 100000).toFixed(1)}L
+                    </span>
                   </div>
                   <div className="flex justify-between py-3 border-b border-emerald-200 dark:border-emerald-800">
                     <span>Estimated Income Tax</span>
-                    <span className="font-semibold">₹{(tax / 100000).toFixed(1)}L</span>
+                    <span className="font-semibold">
+                      ₹{(tax / 100000).toFixed(1)}L
+                    </span>
                   </div>
                   <div className="flex justify-between py-3 border-b border-emerald-200 dark:border-emerald-800">
                     <span>GST (Approx)</span>
-                    <span className="font-semibold">₹{(gst / 100000).toFixed(1)}L</span>
+                    <span className="font-semibold">
+                      ₹{(gst / 100000).toFixed(1)}L
+                    </span>
                   </div>
                   <div className="flex justify-between py-3 bg-emerald-100 dark:bg-emerald-900/30 px-4 rounded-lg">
                     <span className="font-semibold">Total Tax Liability</span>
@@ -530,7 +626,8 @@ export default function LandingPage() {
                     </span>
                   </div>
                   <p className="text-xs text-gray-600 dark:text-gray-400 mt-6 pt-6 border-t border-emerald-200 dark:border-emerald-800">
-                    This is an estimate based on standard tax slabs. Consult a tax professional for accurate calculations.
+                    This is an estimate based on standard tax slabs. Consult a
+                    tax professional for accurate calculations.
                   </p>
                 </div>
               );
@@ -551,17 +648,42 @@ export default function LandingPage() {
           Built for Indian Businesses
         </h2>
         <p className="text-lg text-gray-600 dark:text-gray-400 text-center max-w-2xl mx-auto mb-12 md:mb-16">
-          Every feature is designed specifically for how you work and the taxes you pay.
+          Every feature is designed specifically for how you work and the taxes
+          you pay.
         </p>
 
         <div className="grid md:grid-cols-3 gap-6 md:gap-8">
           {[
-            { icon: "🏦", title: "GST Support", desc: "Full GST registration, filing, and compliance tracking" },
-            { icon: "📊", title: "44ADA/44AD", desc: "Presumptive income scheme for sole proprietors" },
-            { icon: "⏰", title: "Advance Tax", desc: "Automated advance tax calculations and reminders" },
-            { icon: "💰", title: "Cash Flow", desc: "Never run out of cash with predictive forecasting" },
-            { icon: "📈", title: "Profit Tracking", desc: "Real-time visibility into your business profitability" },
-            { icon: "🎯", title: "Business Goals", desc: "Set targets and track progress toward them" },
+            {
+              icon: "🏦",
+              title: "GST Support",
+              desc: "Full GST registration, filing, and compliance tracking",
+            },
+            {
+              icon: "📊",
+              title: "44ADA/44AD",
+              desc: "Presumptive income scheme for sole proprietors",
+            },
+            {
+              icon: "⏰",
+              title: "Advance Tax",
+              desc: "Automated advance tax calculations and reminders",
+            },
+            {
+              icon: "💰",
+              title: "Cash Flow",
+              desc: "Never run out of cash with predictive forecasting",
+            },
+            {
+              icon: "📈",
+              title: "Profit Tracking",
+              desc: "Real-time visibility into your business profitability",
+            },
+            {
+              icon: "🎯",
+              title: "Business Goals",
+              desc: "Set targets and track progress toward them",
+            },
           ].map((item, i) => (
             <motion.div
               key={i}
@@ -571,8 +693,12 @@ export default function LandingPage() {
               className="bg-white dark:bg-zinc-900 rounded-2xl p-6 md:p-8 border border-gray-200 dark:border-zinc-800 hover:border-emerald-500 dark:hover:border-emerald-600 transition"
             >
               <div className="text-4xl mb-4">{item.icon}</div>
-              <h3 className="text-lg md:text-xl font-bold mb-3">{item.title}</h3>
-              <p className="text-gray-600 dark:text-gray-400 text-sm md:text-base">{item.desc}</p>
+              <h3 className="text-lg md:text-xl font-bold mb-3">
+                {item.title}
+              </h3>
+              <p className="text-gray-600 dark:text-gray-400 text-sm md:text-base">
+                {item.desc}
+              </p>
             </motion.div>
           ))}
         </div>
@@ -593,22 +719,25 @@ export default function LandingPage() {
           <div className="grid md:grid-cols-3 gap-6 md:gap-8">
             {[
               {
-                quote: "Finally, I understand my tax liability. FinWise saved me thousands during filing.",
+                quote:
+                  "Finally, I understand my tax liability. FinWise saved me thousands during filing.",
                 author: "Priya Sharma",
                 role: "Freelance Designer",
-                location: "Bangalore"
+                location: "Bangalore",
               },
               {
-                quote: "Keeps me aware of taxes every month. No surprises. No stress.",
+                quote:
+                  "Keeps me aware of taxes every month. No surprises. No stress.",
                 author: "Rajesh Kumar",
                 role: "Web Developer",
-                location: "Pune"
+                location: "Pune",
               },
               {
-                quote: "Invoicing became a breeze. Clients love the professional look.",
+                quote:
+                  "Invoicing became a breeze. Clients love the professional look.",
                 author: "Amit Patel",
                 role: "Agency Owner",
-                location: "Mumbai"
+                location: "Mumbai",
               },
             ].map((testimonial, i) => (
               <motion.div
@@ -622,9 +751,15 @@ export default function LandingPage() {
                   "{testimonial.quote}"
                 </p>
                 <div>
-                  <p className="font-semibold text-gray-900 dark:text-white">{testimonial.author}</p>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">{testimonial.role}</p>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">{testimonial.location}</p>
+                  <p className="font-semibold text-gray-900 dark:text-white">
+                    {testimonial.author}
+                  </p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    {testimonial.role}
+                  </p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    {testimonial.location}
+                  </p>
                 </div>
               </motion.div>
             ))}
@@ -679,9 +814,21 @@ export default function LandingPage() {
             <div>
               <h4 className="font-semibold mb-4">Product</h4>
               <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
-                <li><a href="#" className="hover:text-emerald-600 transition">Features</a></li>
-                <li><a href="#" className="hover:text-emerald-600 transition">Pricing</a></li>
-                <li><a href="#" className="hover:text-emerald-600 transition">Tax Center</a></li>
+                <li>
+                  <a href="#" className="hover:text-emerald-600 transition">
+                    Features
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-emerald-600 transition">
+                    Pricing
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-emerald-600 transition">
+                    Tax Center
+                  </a>
+                </li>
               </ul>
             </div>
 
@@ -689,9 +836,21 @@ export default function LandingPage() {
             <div>
               <h4 className="font-semibold mb-4">Legal</h4>
               <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
-                <li><a href="#" className="hover:text-emerald-600 transition">Privacy</a></li>
-                <li><a href="#" className="hover:text-emerald-600 transition">Terms</a></li>
-                <li><a href="#" className="hover:text-emerald-600 transition">Contact</a></li>
+                <li>
+                  <a href="#" className="hover:text-emerald-600 transition">
+                    Privacy
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-emerald-600 transition">
+                    Terms
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-emerald-600 transition">
+                    Contact
+                  </a>
+                </li>
               </ul>
             </div>
 
@@ -699,9 +858,21 @@ export default function LandingPage() {
             <div>
               <h4 className="font-semibold mb-4">Support</h4>
               <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
-                <li><a href="#" className="hover:text-emerald-600 transition">Help Center</a></li>
-                <li><a href="#" className="hover:text-emerald-600 transition">Email us</a></li>
-                <li><a href="#" className="hover:text-emerald-600 transition">Community</a></li>
+                <li>
+                  <a href="#" className="hover:text-emerald-600 transition">
+                    Help Center
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-emerald-600 transition">
+                    Email us
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-emerald-600 transition">
+                    Community
+                  </a>
+                </li>
               </ul>
             </div>
           </div>

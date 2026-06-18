@@ -101,29 +101,33 @@ transition
             Invoices
           </h1>
 
-          <select
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-            className="
-bg-white dark:bg-zinc-950
-border border-gray-300 dark:border-zinc-700
-text-gray-900 dark:text-white
-rounded-xl
-px-4
-py-2
-pr-10
-appearance-none
-focus:outline-none
-focus:ring-2
-focus:ring-emerald-500
-"
-          >
-            <option value="all">All Invoices</option>
-            <option value="draft">Draft</option>
-            <option value="pending">Pending</option>
-            <option value="paid">Paid</option>
-            <option value="overdue">Overdue</option>
-          </select>
+          <div className="relative">
+            <select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              className="
+    bg-white dark:bg-zinc-950
+    border border-gray-300 dark:border-zinc-700
+    text-gray-900 dark:text-white
+    rounded-xl
+    px-4 py-2
+    pr-10
+    appearance-none
+    focus:outline-none
+    focus:ring-2
+    focus:ring-emerald-500
+    "
+            >
+              <option value="all">All Invoices</option>
+              <option value="draft">Draft</option>
+              <option value="pending">Pending</option>
+              <option value="paid">Paid</option>
+              <option value="overdue">Overdue</option>
+            </select>
+            <span className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
+              ▼
+            </span>
+          </div>
         </div>
         <div className="grid md:grid-cols-4 gap-4 mb-6">
           <div className="rounded-xl border border-blue-500/30 dark:bg-blue-950/30 p-5">
@@ -203,12 +207,13 @@ focus:ring-emerald-500
                     </td>
 
                     <td className="p-4">
-                      <select
-                        value={invoice.status}
-                        onChange={(e) =>
-                          updateStatus(invoice.id, e.target.value)
-                        }
-                        className={`
+                      <div className="relative inline-block">
+                        <select
+                          value={invoice.status}
+                          onChange={(e) =>
+                            updateStatus(invoice.id, e.target.value)
+                          }
+                          className={`
 px-3 py-2
 rounded-lg
 text-sm
@@ -217,55 +222,71 @@ border
 appearance-none
 pr-8
 focus:outline-none
+cursor-pointer
+
 
 ${
   invoice.status === "paid"
     ? `
-      bg-green-50
-      text-green-700
-      border-green-200
+      bg-green-100
+      text-green-800
+      border-green-300
 
-      dark:dark:bg-green-950/30
-      dark:text-green-400
-      dark:border-green-500/20
+      dark:bg-green-950/40
+      dark:text-green-300
+      dark:border-green-700
     `
     : invoice.status === "pending"
       ? `
-      bg-amber-50
-      text-amber-700
-      border-amber-200
+      bg-amber-100
+      text-amber-800
+      border-amber-300
 
-      dark:bg-amber-500/10
-      dark:text-amber-400
-      dark:border-amber-500/20
+      dark:bg-amber-950/40
+      dark:text-amber-300
+      dark:border-amber-700
     `
       : invoice.status === "draft"
         ? `
-      bg-gray-50
-      text-gray-700
-      border-gray-200
+      bg-zinc-100
+      text-zinc-700
+      border-zinc-300
 
       dark:bg-zinc-800
       dark:text-zinc-300
       dark:border-zinc-700
     `
         : `
-      bg-red-50
-      text-red-700
-      border-red-200
+      bg-red-100
+      text-red-800
+      border-red-300
 
-      dark:bg-red-500/10
-      dark:text-red-400
-      dark:border-red-500/20
+      dark:bg-red-950/40
+      dark:text-red-300
+      dark:border-red-700
     `
 }
 `}
-                      >
-                        <option value="draft">Draft</option>
-                        <option value="pending">Pending</option>
-                        <option value="paid">Paid</option>
-                        <option value="overdue">Overdue</option>
-                      </select>
+                        >
+                          <option value="draft">Draft</option>
+                          <option value="pending">Pending</option>
+                          <option value="paid">Paid</option>
+                          <option value="overdue">Overdue</option>
+                        </select>
+                        <span
+                          className="
+  absolute
+  right-3
+  top-1/2
+  -translate-y-1/2
+  pointer-events-none
+  text-current
+  text-xs
+"
+                        >
+                          ▼
+                        </span>
+                      </div>
                     </td>
 
                     <td className="p-4 text-right">

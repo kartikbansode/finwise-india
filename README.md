@@ -1,6 +1,6 @@
 # FinWise India
 
->**Version:** 1.2.0 ( Complete Dark Mode support )
+>**Version:** 1.2.1 ( Dark Mode & UI Stability Update )
 >
 >**Release Date:** June 18, 2026
 
@@ -10,28 +10,34 @@ Smart Finance & Tax Management Platform for Indian Freelancers, Consultants, Age
 
 ---
 
-## What's new in v1.2.0
+## What's new in v1.2.1
 
-- Complete Dark Mode support across the platform
-- Theme switching from Settings and User Menu
-- Company Profile Settings
-- Enhanced User Profile Management
+Added
 
-Performance Improvements
-- Faster Dashboard Loading
-- Improved Data Fetching
-- Better State Management
-- Optimized Component Rendering
+- Dark mode support for Landing, Login, Signup and Onboarding Page
+- Official Google logo for Login and Signup authentication
 
-Bug Fixes
-- Fixed dark mode inconsistencies
-- Fixed chart responsiveness issues
-- Fixed invoice rendering issues
-- Fixed sidebar theme issues
-- Fixed card color mismatches
-- Fixed form alignment issues
-- Fixed settings page layout issues
+Improved
 
+- Dashboard cards redesigned for better dark mode appearance
+- Expense page colors adjusted for improved readability
+- Invoice statistics cards updated for dark theme consistency
+- Authentication screens now have consistent dark mode styling
+- Better contrast across forms, cards and tables
+
+Fixed
+
+- White text appearing on white backgrounds
+- Dark mode hydration mismatch issue
+- Missing dropdown arrows in onboarding and invoice filters
+- Invoice status selector dark mode styling issues
+- Invoice status color inconsistencies
+- Expense amount colors being too bright in dark mode
+- Add Expense button color mismatch
+
+Removed
+
+- Dashboard quick action buttons for a cleaner interface
 ---
 
 

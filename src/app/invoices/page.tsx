@@ -111,6 +111,11 @@ text-gray-900 dark:text-white
 rounded-xl
 px-4
 py-2
+pr-10
+appearance-none
+focus:outline-none
+focus:ring-2
+focus:ring-emerald-500
 "
           >
             <option value="all">All Invoices</option>
@@ -121,26 +126,26 @@ py-2
           </select>
         </div>
         <div className="grid md:grid-cols-4 gap-4 mb-6">
-          <div className="rounded-xl border border-blue-500/30 bg-blue-500/10 p-5">
+          <div className="rounded-xl border border-blue-500/30 dark:bg-blue-950/30 p-5">
             <p className="text-gray-500 dark:text-gray-400 text-sm">Total</p>
             <p className="text-2xl font-bold">{invoices.length}</p>
           </div>
 
-          <div className="rounded-xl border border-green-500/30 bg-green-500/10 p-5">
+          <div className="rounded-xl border border-green-500/30 dark:bg-green-950/30 p-5">
             <p className="text-gray-500 dark:text-gray-400 text-sm">Paid</p>
             <p className="text-2xl font-bold text-green-600">
               {invoices.filter((i) => i.status === "paid").length}
             </p>
           </div>
 
-          <div className="rounded-xl border border-yellow-500/30 bg-yellow-500/10 p-5">
+          <div className="rounded-xl border border-yellow-500/30 dark:bg-amber-950/30 p-5">
             <p className="text-gray-500 dark:text-gray-400 text-sm">Pending</p>
             <p className="text-2xl font-bold text-yellow-600">
               {invoices.filter((i) => i.status === "pending").length}
             </p>
           </div>
 
-          <div className="rounded-xl border border-zinc-500/30 bg-zinc-500/10 p-5">
+          <div className="rounded-xl border border-zinc-500/30 dark:bg-zinc-900 p-5">
             <p className="text-gray-500 dark:text-gray-400 text-sm">Draft</p>
             <p className="text-2xl font-bold text-gray-600">
               {invoices.filter((i) => i.status === "draft").length}
@@ -204,18 +209,57 @@ py-2
                           updateStatus(invoice.id, e.target.value)
                         }
                         className={`
-      px-3 py-2 rounded-lg border text-sm font-medium dark:bg-zinc-900
-dark:border-zinc-700
-      ${
-        invoice.status === "paid"
-          ? "bg-green-50 text-green-700 border-green-200"
-          : invoice.status === "pending"
-            ? "bg-yellow-50 text-yellow-700 border-yellow-200"
-            : invoice.status === "draft"
-              ? "bg-gray-50 text-gray-700 border-gray-200"
-              : "bg-red-50 text-red-700 border-red-200"
-      }
-    `}
+px-3 py-2
+rounded-lg
+text-sm
+font-medium
+border
+appearance-none
+pr-8
+focus:outline-none
+
+${
+  invoice.status === "paid"
+    ? `
+      bg-green-50
+      text-green-700
+      border-green-200
+
+      dark:dark:bg-green-950/30
+      dark:text-green-400
+      dark:border-green-500/20
+    `
+    : invoice.status === "pending"
+      ? `
+      bg-amber-50
+      text-amber-700
+      border-amber-200
+
+      dark:bg-amber-500/10
+      dark:text-amber-400
+      dark:border-amber-500/20
+    `
+      : invoice.status === "draft"
+        ? `
+      bg-gray-50
+      text-gray-700
+      border-gray-200
+
+      dark:bg-zinc-800
+      dark:text-zinc-300
+      dark:border-zinc-700
+    `
+        : `
+      bg-red-50
+      text-red-700
+      border-red-200
+
+      dark:bg-red-500/10
+      dark:text-red-400
+      dark:border-red-500/20
+    `
+}
+`}
                       >
                         <option value="draft">Draft</option>
                         <option value="pending">Pending</option>

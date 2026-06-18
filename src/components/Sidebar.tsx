@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import Image from "next/image";
 import {
   LayoutDashboard,
   IndianRupee,
@@ -68,17 +69,23 @@ dark:bg-zinc-950
 border-r
 dark:border-zinc-800 fixed left-0 top-0 flex flex-col"
     >
-      <div className="p-6 border-b border-gray-200 dark:border-zinc-800">
-        <div>
-          <h1 className="font-bold text-xl text-gray-900 dark:text-white">
-            FinWise India
-          </h1>
+      <div className="flex items-center gap-3">
+  <Image
+    src="/logo/finwise-icon.png"
+    alt="FinWise"
+    className="w-8 h-8" width={32} height={32}
+  />
 
-          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-            Smart Finance for India
-          </p>
-        </div>
-      </div>
+  <div>
+    <p className="font-bold text-white">
+      FinWise
+    </p>
+
+    <p className="text-xs text-zinc-400">
+      India
+    </p>
+  </div>
+</div>
 
       <div className="p-4 flex-1">
         {items.map((item) => {

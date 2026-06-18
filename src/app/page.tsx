@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase";
+import Image from "next/image";
 
 export default function HomePage() {
   const router = useRouter();
@@ -60,9 +61,15 @@ export default function HomePage() {
     <main className="min-h-screen bg-white dark:bg-zinc-950">
       <section className="border-b border-gray-200 dark:border-zinc-800">
         <div className="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
-          <h1 className="text-6xl font-bold leading-tight max-w-5xl mx-auto text-gray-900 dark:text-white">
-            FinWise India
-          </h1>
+          <div className="flex items-center gap-3">
+  <Image
+    src="/logo/finwise-icon.png"
+    alt="FinWise"
+    className="h-11 w-auto"
+    width={40}
+    height={40}
+  />
+</div>
 
           <div className="flex gap-3">
             <Link

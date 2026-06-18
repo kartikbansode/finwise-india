@@ -9,9 +9,12 @@ import { ThemeProvider } from "@/components/theme-provider";
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 
 export const metadata: Metadata = {
-  title: "FinWise India — Tax & Finance for Freelancers and Businesses",
+  title: "FinWise India",
   description:
-    "Track variable income, calculate GST and advance tax automatically, and know exactly how much you can safely spend. Built for Indian freelancers and business owners.",
+    "India's smartest tax and finance platform for freelancers and business owners.",
+  icons: {
+    icon: "/logo/finwise black andriod-chrome-512x512.png",
+  },
 };
 
 export default function RootLayout({

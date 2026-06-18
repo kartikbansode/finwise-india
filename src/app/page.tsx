@@ -16,8 +16,12 @@ import {
   DollarSign,
   PieChart,
   Check,
+  IndianRupee,
+  Calculator,
+  TrendingUp,
+  Receipt,
+  ShieldCheck,
 } from "lucide-react";
-
 
 export default function LandingPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -137,11 +141,11 @@ export default function LandingPage() {
       </motion.nav>
 
       {/* Hero Section */}
-<motion.section
-  initial={{ opacity: 0 }}
-  animate={{ opacity: 1 }}
-  transition={{ duration: 0.8 }}
-  className="
+      <motion.section
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.8 }}
+        className="
 relative
 min-h-screen
 flex
@@ -149,43 +153,43 @@ items-center
 justify-center
 overflow-hidden
 "
->
-  {/* Background Video */}
-  <video
-    autoPlay
-    muted
-    loop
-    playsInline
-    className="
+      >
+        {/* Background Video */}
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="
 absolute
 inset-0
 w-full
 h-full
 object-cover
 "
-  >
-    <source src="/landing/hero-video.mp4" type="video/mp4" />
-  </video>
+        >
+          <source src="/landing/hero-video.mp4" type="video/mp4" />
+        </video>
 
-  {/* Dark Overlay */}
-  <div
-    className="
+        {/* Dark Overlay */}
+        <div
+          className="
 absolute
 inset-0
 bg-black/65
 "
-  />
+        />
 
-  {/* Floating Glow */}
-  <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-emerald-500/20 blur-[180px] rounded-full" />
+        {/* Floating Glow */}
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-emerald-500/20 blur-[180px] rounded-full" />
 
-  {/* Content */}
-  <div className="relative z-10 max-w-7xl mx-auto px-6 text-center text-white">
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.2 }}
-      className="
+        {/* Content */}
+        <div className="relative z-10 max-w-7xl mx-auto px-6 text-center text-white">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="
 inline-flex
 items-center
 gap-2
@@ -200,15 +204,15 @@ text-sm
 font-medium
 mb-8
 "
-    >
-      Financial Operating System for Indian Businesses
-    </motion.div>
+          >
+            Financial Operating System for Indian Businesses
+          </motion.div>
 
-    <motion.h1
-      initial={{ opacity: 0, y: 30 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.3 }}
-      className="
+          <motion.h1
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="
 text-5xl
 md:text-7xl
 lg:text-[90px]
@@ -216,21 +220,19 @@ font-bold
 leading-[0.95]
 tracking-tight
 "
-    >
-      Run Your Entire
-      <br />
-      Business From
-      <br />
-      <span className="text-emerald-400">
-        One Dashboard
-      </span>
-    </motion.h1>
+          >
+            Run Your Entire
+            <br />
+            Business From
+            <br />
+            <span className="text-emerald-400">One Dashboard</span>
+          </motion.h1>
 
-    <motion.p
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.4 }}
-      className="
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+            className="
 mt-8
 max-w-3xl
 mx-auto
@@ -239,16 +241,16 @@ md:text-2xl
 text-white/70
 leading-relaxed
 "
-    >
-      Track income, expenses, GST, invoices, tax obligations and
-      business performance with complete financial clarity.
-    </motion.p>
+          >
+            Track income, expenses, GST, invoices, tax obligations and business
+            performance with complete financial clarity.
+          </motion.p>
 
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.5 }}
-      className="
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+            className="
 flex
 flex-col
 sm:flex-row
@@ -256,10 +258,10 @@ justify-center
 gap-4
 mt-10
 "
-    >
-      <Link
-        href="/signup"
-        className="
+          >
+            <Link
+              href="/signup"
+              className="
 px-10
 py-5
 rounded-2xl
@@ -273,13 +275,13 @@ transition-all
 duration-300
 hover:scale-105
 "
-      >
-        Start Free
-      </Link>
+            >
+              Start Free
+            </Link>
 
-      <Link
-        href="#features"
-        className="
+            <Link
+              href="#features"
+              className="
 px-10
 py-5
 rounded-2xl
@@ -293,17 +295,17 @@ hover:bg-white/10
 transition-all
 duration-300
 "
-      >
-        Explore Features
-      </Link>
-    </motion.div>
+            >
+              Explore Features
+            </Link>
+          </motion.div>
 
-    {/* Stats */}
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ delay: 0.7 }}
-      className="
+          {/* Stats */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.7 }}
+            className="
 grid
 grid-cols-2
 md:grid-cols-4
@@ -312,45 +314,37 @@ mt-20
 max-w-5xl
 mx-auto
 "
-    >
-      <div>
-        <div className="text-3xl md:text-5xl font-bold text-emerald-400">
-          ₹1Cr+
-        </div>
-        <div className="text-white/60 mt-2">
-          Invoices Processed
-        </div>
-      </div>
+          >
+            <div>
+              <div className="text-3xl md:text-5xl font-bold text-emerald-400">
+                ₹1Cr+
+              </div>
+              <div className="text-white/60 mt-2">Invoices Processed</div>
+            </div>
 
-      <div>
-        <div className="text-3xl md:text-5xl font-bold text-emerald-400">
-          ₹5Cr+
-        </div>
-        <div className="text-white/60 mt-2">
-          Tax Calculated
-        </div>
-      </div>
+            <div>
+              <div className="text-3xl md:text-5xl font-bold text-emerald-400">
+                ₹5Cr+
+              </div>
+              <div className="text-white/60 mt-2">Tax Calculated</div>
+            </div>
 
-      <div>
-        <div className="text-3xl md:text-5xl font-bold text-emerald-400">
-          1K+
-        </div>
-        <div className="text-white/60 mt-2">
-          Businesses
-        </div>
-      </div>
+            <div>
+              <div className="text-3xl md:text-5xl font-bold text-emerald-400">
+                1K+
+              </div>
+              <div className="text-white/60 mt-2">Businesses</div>
+            </div>
 
-      <div>
-        <div className="text-3xl md:text-5xl font-bold text-emerald-400">
-          99.8%
+            <div>
+              <div className="text-3xl md:text-5xl font-bold text-emerald-400">
+                99.8%
+              </div>
+              <div className="text-white/60 mt-2">Accuracy</div>
+            </div>
+          </motion.div>
         </div>
-        <div className="text-white/60 mt-2">
-          Accuracy
-        </div>
-      </div>
-    </motion.div>
-  </div>
-</motion.section>
+      </motion.section>
 
       {/* 3D Dashboard Showcase. */}
       <motion.section
@@ -445,13 +439,56 @@ mx-auto
         </div>
       </motion.section>
 
-      
-
       {/* Feature Sections - Alternating Layout */}
       <section
-        id="features"
-        className="py-20 md:py-32 px-4 md:px-6 max-w-7xl mx-auto space-y-20 md:space-y-32"
-      >
+  id="features"
+  className="
+relative
+overflow-hidden
+py-24
+md:py-36
+"
+>
+  {/* Background Video */}
+  <video
+    autoPlay
+    muted
+    loop
+    playsInline
+    className="
+    absolute
+    inset-0
+    w-full
+    h-full
+    object-cover
+    "
+  >
+    <source src="/landing/bg-video-1.mp4" type="video/mp4" />
+  </video>
+
+  {/* Dark Overlay */}
+  <div
+    className="
+    absolute
+    inset-0
+    bg-black/70
+    backdrop-blur-[2px]
+    "
+  />
+
+  {/* Content Container */}
+  <div
+    className="
+    relative
+    z-10
+    max-w-7xl
+    mx-auto
+    px-4
+    md:px-6
+    space-y-20
+    md:space-y-32
+    "
+  >
         {/* Feature 1 */}
         <motion.div
           initial={{ opacity: 0 }}
@@ -464,10 +501,10 @@ mx-auto
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">
               Track Every Rupee.
             </h2>
-            <p className="text-lg text-gray-600 dark:text-gray-400 mb-6">
+            <p className="text-lg text-white/70 mb-6">
               See where your money comes from and where it goes. Real-time
               income tracking with support for all payment methods. Invoice
               management that doesn't feel like a burden.
@@ -481,14 +518,23 @@ mx-auto
               ].map((item) => (
                 <li key={item} className="flex items-center gap-3">
                   <Check className="w-5 h-5 text-emerald-600 flex-shrink-0" />
-                  <span className="text-gray-700 dark:text-gray-300">
+                  <span className="text-white/80">
                     {item}
                   </span>
                 </li>
               ))}
             </ul>
           </motion.div>
-          <motion.div className="rounded-3xl overflow-hidden border border-emerald-200 dark:border-emerald-800">
+          <motion.div className="
+rounded-3xl
+overflow-hidden
+border
+border-white/10
+bg-white/5
+backdrop-blur-xl
+shadow-2xl
+shadow-black/50
+">
             <Image
               src="/landing/income-dashboard.png"
               alt="Income Tracking Dashboard"
@@ -506,7 +552,16 @@ mx-auto
           transition={{ duration: 0.8 }}
           className="grid md:grid-cols-2 gap-8 md:gap-16 items-center"
         >
-          <motion.div className="rounded-3xl overflow-hidden border border-emerald-200 dark:border-emerald-800">
+          <motion.div className="
+rounded-3xl
+overflow-hidden
+border
+border-white/10
+bg-white/5
+backdrop-blur-xl
+shadow-2xl
+shadow-black/50
+">
             <Image
               src="/landing/tax-dashboard1.png"
               alt="Tax Tracking Dashboard"
@@ -521,10 +576,10 @@ mx-auto
             transition={{ duration: 0.8 }}
             className="order-1 md:order-2"
           >
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">
               Know Your Tax Before Government Does.
             </h2>
-            <p className="text-lg text-gray-600 dark:text-gray-400 mb-6">
+            <p className="text-lg text-white/70 mb-6">
               Accurate tax calculations for 44ADA, 44AD, GST, and advance tax.
               Built with India's tax rules in mind. No surprises during filing.
             </p>
@@ -537,7 +592,7 @@ mx-auto
               ].map((item) => (
                 <li key={item} className="flex items-center gap-3">
                   <Check className="w-5 h-5 text-blue-600 flex-shrink-0" />
-                  <span className="text-gray-700 dark:text-gray-300">
+                  <span className="text-white/80">
                     {item}
                   </span>
                 </li>
@@ -558,10 +613,10 @@ mx-auto
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">
               Professional Invoicing Built In.
             </h2>
-            <p className="text-lg text-gray-600 dark:text-gray-400 mb-6">
+            <p className="text-lg text-white/70 mb-6">
               Create and send invoices in seconds. Built-in templates for
               freelancers and agencies. Track payment status automatically.
             </p>
@@ -574,14 +629,23 @@ mx-auto
               ].map((item) => (
                 <li key={item} className="flex items-center gap-3">
                   <Check className="w-5 h-5 text-emerald-600 flex-shrink-0" />
-                  <span className="text-gray-700 dark:text-gray-300">
+                  <span className="text-white/80">
                     {item}
                   </span>
                 </li>
               ))}
             </ul>
           </motion.div>
-          <motion.div className="rounded-3xl overflow-hidden border border-emerald-200 dark:border-emerald-800">
+          <motion.div className="
+rounded-3xl
+overflow-hidden
+border
+border-white/10
+bg-white/5
+backdrop-blur-xl
+shadow-2xl
+shadow-black/50
+">
             <Image
               src="/landing/invoice-dashboard.png"
               alt="Invoice Dashboard"
@@ -591,6 +655,7 @@ mx-auto
             />
           </motion.div>
         </motion.div>
+        </div>
       </section>
 
       {/* Interactive Tax Calculator */}
@@ -739,46 +804,66 @@ mx-auto
         <div className="grid md:grid-cols-3 gap-6 md:gap-8">
           {[
             {
-              title: "GST Support",
-              desc: "Full GST registration, filing, and compliance tracking",
+              icon: IndianRupee,
+              title: "Income Tracking",
+              desc: "Track every payment, invoice and revenue stream.",
             },
             {
-              title: "44ADA/44AD",
-              desc: "Presumptive income scheme for sole proprietors",
+              icon: Calculator,
+              title: "Tax Center",
+              desc: "GST, advance tax, 44ADA and tax planning tools.",
             },
             {
-              title: "Advance Tax",
-              desc: "Automated advance tax calculations and reminders",
+              icon: Receipt,
+              title: "Expense Tracking",
+              desc: "Monitor spending and control business costs.",
             },
             {
-              title: "Cash Flow",
-              desc: "Never run out of cash with predictive forecasting",
+              icon: FileText,
+              title: "Invoices",
+              desc: "Create and manage professional invoices.",
             },
             {
-              title: "Profit Tracking",
-              desc: "Real-time visibility into your business profitability",
+              icon: TrendingUp,
+              title: "Business Insights",
+              desc: "Understand profit, cash flow and growth trends.",
             },
             {
-              title: "Business Goals",
-              desc: "Set targets and track progress toward them",
+              icon: ShieldCheck,
+              title: "Compliance",
+              desc: "Stay tax-ready and avoid costly mistakes.",
             },
-          ].map((item, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.1, duration: 0.6 }}
-              className="bg-white dark:bg-zinc-900 rounded-2xl p-6 md:p-8 border border-gray-200 dark:border-zinc-800 hover:border-emerald-500 dark:hover:border-emerald-600 transition"
-            >
-              <div className="text-4xl mb-4">{item.icon}</div>
-              <h3 className="text-lg md:text-xl font-bold mb-3">
-                {item.title}
-              </h3>
-              <p className="text-gray-600 dark:text-gray-400 text-sm md:text-base">
-                {item.desc}
-              </p>
-            </motion.div>
-          ))}
+          ].map((item, i) => {
+            const Icon = item.icon;
+
+            return (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.1, duration: 0.6 }}
+                className="
+        bg-white dark:bg-zinc-900
+        rounded-2xl
+        p-6 md:p-8
+        border border-gray-200 dark:border-zinc-800
+        hover:border-emerald-500
+        dark:hover:border-emerald-600
+        transition
+      "
+              >
+                <Icon className="w-10 h-10 mb-4 text-emerald-500" />
+
+                <h3 className="text-lg md:text-xl font-bold mb-3">
+                  {item.title}
+                </h3>
+
+                <p className="text-gray-600 dark:text-gray-400 text-sm md:text-base">
+                  {item.desc}
+                </p>
+              </motion.div>
+            );
+          })}
         </div>
       </motion.section>
 

@@ -40,31 +40,40 @@ export default function HomePage() {
 
   if (checkingSession) {
     return (
-      <main className="min-h-screen flex items-center justify-center bg-white dark:bg-zinc-950">
+      <main className="min-h-screen flex items-center justify-center bg-white dark:bg-zinc-950 ">
         <div className="text-center">
           <div className="w-12 h-12 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
 
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Loading FinWise...</h2>
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+            Loading FinWise...
+          </h2>
 
-          <p className="text-gray-500 dark:text-gray-400 mt-2">Preparing your workspace</p>
+          <p className="text-gray-500 dark:text-gray-400 mt-2">
+            Preparing your workspace
+          </p>
         </div>
       </main>
     );
   }
 
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen bg-white dark:bg-zinc-950">
       <section className="border-b border-gray-200 dark:border-zinc-800">
         <div className="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">FinWise India</h1>
+          <h1 className="text-6xl font-bold leading-tight max-w-5xl mx-auto text-gray-900 dark:text-white">
+            FinWise India
+          </h1>
 
           <div className="flex gap-3">
-            <Link href="/login" className="
+            <Link
+              href="/login"
+              className="
 border border-gray-300 dark:border-zinc-700
 text-gray-900 dark:text-white
 px-4 py-2 rounded-lg
 hover:bg-gray-50 dark:hover:bg-zinc-900
-">
+"
+            >
               Login
             </Link>
 
@@ -79,12 +88,14 @@ hover:bg-gray-50 dark:hover:bg-zinc-900
       </section>
 
       <section className="max-w-7xl mx-auto px-6 py-24 text-center">
-        <div className="
+        <div
+          className="
 inline-flex
 bg-emerald-100 dark:bg-emerald-900/20
 text-emerald-700 dark:text-emerald-400
 px-4 py-2 rounded-full text-sm mb-6
-">
+"
+        >
           Built for Indian Freelancers & Businesses
         </div>
 
@@ -121,13 +132,15 @@ px-4 py-2 rounded-full text-sm mb-6
 
         <div className="grid md:grid-cols-3 gap-6">
           <div
-  className="
+            className="
   bg-white dark:bg-zinc-900
   border border-gray-200 dark:border-zinc-800
   rounded-2xl p-6
 "
->
-            <h3 className="font-bold text-xl text-gray-900 dark:text-white">Income Tracking</h3>
+          >
+            <h3 className="font-bold text-xl text-gray-900 dark:text-white">
+              Income Tracking
+            </h3>
 
             <p className="text-gray-600 dark:text-gray-400 mt-3">
               Track all client payments, invoices and revenue.
@@ -135,13 +148,15 @@ px-4 py-2 rounded-full text-sm mb-6
           </div>
 
           <div
-  className="
+            className="
   bg-white dark:bg-zinc-900
   border border-gray-200 dark:border-zinc-800
   rounded-2xl p-6
 "
->
-            <h3 className="font-bold text-xl text-gray-900 dark:text-white">Tax Center</h3>
+          >
+            <h3 className="font-bold text-xl text-gray-900 dark:text-white">
+              Tax Center
+            </h3>
 
             <p className="text-gray-600 dark:text-gray-400 mt-3">
               GST, advance tax, 44ADA and 44AD support.
@@ -149,13 +164,15 @@ px-4 py-2 rounded-full text-sm mb-6
           </div>
 
           <div
-  className="
+            className="
   bg-white dark:bg-zinc-900
   border border-gray-200 dark:border-zinc-800
   rounded-2xl p-6
 "
->
-            <h3 className="font-bold text-xl text-gray-900 dark:text-white">Business Insights</h3>
+          >
+            <h3 className="font-bold text-xl text-gray-900 dark:text-white">
+              Business Insights
+            </h3>
 
             <p className="text-gray-600 dark:text-gray-400 mt-3">
               Know where your money goes and how much is safe to spend.
@@ -165,15 +182,17 @@ px-4 py-2 rounded-full text-sm mb-6
       </section>
 
       <section
-  className="
+        className="
   bg-slate-900
   dark:bg-zinc-900
   border-t border-slate-800
   py-24
   "
->
+      >
         <div className="max-w-5xl mx-auto text-center">
-          <h2 className="text-5xl font-bold text-white">Stop Guessing Your Taxes</h2>
+          <h2 className="text-5xl font-bold text-white">
+            Stop Guessing Your Taxes
+          </h2>
 
           <p className="mt-6 text-slate-300 text-xl">
             Join freelancers and business owners who want clarity over their

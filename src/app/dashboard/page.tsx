@@ -247,62 +247,65 @@ dark:text-gray-400"
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
           <div
-            className="bg-emerald-50
-dark:bg-emerald-900/30 border-emerald-200 rounded-xl border p-5"
+            className="
+    bg-white dark:bg-zinc-900
+    border border-gray-200 dark:border-zinc-800
+    rounded-xl p-5
+  "
           >
-            <p
-              className="text-xs text-gray-500
-dark:text-gray-400 uppercase"
-            >
+            <p className="text-xs uppercase text-gray-500 dark:text-gray-400">
               Monthly Profit
             </p>
 
-            <p className="text-2xl font-bold text-emerald-600 mt-1">
+            <p className="text-2xl font-bold text-emerald-500 dark:text-emerald-400 mt-2">
               ₹{monthlyProfit.toLocaleString("en-IN")}
             </p>
           </div>
 
           <div
-            className="bg-blue-50
-dark:bg-blue-900/20 border-blue-200 rounded-xl border p-5"
+            className="
+    bg-white dark:bg-zinc-900
+    border border-gray-200 dark:border-zinc-800
+    rounded-xl p-5
+  "
           >
-            <p
-              className="text-xs text-gray-500
-dark:text-gray-400 uppercase"
-            >
+            <p className="text-xs uppercase text-gray-500 dark:text-gray-400">
               Savings Rate
             </p>
 
-            <p className="text-2xl font-bold text-blue-600 mt-1">
+            <p className="text-2xl font-bold text-blue-500 dark:text-blue-400 mt-2">
               {savingsRate}%
             </p>
           </div>
 
           <div
-            className="bg-amber-50
-dark:bg-amber-900/20 border-amber-200 rounded-xl border p-5"
+            className="
+    bg-white dark:bg-zinc-900
+    border border-gray-200 dark:border-zinc-800
+    rounded-xl p-5
+  "
           >
-            <p
-              className="text-xs text-gray-500
-dark:text-gray-400 uppercase"
-            >
+            <p className="text-xs uppercase text-gray-500 dark:text-gray-400">
               Tax Reserve
             </p>
 
-            <p className="text-2xl font-bold text-amber-600 mt-1">
+            <p className="text-2xl font-bold text-amber-500 dark:text-amber-400 mt-2">
               ₹{taxReserve.toLocaleString("en-IN")}
             </p>
           </div>
 
-          <div className="bg-purple-50 border-purple-200 rounded-xl border p-5">
-            <p
-              className="text-xs text-gray-500
-dark:text-gray-400 uppercase"
-            >
+          <div
+            className="
+    bg-white dark:bg-zinc-900
+    border border-gray-200 dark:border-zinc-800
+    rounded-xl p-5
+  "
+          >
+            <p className="text-xs uppercase text-gray-500 dark:text-gray-400">
               Expense Ratio
             </p>
 
-            <p className="text-2xl font-bold text-purple-600 mt-1">
+            <p className="text-2xl font-bold text-violet-500 dark:text-violet-400 mt-2">
               {expenseRatio}%
             </p>
           </div>
@@ -429,7 +432,7 @@ dark:border-zinc-800 rounded-xl border-gray-200 p-5"
               <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Expenses this month
               </p>
-              <p className="text-xl font-semibold text-red-600">
+              <p className="text-xl font-semibold text-red-500 dark:text-red-400">
                 ₹{monthlyExpenses.toLocaleString("en-IN")}
               </p>
             </div>
@@ -450,55 +453,6 @@ dark:text-white"
               ₹{(monthlyIncome - monthlyExpenses).toLocaleString("en-IN")}
             </p>
           </div>
-        </div>
-
-        <div className="grid md:grid-cols-4 gap-4 mb-6">
-          <Link
-            href="/income"
-            className="bg-emerald-50
-dark:bg-emerald-900/30 border border-emerald-200 rounded-xl p-5 hover:shadow-md transition-all"
-          >
-            <p
-              className="font-semibold text-emerald-700
-dark:text-emerald-400"
-            >
-              Add Income
-            </p>
-
-            <p className="text-sm text-emerald-600 mt-1">Record new income</p>
-          </Link>
-
-          <Link
-            href="/expenses"
-            className="bg-red-50
-dark:bg-red-900/20 border border-red-200 rounded-xl p-5 hover:shadow-md transition-all"
-          >
-            <p className="font-semibold text-red-700">Add Expense</p>
-
-            <p className="text-sm text-red-600 mt-1">
-              Record business expenses
-            </p>
-          </Link>
-
-          <Link
-            href="/invoices"
-            className="bg-blue-50
-dark:bg-blue-900/20 border border-blue-200 rounded-xl p-5 hover:shadow-md transition-all"
-          >
-            <p className="font-semibold text-blue-700">Invoices</p>
-
-            <p className="text-sm text-blue-600 mt-1">Manage invoices</p>
-          </Link>
-
-          <Link
-            href="/tax"
-            className="bg-amber-50
-dark:bg-amber-900/20 border border-amber-200 rounded-xl p-5 hover:shadow-md transition-all"
-          >
-            <p className="font-semibold text-amber-700">Tax Center</p>
-
-            <p className="text-sm text-amber-600 mt-1">View tax obligations</p>
-          </Link>
         </div>
 
         <TaxDisclaimer />

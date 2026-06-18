@@ -167,7 +167,7 @@ overflow-hidden
               src="/logo/finwise-icon.png"
               alt="FinWise"
               width={60}
-              height={60}
+              height={60} className="rounded-2xl border border-white/20 shadow-lg"
             />
 
             <div>
@@ -235,7 +235,7 @@ bg-gray-50 dark:bg-zinc-950
               alt="FinWise"
               width={60}
               height={60}
-              className="mx-auto mb-4"
+              className="mx-auto mb-4 rounded-2xl border border-white/20 shadow-lg"
             />
 
             <h1 className="text-3xl font-bold text-gray-900 dark:text-white">

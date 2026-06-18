@@ -36,20 +36,14 @@ export default function AuthCard({
     >
       <div className="text-center mb-8">
         <div className="flex flex-col items-center">
-          <Image
-            src="/logo/finwise-icon.png"
-            alt="FinWise"
-            className="w-16 h-16 mb-4"
-            width={64}
-            height={64}
-          />
+ 
 
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-            FinWise
+            Login to your account
           </h1>
 
           <p className="text-gray-500 dark:text-gray-400 mt-2">
-            Financial Operating System
+            Welcome back! Please enter your details.
           </p>
         </div>
       </div>

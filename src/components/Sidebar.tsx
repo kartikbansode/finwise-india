@@ -86,7 +86,7 @@ dark:border-zinc-800 fixed left-0 top-0 flex flex-col"
             alt="FinWise"
             width={36}
             height={36}
-            className="shrink-0 rounded-2xl border border-white/20 shadow-lg"
+            className="shrink-0"
           />
 
           <div>

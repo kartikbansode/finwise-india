@@ -248,64 +248,72 @@ dark:text-gray-400"
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
           <div
             className="
-    bg-white dark:bg-zinc-900
-    border border-gray-200 dark:border-zinc-800
-    rounded-xl p-5
+    rounded-2xl
+    border border-emerald-500/20
+    bg-emerald-50
+    dark:bg-emerald-950/30
+    p-5
   "
           >
-            <p className="text-xs uppercase text-gray-500 dark:text-gray-400">
+            <p className="text-xs uppercase tracking-wide text-emerald-700 dark:text-emerald-400">
               Monthly Profit
             </p>
 
-            <p className="text-2xl font-bold text-emerald-500 dark:text-emerald-400 mt-2">
+            <p className="text-3xl font-bold text-emerald-800 dark:text-emerald-300 mt-3">
               ₹{monthlyProfit.toLocaleString("en-IN")}
             </p>
           </div>
 
           <div
             className="
-    bg-white dark:bg-zinc-900
-    border border-gray-200 dark:border-zinc-800
-    rounded-xl p-5
+    rounded-2xl
+    border border-blue-500/20
+    bg-blue-50
+    dark:bg-blue-950/30
+    p-5
   "
           >
-            <p className="text-xs uppercase text-gray-500 dark:text-gray-400">
+            <p className="text-xs uppercase tracking-wide text-blue-700 dark:text-blue-400">
               Savings Rate
             </p>
 
-            <p className="text-2xl font-bold text-blue-500 dark:text-blue-400 mt-2">
+            <p className="text-3xl font-bold text-blue-800 dark:text-blue-300 mt-3">
               {savingsRate}%
             </p>
           </div>
 
           <div
             className="
-    bg-white dark:bg-zinc-900
-    border border-gray-200 dark:border-zinc-800
-    rounded-xl p-5
+    rounded-2xl
+    border border-amber-500/20
+    bg-amber-50
+    dark:bg-amber-950/30
+    p-5
   "
           >
-            <p className="text-xs uppercase text-gray-500 dark:text-gray-400">
+            <p className="text-xs uppercase tracking-wide text-amber-700 dark:text-amber-400">
               Tax Reserve
             </p>
 
-            <p className="text-2xl font-bold text-amber-500 dark:text-amber-400 mt-2">
+            <p className="text-3xl font-bold text-amber-800 dark:text-amber-300 mt-3">
               ₹{taxReserve.toLocaleString("en-IN")}
             </p>
           </div>
 
           <div
             className="
-    bg-white dark:bg-zinc-900
-    border border-gray-200 dark:border-zinc-800
-    rounded-xl p-5
+    rounded-2xl
+    border border-violet-500/20
+    bg-violet-50
+    dark:bg-violet-950/30
+    p-5
   "
           >
-            <p className="text-xs uppercase text-gray-500 dark:text-gray-400">
+            <p className="text-xs uppercase tracking-wide text-violet-700 dark:text-violet-400">
               Expense Ratio
             </p>
 
-            <p className="text-2xl font-bold text-violet-500 dark:text-violet-400 mt-2">
+            <p className="text-3xl font-bold text-violet-800 dark:text-violet-300 mt-3">
               {expenseRatio}%
             </p>
           </div>

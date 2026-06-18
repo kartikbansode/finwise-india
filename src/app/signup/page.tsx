@@ -116,67 +116,142 @@ export default function SignupPage() {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-emerald-50 flex items-center justify-center p-6">
-      <div className="w-full max-w-md bg-white rounded-3xl shadow-xl border border-gray-200 p-8">
+    <main
+      className="
+  min-h-screen
+  flex items-center justify-center
+  p-6
+  bg-gradient-to-br
+  from-slate-50 via-white to-emerald-50
+  dark:from-zinc-950 dark:via-black dark:to-emerald-950/20
+"
+    >
+      <div
+        className="
+  w-full max-w-md
+  bg-white dark:bg-zinc-900
+  border border-gray-200 dark:border-zinc-800
+  rounded-3xl
+  shadow-xl
+  p-8
+"
+      >
         <div className="text-center">
-          <h1 className="text-3xl font-bold">Create Account</h1>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+            Create Account
+          </h1>
 
-          <p className="text-gray-500 mt-2">
+          <p className="text-gray-500 dark:text-gray-400 mt-2">
             Start managing your finances smarter.
           </p>
         </div>
 
         {error && (
-          <div className="mt-6 bg-red-50 border border-red-200 text-red-700 rounded-xl p-3">
+          <div
+            className="
+  mt-6
+  bg-red-50 dark:bg-red-950/30
+  border border-red-200 dark:border-red-900
+  text-red-700 dark:text-red-400
+  rounded-xl p-3
+"
+          >
             {error}
           </div>
         )}
 
         {success && (
-          <div className="mt-6 bg-emerald-50 border border-emerald-200 text-emerald-700 rounded-xl p-3">
+          <div
+            className="
+  mt-6
+  bg-emerald-50 dark:bg-emerald-950/30
+  border border-emerald-200 dark:border-emerald-900
+  text-emerald-700 dark:text-emerald-400
+  rounded-xl p-3
+"
+          >
             {success}
           </div>
         )}
 
         <div className="space-y-4 mt-6">
           <div>
-            <label className="block text-sm font-medium mb-1">Full Name</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Full Name
+            </label>
 
             <input
               type="text"
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
-              className="w-full border rounded-xl px-4 py-3"
+              className="
+w-full
+bg-white dark:bg-zinc-950
+border border-gray-300 dark:border-zinc-700
+text-gray-900 dark:text-white
+placeholder:text-gray-400 dark:placeholder:text-gray-500
+rounded-xl
+px-4 py-3
+focus:outline-none
+focus:ring-2
+focus:ring-emerald-500
+"
               placeholder="John Doe"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">Email</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Email
+            </label>
 
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full border rounded-xl px-4 py-3"
+              className="
+w-full
+bg-white dark:bg-zinc-950
+border border-gray-300 dark:border-zinc-700
+text-gray-900 dark:text-white
+placeholder:text-gray-400 dark:placeholder:text-gray-500
+rounded-xl
+px-4 py-3
+focus:outline-none
+focus:ring-2
+focus:ring-emerald-500
+"
               placeholder="john@example.com"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">Password</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Password
+            </label>
 
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full border rounded-xl px-4 py-3"
+              className="
+w-full
+bg-white dark:bg-zinc-950
+border border-gray-300 dark:border-zinc-700
+text-gray-900 dark:text-white
+placeholder:text-gray-400 dark:placeholder:text-gray-500
+rounded-xl
+px-4 py-3
+focus:outline-none
+focus:ring-2
+focus:ring-emerald-500
+"
               placeholder="********"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Confirm Password
             </label>
 
@@ -184,7 +259,18 @@ export default function SignupPage() {
               type="password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              className="w-full border rounded-xl px-4 py-3"
+              className="
+w-full
+bg-white dark:bg-zinc-950
+border border-gray-300 dark:border-zinc-700
+text-gray-900 dark:text-white
+placeholder:text-gray-400 dark:placeholder:text-gray-500
+rounded-xl
+px-4 py-3
+focus:outline-none
+focus:ring-2
+focus:ring-emerald-500
+"
               placeholder="********"
             />
           </div>
@@ -199,7 +285,14 @@ export default function SignupPage() {
 
           <button
             onClick={googleSignup}
-            className="w-full border py-3 rounded-xl flex justify-center items-center gap-3 hover:bg-gray-50"
+            className="
+w-full
+border border-gray-300 dark:border-zinc-700
+text-gray-900 dark:text-white
+py-3 rounded-xl
+flex justify-center items-center gap-3
+hover:bg-gray-50 dark:hover:bg-zinc-800
+"
           >
             <div className="w-5 h-5 rounded-full bg-white border flex items-center justify-center text-xs font-bold">
               G
@@ -208,9 +301,12 @@ export default function SignupPage() {
           </button>
         </div>
 
-        <p className="text-center text-sm text-gray-500 mt-6">
+        <p className="text-center text-sm text-gray-500 dark:text-gray-400 mt-6">
           Already have an account?{" "}
-          <Link href="/login" className="text-emerald-600 font-medium">
+          <Link
+            href="/login"
+            className="text-emerald-600 dark:text-emerald-400 font-medium"
+          >
             Sign In
           </Link>
         </p>

@@ -12,7 +12,6 @@ export default function LoginPage() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  
 
   const [loading, setLoading] = useState(false);
 
@@ -101,16 +100,41 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-white to-emerald-50 p-6">
+    <main
+      className="
+  min-h-screen
+  flex items-center justify-center
+  bg-gradient-to-br
+  from-slate-50 via-white to-emerald-50
+  dark:from-zinc-950 dark:via-black dark:to-emerald-950/20
+  p-6
+"
+    >
       <div className="w-full max-w-md">
         {errorMessage && (
-          <div className="mb-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl">
+          <div
+            className="
+  mb-4
+  bg-red-50 dark:bg-red-950/30
+  border border-red-200 dark:border-red-900
+  text-red-700 dark:text-red-400
+  px-4 py-3 rounded-xl
+"
+          >
             {errorMessage}
           </div>
         )}
 
         {successMessage && (
-          <div className="mb-4 bg-emerald-50 border border-emerald-200 text-emerald-700 px-4 py-3 rounded-xl">
+          <div
+            className="
+  mb-4
+  bg-emerald-50 dark:bg-emerald-950/30
+  border border-emerald-200 dark:border-emerald-900
+  text-emerald-700 dark:text-emerald-400
+  px-4 py-3 rounded-xl
+"
+          >
             {successMessage}
           </div>
         )}

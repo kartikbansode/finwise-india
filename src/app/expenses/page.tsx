@@ -109,7 +109,7 @@ export default function ExpensesPage() {
         </h1>
         <p className="text-gray-500 dark:text-gray-400 mt-1 mb-6">
           Expenses this month:{" "}
-          <span className="font-semibold text-red-600">
+          <span className="font-semibold text-gray-900 dark:text-white">
             ₹{totalThisMonth.toLocaleString("en-IN")}
           </span>
         </p>
@@ -118,7 +118,7 @@ export default function ExpensesPage() {
           onSubmit={handleAdd}
           className="
 bg-white dark:bg-zinc-900
-border border-gray-200 dark:border-zinc-800
+border border-gray-200 dark:border-zinc-700
 rounded-xl
 p-5
 mb-8
@@ -226,7 +226,16 @@ focus:ring-emerald-500
           <button
             type="submit"
             disabled={saving}
-            className="bg-gray-900 text-white px-5 py-2 rounded-lg text-sm font-medium hover:bg-gray-800 disabled:opacity-50"
+            className="
+bg-emerald-600
+hover:bg-emerald-700
+text-white
+px-5 py-2
+rounded-lg
+text-sm
+font-medium
+disabled:opacity-50
+"
           >
             {saving ? "Saving..." : "Add expense"}
           </button>
@@ -235,7 +244,7 @@ focus:ring-emerald-500
         <div
           className="
   bg-white dark:bg-zinc-900
-  border border-gray-200 dark:border-zinc-800
+  border border-gray-200 dark:border-zinc-700
   rounded-xl
   overflow-hidden
 "

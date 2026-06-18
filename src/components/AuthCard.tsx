@@ -35,13 +35,23 @@ export default function AuthCard({
 "
     >
       <div className="text-center mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-          FinWise India
-        </h1>
+        <div className="flex flex-col items-center">
+          <Image
+            src="/logo/finwise-icon.png"
+            alt="FinWise"
+            className="w-16 h-16 mb-4"
+            width={64}
+            height={64}
+          />
 
-        <p className="text-gray-500 dark:text-gray-400 mt-2">
-          Financial Operating System
-        </p>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+            FinWise
+          </h1>
+
+          <p className="text-gray-500 dark:text-gray-400 mt-2">
+            Financial Operating System
+          </p>
+        </div>
       </div>
 
       <div className="space-y-4">
@@ -160,12 +170,7 @@ hover:bg-gray-50 dark:hover:bg-zinc-800
 transition-colors
 "
         >
-          <Image
-            src="/google.svg"
-            alt="Google"
-            width={20}
-            height={20}
-          />
+          <Image src="/google.svg" alt="Google" width={20} height={20} />
 
           <span>Continue with Google</span>
         </button>

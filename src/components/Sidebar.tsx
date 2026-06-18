@@ -70,22 +70,20 @@ border-r
 dark:border-zinc-800 fixed left-0 top-0 flex flex-col"
     >
       <div className="flex items-center gap-3">
-  <Image
-    src="/logo/finwise-icon.png"
-    alt="FinWise"
-    className="w-8 h-8" width={32} height={32}
-  />
+        <Image
+          src="/logo/finwise-icon.png"
+          alt="FinWise"
+          className="w-8 h-8"
+          width={32}
+          height={32}
+        />
 
-  <div>
-    <p className="font-bold text-white">
-      FinWise
-    </p>
+        <div>
+          <p className="font-bold text-white">FinWise</p>
 
-    <p className="text-xs text-zinc-400">
-      India
-    </p>
-  </div>
-</div>
+          <p className="text-xs text-zinc-400">India</p>
+        </div>
+      </div>
 
       <div className="p-4 flex-1">
         {items.map((item) => {

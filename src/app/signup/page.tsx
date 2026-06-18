@@ -138,13 +138,23 @@ export default function SignupPage() {
 "
       >
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-            Create Account
-          </h1>
+          <div className="flex flex-col items-center">
+            <Image
+              src="/logo/finwise-icon.png"
+              alt="FinWise"
+              className="w-16 h-16 mb-4"
+              width={64}
+              height={64}
+            />
 
-          <p className="text-gray-500 dark:text-gray-400 mt-2">
-            Start managing your finances smarter.
-          </p>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+              Create Account
+            </h1>
+
+            <p className="text-gray-500 dark:text-gray-400 mt-2">
+              Join FinWise India
+            </p>
+          </div>
         </div>
 
         {error && (

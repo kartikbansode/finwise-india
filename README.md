@@ -72,7 +72,6 @@ The platform helps users:
 
 - Add Income Sources
 - Revenue History
-- Monthly Analysis
 
 ### 💸 Expense Management
 

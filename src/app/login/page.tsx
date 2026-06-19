@@ -65,6 +65,18 @@ export default function LoginPage() {
         return;
       }
 
+      if (!email.trim()) {
+        setErrorMessage("Please enter your email address.");
+        setLoading(false);
+        return;
+      }
+
+      if (!password.trim()) {
+        setErrorMessage("Please enter your password.");
+        setLoading(false);
+        return;
+      }
+
       setSuccessMessage("Login successful. Redirecting...");
 
       const { data: profile } = await supabase
@@ -185,7 +197,7 @@ export default function LoginPage() {
                 India's Smartest Tax & Finance Platform
               </h2>
 
-              <p className="mt-6 text-xl text-emerald-100 max-w-lg">
+              <p className="mt-6 text-xl text-white/80 max-w-lg">
                 Manage income, GST, invoices, taxes and cash flow from one
                 powerful dashboard.
               </p>
@@ -221,7 +233,7 @@ export default function LoginPage() {
 
       {/* Right Side */}
       <div
-  className="
+        className="
   relative
   z-10
   min-h-screen
@@ -234,7 +246,7 @@ lg:items-center
   px-4
   sm:px-6
   "
->
+      >
         <div className="w-full max-w-md">
           {/* Mobile Logo */}
           <div className="lg:hidden flex items-center justify-between mb-4">
@@ -254,18 +266,21 @@ lg:items-center
                 }
               }}
               className="
-    cursor-pointer
-    flex items-center gap-2
-    px-4 py-2
-    rounded-xl
+cursor-pointer
+flex items-center gap-2
+px-4 py-2
+rounded-xl
 
-    bg-black/50
-    backdrop-blur-xl
+bg-black/50
+backdrop-blur-xl
 
-    border border-white/10
+border border-white/10
 
-    text-white
-    "
+text-white
+
+hover:bg-black/70
+transition-all
+"
             >
               <ArrowLeft size={16} />
               Back
@@ -273,13 +288,13 @@ lg:items-center
           </div>
 
           {errorMessage && (
-            <div className="mb-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl">
+            <div className="mb-4 bg-red-500/10 border border-red-500/20 text-red-400 px-4 py-3 rounded-xl">
               {errorMessage}
             </div>
           )}
 
           {successMessage && (
-            <div className="mb-4 bg-emerald-50 border border-emerald-200 text-emerald-700 px-4 py-3 rounded-xl">
+            <div className="mb-4 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 px-4 py-3 rounded-xl">
               {successMessage}
             </div>
           )}

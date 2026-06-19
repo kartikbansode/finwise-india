@@ -259,7 +259,7 @@ export default function SignupPage() {
 
       {/* Right Side */}
       <div
-  className="
+        className="
   relative
   z-20
   min-h-screen
@@ -274,25 +274,25 @@ export default function SignupPage() {
 
   px-6
   "
->
+      >
         <div className="w-full max-w-md lg:mb-0 mb-8">
           <div className="lg:hidden flex items-center justify-between mb-6">
-  <Image
-    src="/logo/finwise-large-black1.png"
-    alt="FinWise"
-    width={160}
-    height={45}
-  />
+            <Image
+              src="/logo/finwise-large-black1.png"
+              alt="FinWise"
+              width={160}
+              height={45}
+            />
 
-  <button
-    onClick={() => {
-      if (window.history.length > 1) {
-        router.back();
-      } else {
-        router.push("/");
-      }
-    }}
-    className="
+            <button
+              onClick={() => {
+                if (window.history.length > 1) {
+                  router.back();
+                } else {
+                  router.push("/");
+                }
+              }}
+              className="
     cursor-pointer
     flex items-center gap-2
     px-4 py-2
@@ -305,11 +305,11 @@ export default function SignupPage() {
 
     text-white
     "
-  >
-    <ArrowLeft size={16} />
-    Back
-  </button>
-</div>
+            >
+              <ArrowLeft size={16} />
+              Back
+            </button>
+          </div>
 
           <div
             className="
@@ -332,20 +332,20 @@ p-8
             </div>
 
             {error && (
-              <div className="mt-6 bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900 text-red-700 dark:text-red-400 rounded-xl p-3">
+              <div className="mt-6 bg-red-500/10 border border-red-500/20 text-red-400 rounded-xl p-3">
                 {error}
               </div>
             )}
 
             {success && (
-              <div className="mt-6 bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-900 text-emerald-700 dark:text-emerald-400 rounded-xl p-3">
+              <div className="mt-6 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-xl p-3">
                 {success}
               </div>
             )}
 
             <div className="space-y-4 mt-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                <label className="block text-sm font-medium text-gray-300 mb-1">
                   Full Name
                 </label>
 
@@ -357,9 +357,9 @@ p-8
                   placeholder="John Doe"
                   className="
 w-full
-bg-white dark:bg-zinc-950
-border border-gray-300 dark:border-zinc-700
-text-gray-900 dark:text-white
+bg-black/40
+border border-white/10
+text-white placeholder:text-gray-500
 rounded-xl
 px-4 py-3
 focus:outline-none
@@ -370,7 +370,7 @@ focus:ring-emerald-500
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                <label className="block text-sm font-medium text-gray-300 mb-1">
                   Email
                 </label>
 
@@ -382,9 +382,9 @@ focus:ring-emerald-500
                   placeholder="john@example.com"
                   className="
 w-full
-bg-white dark:bg-zinc-950
-border border-gray-300 dark:border-zinc-700
-text-gray-900 dark:text-white
+bg-black/40
+border border-white/10
+text-white placeholder:text-gray-500
 rounded-xl
 px-4 py-3
 focus:outline-none
@@ -395,7 +395,7 @@ focus:ring-emerald-500
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                <label className="block text-sm font-medium text-gray-300 mb-1">
                   Password
                 </label>
 
@@ -407,9 +407,9 @@ focus:ring-emerald-500
                   placeholder="********"
                   className="
 w-full
-bg-white dark:bg-zinc-950
-border border-gray-300 dark:border-zinc-700
-text-gray-900 dark:text-white
+bg-black/40
+border border-white/10
+text-white placeholder:text-gray-500
 rounded-xl
 px-4 py-3
 focus:outline-none
@@ -420,7 +420,7 @@ focus:ring-emerald-500
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                <label className="block text-sm font-medium text-gray-300 mb-1">
                   Confirm Password
                 </label>
 
@@ -432,9 +432,9 @@ focus:ring-emerald-500
                   placeholder="********"
                   className="
 w-full
-bg-white dark:bg-zinc-950
-border border-gray-300 dark:border-zinc-700
-text-gray-900 dark:text-white
+bg-black/40
+border border-white/10
+text-white placeholder:text-gray-500
 rounded-xl
 px-4 py-3
 focus:outline-none
@@ -454,11 +454,19 @@ focus:ring-emerald-500
 
               <div className="relative py-2">
                 <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-gray-200 dark:border-zinc-700" />
+                  <div className="w-full border-t border-white/10" />
                 </div>
 
                 <div className="relative flex justify-center">
-                  <span className="bg-white dark:bg-zinc-900 px-3 text-sm text-gray-500 dark:text-gray-400">
+                  <span
+                    className="
+  bg-black/40
+  backdrop-blur-2xl
+  px-3
+  text-sm
+  text-gray-400
+"
+                  >
                     OR
                   </span>
                 </div>
@@ -467,13 +475,16 @@ focus:ring-emerald-500
               <button
                 onClick={googleSignup}
                 className="
+cursor-pointer
 w-full
-border border-gray-300 dark:border-zinc-700
-bg-white dark:bg-zinc-900
-text-gray-900 dark:text-white
-py-3 rounded-xl
+bg-black/40
+text-white
+py-3
+rounded-xl
 flex justify-center items-center gap-3
-hover:bg-gray-50 dark:hover:bg-zinc-800
+border border-white/10
+hover:bg-black/60
+transition-colors
 "
               >
                 <Image src="/google.svg" alt="Google" width={20} height={20} />
@@ -482,11 +493,11 @@ hover:bg-gray-50 dark:hover:bg-zinc-800
               </button>
             </div>
 
-            <p className="text-center text-sm text-gray-500 dark:text-gray-400 mt-6">
+            <p className="text-center text-sm text-gray-400 mt-6">
               Already have an account?{" "}
               <Link
                 href="/login"
-                className="text-emerald-600 dark:text-emerald-400 font-medium"
+                className="text-emerald-400 font-medium"
               >
                 Sign In
               </Link>

@@ -32,6 +32,8 @@ bg-black/55
 backdrop-blur-2xl
 
 border border-white/10
+focus-within:border-emerald-500/70
+transition-colors
 
 shadow-[0_25px_80px_rgba(0,0,0,0.45)]
 
@@ -43,11 +45,11 @@ p-8
     >
       <div className="text-center mb-8">
         <div className="flex flex-col items-center">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+          <h1 className="text-3xl font-bold text-white">
             Login to your account
           </h1>
 
-          <p className="text-gray-500 dark:text-gray-400 mt-2">
+          <p className="text-gray-400 mt-2">
             Welcome back! Please enter your details.
           </p>
         </div>
@@ -55,19 +57,19 @@ p-8
 
       <div className="space-y-4">
         <div>
-          <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
-            Email
-          </label>
+          <label className="text-sm font-medium text-gray-300">Email</label>
 
           <div
             className="
   mt-1 flex items-center
   bg-black/40
-  border border-gray-300 dark:border-zinc-700
+  border border-white/10
+focus-within:border-emerald-500/70
+transition-colors
   rounded-xl px-3
 "
           >
-            <Mail size={18} className="text-gray-500 dark:text-gray-400" />
+            <Mail size={18} className="text-gray-500" />
             <input
               type="email"
               value={email}
@@ -75,8 +77,8 @@ p-8
               className="
 w-full px-3 py-3
 bg-transparent
-text-gray-900 dark:text-white
-placeholder:text-gray-400 dark:placeholder:text-gray-500
+text-white
+placeholder:text-gray-500
 outline-none
 "
               placeholder="you@example.com"
@@ -85,19 +87,19 @@ outline-none
         </div>
 
         <div>
-          <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
-            Password
-          </label>
+          <label className="text-sm font-medium text-gray-300">Password</label>
 
           <div
             className="
   mt-1 flex items-center
-  bg-white dark:bg-zinc-950
-  border border-gray-300 dark:border-zinc-700
+  bg-black/40
+  border border-white/10
+focus-within:border-emerald-500/70
+transition-colors
   rounded-xl px-3
 "
           >
-            <Lock size={18} className="text-gray-500 dark:text-gray-400" />
+            <Lock size={18} className="text-gray-400" />
             <input
               type="password"
               value={password}
@@ -105,8 +107,8 @@ outline-none
               className="
 w-full px-3 py-3
 bg-transparent
-text-gray-900 dark:text-white
-placeholder:text-gray-400 dark:placeholder:text-gray-500
+text-white
+placeholder:text-gray-500
 outline-none
 "
               placeholder="********"
@@ -116,8 +118,16 @@ outline-none
 
         <button
           onClick={onLogin}
-          disabled={loading}
-          className="w-full bg-emerald-600 text-white py-3 rounded-xl font-medium hover:bg-emerald-700"
+          className="
+  cursor-pointer
+  w-full
+  bg-emerald-600
+  text-white
+  py-3
+  rounded-xl
+  font-medium
+  hover:bg-emerald-700
+  "
         >
           {loading ? "Signing In..." : "Sign In"}
         </button>
@@ -126,11 +136,14 @@ outline-none
           href="/signup"
           className="
 w-full
-border border-gray-300 dark:border-zinc-700
-text-gray-900 dark:text-white
+border border-white/10
+focus-within:border-emerald-500/70
+transition-colors
+text-white
 py-3 rounded-xl
 font-medium
-hover:bg-gray-50 dark:hover:bg-zinc-800
+hover:bg-black/40
+transition-colors
 text-center block
 "
         >
@@ -139,7 +152,7 @@ text-center block
 
         <div className="relative py-2">
           <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-gray-200 dark:border-zinc-700"></div>
+            <div className="w-full border-t border-white/10"></div>
           </div>
 
           <div className="relative flex justify-center">
@@ -149,7 +162,7 @@ text-center block
 backdrop-blur-2xl
   px-3
   text-sm
-  text-gray-500 dark:text-gray-400
+  text-gray-400
 "
             >
               OR
@@ -160,14 +173,17 @@ backdrop-blur-2xl
         <button
           onClick={onGoogle}
           className="
+cursor-pointer
 w-full
-border border-white/10
-bg-white dark:bg-zinc-900
-text-gray-900 dark:text-white
-py-3 rounded-xl
+bg-black/40
+text-white
+py-3
+rounded-xl
 flex justify-center items-center gap-3
-hover:bg-gray-50 dark:hover:bg-zinc-800
+border border-white/10
+focus-within:border-emerald-500/70
 transition-colors
+hover:bg-black/60
 "
         >
           <Image src="/google.svg" alt="Google" width={20} height={20} />

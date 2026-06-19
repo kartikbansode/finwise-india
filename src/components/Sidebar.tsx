@@ -75,7 +75,7 @@ dark:border-zinc-800 fixed left-0 top-0 flex flex-col"
       <div className="flex items-center gap-3">
   {/* Light Mode Logo */}
   <Image
-    src="/logo/finwise-large-white1.png"
+    src="/logo/finwise-large-white.png"
     alt="FinWise"
     width={180}
     height={50}

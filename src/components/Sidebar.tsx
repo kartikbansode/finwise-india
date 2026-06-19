@@ -72,25 +72,27 @@ dark:bg-zinc-950
 border-r
 dark:border-zinc-800 fixed left-0 top-0 flex flex-col"
     >
-      <div className="flex items-center gap-3">
-  {/* Light Mode Logo */}
-  <Image
-    src="/logo/finwise-large-white.png"
-    alt="FinWise"
-    width={180}
-    height={50}
-    className="block dark:hidden shrink-0"
-  />
+      <div className="w-full flex justify-center items-center">
+        <div className="flex items-center gap-3">
+          {/* Light Mode Logo */}
+          <Image
+            src="/logo/finwise-large-white.png"
+            alt="FinWise"
+            width={180}
+            height={50}
+            className="block dark:hidden shrink-0"
+          />
 
-  {/* Dark Mode Logo */}
-  <Image
-    src="/logo/finwise-large-black1.png"
-    alt="FinWise"
-    width={180}
-    height={50}
-    className="hidden dark:block shrink-0"
-  />
-</div>
+          {/* Dark Mode Logo */}
+          <Image
+            src="/logo/finwise-large-black1.png"
+            alt="FinWise"
+            width={180}
+            height={50}
+            className="hidden dark:block shrink-0"
+          />
+        </div>
+      </div>
 
       <div className="p-4 pt-5 flex-1">
         {items.map((item) => {
@@ -140,7 +142,7 @@ py-2
         </Link>
 
         <p className="text-xs text-gray-400 dark:text-gray-500 mt-4">
-          FinWise India v1.3.0
+          FinWise India v1.3.1
         </p>
       </div>
     </div>

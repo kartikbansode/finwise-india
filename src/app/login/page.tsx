@@ -102,16 +102,16 @@ export default function LoginPage() {
 
   return (
     <main
-  className="
+      className="
   relative
   min-h-screen
   overflow-hidden
   "
->
-  <div className="fixed top-6 right-6 z-50">
-  <button
-    onClick={() => router.back()}
-    className="
+    >
+      <div className="hidden lg:block fixed top-6 right-6 z-50">
+        <button
+          onClick={() => router.back()}
+          className="
     cursor-pointer
     flex items-center gap-2
     px-4 py-2.5
@@ -127,17 +127,17 @@ export default function LoginPage() {
     hover:bg-black/70
     transition-all
     "
-  >
-    <ArrowLeft size={16} />
-    Back
-  </button>
-</div>
-  <video
-  autoPlay
-  muted
-  loop
-  playsInline
-  className="
+        >
+          <ArrowLeft size={16} />
+          Back
+        </button>
+      </div>
+      <video
+        autoPlay
+        muted
+        loop
+        playsInline
+        className="
   absolute
   inset-0
   w-full
@@ -146,15 +146,15 @@ export default function LoginPage() {
   blur-md
   scale-110
   "
->
-  <source src="/landing/bg-video-1.mp4" type="video/mp4" />
-</video>
+      >
+        <source src="/landing/bg-video-1.mp4" type="video/mp4" />
+      </video>
 
-<div className="absolute inset-0 bg-black/65" />
+      <div className="absolute inset-0 bg-black/65" />
       {/* Left Side */}
       {/* Left Content */}
-<div
-  className="
+      <div
+        className="
   hidden
   lg:flex
   absolute
@@ -167,69 +167,56 @@ export default function LoginPage() {
   text-white
   z-10
   "
->
-  
+      >
+        {/* Content Container */}
+        <div className="relative z-10 flex flex-col justify-between h-full">
+          <div>
+            <div className="flex items-center gap-4">
+              <Image
+                src="/logo/finwise-large-black1.png"
+                alt="FinWise"
+                width={180}
+                height={50}
+              />
+            </div>
 
+            <div className="mt-16">
+              <h2 className="text-6xl font-bold leading-tight max-w-xl">
+                India's Smartest Tax & Finance Platform
+              </h2>
 
-  {/* Content Container */}
-  <div className="relative z-10 flex flex-col justify-between h-full">
-        
-        
-        <div>
-          
-
-          <div className="flex items-center gap-4">
-            <Image
-              src="/logo/finwise-icon.png"
-              alt="FinWise"
-              width={60}
-              height={60} className="rounded-2xl border border-white/20 shadow-lg"
-            />
-
-            <div>
-              <h1 className="text-3xl font-bold">FinWise</h1>
-
-              <p className="text-emerald-100">India</p>
+              <p className="mt-6 text-xl text-emerald-100 max-w-lg">
+                Manage income, GST, invoices, taxes and cash flow from one
+                powerful dashboard.
+              </p>
             </div>
           </div>
 
-          <div className="mt-16">
-            <h2 className="text-6xl font-bold leading-tight max-w-xl">
-              India's Smartest Tax & Finance Platform
-            </h2>
+          <div className="space-y-5">
+            <div className="flex items-center gap-3">
+              <div className="w-2 h-2 rounded-full bg-white" />
+              GST & Tax Intelligence
+            </div>
 
-            <p className="mt-6 text-xl text-emerald-100 max-w-lg">
-              Manage income, GST, invoices, taxes and cash flow from one
-              powerful dashboard.
-            </p>
+            <div className="flex items-center gap-3">
+              <div className="w-2 h-2 rounded-full bg-white" />
+              Invoice Tracking
+            </div>
+
+            <div className="flex items-center gap-3">
+              <div className="w-2 h-2 rounded-full bg-white" />
+              Expense Management
+            </div>
+
+            <div className="flex items-center gap-3">
+              <div className="w-2 h-2 rounded-full bg-white" />
+              Real Financial Insights
+            </div>
           </div>
+
+          {/* Decorative Blur */}
+          <div className="absolute -bottom-32 -right-32 w-96 h-96 bg-white/10 rounded-full blur-3xl" />
         </div>
-
-        <div className="space-y-5">
-          <div className="flex items-center gap-3">
-            <div className="w-2 h-2 rounded-full bg-white" />
-            GST & Tax Intelligence
-          </div>
-
-          <div className="flex items-center gap-3">
-            <div className="w-2 h-2 rounded-full bg-white" />
-            Invoice Tracking
-          </div>
-
-          <div className="flex items-center gap-3">
-            <div className="w-2 h-2 rounded-full bg-white" />
-            Expense Management
-          </div>
-
-          <div className="flex items-center gap-3">
-            <div className="w-2 h-2 rounded-full bg-white" />
-            Real Financial Insights
-          </div>
-        </div>
-
-        {/* Decorative Blur */}
-        <div className="absolute -bottom-32 -right-32 w-96 h-96 bg-white/10 rounded-full blur-3xl" />
-      </div>
       </div>
 
       {/* Right Side */}
@@ -238,52 +225,64 @@ export default function LoginPage() {
   relative
   z-10
   min-h-screen
+  flex
+  items-start
+lg:items-center
+  justify-center
+  lg:justify-end
+  lg:pr-24
+  px-4
+  sm:px-6
   "
 >
-  <div
-    className="
-    absolute
-
-    top-1/2
-    right-[12%]
-
-    -translate-y-1/2
-
-    w-full
-    max-w-md
-
-    px-6
-    "
-  >
-        
         <div className="w-full max-w-md">
           {/* Mobile Logo */}
-          <div className="lg:hidden text-center mb-8">
+          <div className="lg:hidden flex items-center justify-between mb-4">
             <Image
-              src="/logo/finwise-icon.png"
+              src="/logo/finwise-large-black1.png"
               alt="FinWise"
-              width={60}
-              height={60}
-              className="mx-auto mb-4 rounded-2xl border border-white/20 shadow-lg"
+              width={160}
+              height={45}
             />
 
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-              FinWise
-            </h1>
+            <button
+              onClick={() => {
+                if (window.history.length > 1) {
+                  router.back();
+                } else {
+                  router.push("/");
+                }
+              }}
+              className="
+    cursor-pointer
+    flex items-center gap-2
+    px-4 py-2
+    rounded-xl
+
+    bg-black/50
+    backdrop-blur-xl
+
+    border border-white/10
+
+    text-white
+    "
+            >
+              <ArrowLeft size={16} />
+              Back
+            </button>
           </div>
 
           {errorMessage && (
-            <div className="mb-4 bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900 text-red-700 dark:text-red-400 px-4 py-3 rounded-xl">
+            <div className="mb-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl">
               {errorMessage}
             </div>
           )}
 
           {successMessage && (
-            <div className="mb-4 bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-900 text-emerald-700 dark:text-emerald-400 px-4 py-3 rounded-xl">
+            <div className="mb-4 bg-emerald-50 border border-emerald-200 text-emerald-700 px-4 py-3 rounded-xl">
               {successMessage}
             </div>
           )}
-          
 
           <AuthCard
             email={email}
@@ -294,10 +293,7 @@ export default function LoginPage() {
             onLogin={login}
             onGoogle={googleLogin}
           />
-
-  
         </div>
-      </div>
       </div>
     </main>
   );

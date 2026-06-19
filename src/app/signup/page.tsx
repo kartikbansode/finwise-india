@@ -148,7 +148,7 @@ export default function SignupPage() {
   "
     >
       {/* Back Button */}
-      <div className="fixed top-6 right-6 z-50">
+      <div className="hidden lg:block fixed top-6 right-6 z-50">
         <button
           onClick={() => router.back()}
           className="
@@ -214,18 +214,11 @@ export default function SignupPage() {
         <div className="relative z-10">
           <div className="flex items-center gap-4">
             <Image
-              src="/logo/finwise-icon.png"
+              src="/logo/finwise-large-black1.png"
               alt="FinWise"
-              width={60}
-              height={60}
-              className="rounded-2xl border border-white/20 shadow-lg"
+              width={180}
+              height={50}
             />
-
-            <div>
-              <h1 className="text-3xl font-bold">FinWise</h1>
-
-              <p className="text-white/80">India</p>
-            </div>
           </div>
 
           <div className="mt-16">
@@ -266,7 +259,7 @@ export default function SignupPage() {
 
       {/* Right Side */}
       <div
-        className="
+  className="
   relative
   z-20
   min-h-screen
@@ -281,21 +274,42 @@ export default function SignupPage() {
 
   px-6
   "
-      >
-        <div className="w-full max-w-md">
-          <div className="lg:hidden text-center mb-8">
-            <Image
-              src="/logo/finwise-icon.png"
-              alt="FinWise"
-              width={60}
-              height={60}
-              className="mx-auto mb-4 rounded-2xl border border-white/20 shadow-lg"
-            />
+>
+        <div className="w-full max-w-md lg:mb-0 mb-8">
+          <div className="lg:hidden flex items-center justify-between mb-6">
+  <Image
+    src="/logo/finwise-large-black1.png"
+    alt="FinWise"
+    width={160}
+    height={45}
+  />
 
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-              FinWise
-            </h1>
-          </div>
+  <button
+    onClick={() => {
+      if (window.history.length > 1) {
+        router.back();
+      } else {
+        router.push("/");
+      }
+    }}
+    className="
+    cursor-pointer
+    flex items-center gap-2
+    px-4 py-2
+    rounded-xl
+
+    bg-black/50
+    backdrop-blur-xl
+
+    border border-white/10
+
+    text-white
+    "
+  >
+    <ArrowLeft size={16} />
+    Back
+  </button>
+</div>
 
           <div
             className="

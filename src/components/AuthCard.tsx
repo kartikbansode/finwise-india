@@ -26,18 +26,23 @@ export default function AuthCard({
   return (
     <div
       className="
-  w-full max-w-md
-  bg-white dark:bg-zinc-900
-  border border-gray-200 dark:border-zinc-800
-  rounded-3xl
-  shadow-xl
-  p-8
+w-full max-w-md
+
+bg-black/55
+backdrop-blur-2xl
+
+border border-white/10
+
+shadow-[0_25px_80px_rgba(0,0,0,0.45)]
+
+rounded-3xl
+p-8
+
+
 "
     >
       <div className="text-center mb-8">
         <div className="flex flex-col items-center">
- 
-
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
             Login to your account
           </h1>
@@ -57,7 +62,7 @@ export default function AuthCard({
           <div
             className="
   mt-1 flex items-center
-  bg-white dark:bg-zinc-950
+  bg-black/40
   border border-gray-300 dark:border-zinc-700
   rounded-xl px-3
 "
@@ -140,7 +145,8 @@ text-center block
           <div className="relative flex justify-center">
             <span
               className="
-  bg-white dark:bg-zinc-900
+  bg-black/40
+backdrop-blur-2xl
   px-3
   text-sm
   text-gray-500 dark:text-gray-400
@@ -155,7 +161,7 @@ text-center block
           onClick={onGoogle}
           className="
 w-full
-border border-gray-300 dark:border-zinc-700
+border border-white/10
 bg-white dark:bg-zinc-900
 text-gray-900 dark:text-white
 py-3 rounded-xl

@@ -55,6 +55,28 @@ export default function SignupPage() {
         return;
       }
 
+      if (!email.trim()) {
+        setError("Please enter your email address.");
+        return;
+      }
+
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+      if (!emailRegex.test(email)) {
+        setError("Please enter a valid email address.");
+        return;
+      }
+
+      if (!password.trim()) {
+        setError("Please enter a password.");
+        return;
+      }
+
+      if (!confirmPassword.trim()) {
+        setError("Please confirm your password.");
+        return;
+      }
+
       if (password.length < 6) {
         setError("Password must be at least 6 characters.");
         return;
@@ -90,7 +112,7 @@ export default function SignupPage() {
         onboarding_completed: false,
       });
 
-      setSuccess("Account created successfully.");
+      setSuccess("Account created successfully. Please wait!");
 
       setTimeout(() => {
         router.replace("/onboarding");
@@ -118,148 +140,147 @@ export default function SignupPage() {
   }
 
   return (
-    <main className="min-h-screen bg-white dark:bg-black grid lg:grid-cols-2">
-      {/* Left Side */}
-<div
-  className="
-hidden lg:flex
-relative
-flex-col
-justify-between
-p-16
-text-white
-overflow-hidden
-"
->
-  {/* Background Video */}
-  <video
-    autoPlay
-    muted
-    loop
-    playsInline
-    className="
-    absolute
-    inset-0
-    w-full
-    h-full
-    object-cover
-    blur-[3px]
-    scale-110
-    brightness-75
-    "
-  >
-    <source src="/landing/cta-bgvideo.mp4" type="video/mp4" />
-  </video>
-
-  {/* Overlay */}
-  <div
-    className="
-    absolute
-    inset-0
-    bg-black/40
-    "
-  />
-
-  {/* Back Button */}
-  <div className="fixed top-6 right-6 z-50">
-    <button
-      onClick={() => router.back()}
+    <main
       className="
-      cursor-pointer
-      flex items-center gap-2
-
-      bg-white/90
-      dark:bg-zinc-900/90
-
-      backdrop-blur-md
-
-      border
-      border-gray-200
-      dark:border-zinc-800
-
-      text-gray-700
-      dark:text-gray-300
-
-      px-4 py-2.5
-      rounded-xl
-
-      shadow-sm
-      hover:shadow-lg
-      hover:scale-105
-
-      transition-all
-      duration-200
-      "
+  relative
+  min-h-screen
+  overflow-hidden
+  "
     >
-      <ArrowLeft size={16} />
-      Back
-    </button>
-  </div>
+      {/* Back Button */}
+      <div className="fixed top-6 right-6 z-50">
+        <button
+          onClick={() => router.back()}
+          className="
+    cursor-pointer
+    flex items-center gap-2
+    px-4 py-2.5
+    rounded-xl
 
-  {/* Content */}
-  <div className="relative z-10">
-    <div className="flex items-center gap-4">
-      <Image
-        src="/logo/finwise-icon.png"
-        alt="FinWise"
-        width={60}
-        height={60}
-        className="rounded-2xl border border-white/20 shadow-lg"
-      />
+    bg-black/50
+    backdrop-blur-xl
 
-      <div>
-        <h1 className="text-3xl font-bold">FinWise</h1>
+    border border-white/10
 
-        <p className="text-white/80">India</p>
+    text-white
+
+    hover:bg-black/70
+    transition-all
+    "
+        >
+          <ArrowLeft size={16} />
+          Back
+        </button>
       </div>
-    </div>
 
-    <div className="mt-16">
-      <h2 className="text-6xl font-bold leading-tight max-w-xl">
-        Build Your Financial Command Center
-      </h2>
+      <video
+        autoPlay
+        muted
+        loop
+        playsInline
+        className="
+  absolute
+  inset-0
+  w-full
+  h-full
+  object-cover
+  blur-md
+  scale-110
+  "
+      >
+        <source src="/landing/cta-bgvideo.mp4" type="video/mp4" />
+      </video>
 
-      <p className="mt-6 text-xl text-white/80 max-w-lg">
-        Join thousands of freelancers, consultants and business owners using
-        FinWise to track income, manage taxes and stay compliant.
-      </p>
-    </div>
-  </div>
+      <div className="absolute inset-0 bg-black/65 pointer-events-none" />
+      {/* Left Side */}
+      <div
+        className="
+  hidden
+  lg:flex
+  absolute
+  left-0
+  top-0
+  h-full
+  w-full
+  max-w-xl
+  flex-col
+  justify-between
+  p-16
+  text-white
+  z-10
+  "
+      >
+        {/* Content */}
+        <div className="relative z-10">
+          <div className="flex items-center gap-4">
+            <Image
+              src="/logo/finwise-icon.png"
+              alt="FinWise"
+              width={60}
+              height={60}
+              className="rounded-2xl border border-white/20 shadow-lg"
+            />
 
-  {/* Features */}
-  <div className="relative z-10 space-y-5">
-    <div className="flex items-center gap-3">
-      <div className="w-2 h-2 rounded-full bg-white" />
-      GST & Tax Tracking
-    </div>
+            <div>
+              <h1 className="text-3xl font-bold">FinWise</h1>
 
-    <div className="flex items-center gap-3">
-      <div className="w-2 h-2 rounded-full bg-white" />
-      Professional Invoicing
-    </div>
+              <p className="text-white/80">India</p>
+            </div>
+          </div>
 
-    <div className="flex items-center gap-3">
-      <div className="w-2 h-2 rounded-full bg-white" />
-      Expense Management
-    </div>
+          <div className="mt-16">
+            <h2 className="text-6xl font-bold leading-tight max-w-xl">
+              Build Your Financial Command Center
+            </h2>
 
-    <div className="flex items-center gap-3">
-      <div className="w-2 h-2 rounded-full bg-white" />
-      Smart Business Insights
-    </div>
-  </div>
-</div>
+            <p className="mt-6 text-xl text-white/80 max-w-lg">
+              Join thousands of freelancers, consultants and business owners
+              using FinWise to track income, manage taxes and stay compliant.
+            </p>
+          </div>
+        </div>
+
+        {/* Features */}
+        <div className="relative z-10 space-y-5">
+          <div className="flex items-center gap-3">
+            <div className="w-2 h-2 rounded-full bg-white" />
+            GST & Tax Tracking
+          </div>
+
+          <div className="flex items-center gap-3">
+            <div className="w-2 h-2 rounded-full bg-white" />
+            Professional Invoicing
+          </div>
+
+          <div className="flex items-center gap-3">
+            <div className="w-2 h-2 rounded-full bg-white" />
+            Expense Management
+          </div>
+
+          <div className="flex items-center gap-3">
+            <div className="w-2 h-2 rounded-full bg-white" />
+            Smart Business Insights
+          </div>
+        </div>
+      </div>
 
       {/* Right Side */}
       <div
         className="
-flex
-items-center
-justify-center
-p-6
-lg:p-16
-bg-gray-50 dark:bg-zinc-950
-"
+  relative
+  z-20
+  min-h-screen
+
+  flex
+  items-center
+
+  lg:ml-auto
+  lg:w-1/2
+
+  justify-center
+
+  px-6
+  "
       >
         <div className="w-full max-w-md">
           <div className="lg:hidden text-center mb-8">
@@ -278,19 +299,20 @@ bg-gray-50 dark:bg-zinc-950
 
           <div
             className="
-bg-white dark:bg-zinc-900
-border border-gray-200 dark:border-zinc-800
+bg-black/50
+backdrop-blur-2xl
+border border-white/10
 rounded-3xl
-shadow-xl
+shadow-[0_25px_80px_rgba(0,0,0,0.55)]
 p-8
 "
           >
             <div className="text-center">
-              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+              <h1 className="text-3xl font-bold text-white">
                 Create your account
               </h1>
 
-              <p className="text-gray-500 dark:text-gray-400 mt-2">
+              <p className="text-gray-300 mt-2">
                 Start managing your business finances professionally.
               </p>
             </div>
@@ -316,6 +338,7 @@ p-8
                 <input
                   type="text"
                   value={fullName}
+                  required
                   onChange={(e) => setFullName(e.target.value)}
                   placeholder="John Doe"
                   className="
@@ -340,6 +363,7 @@ focus:ring-emerald-500
                 <input
                   type="email"
                   value={email}
+                  required
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="john@example.com"
                   className="
@@ -363,6 +387,7 @@ focus:ring-emerald-500
 
                 <input
                   type="password"
+                  required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="********"
@@ -387,6 +412,7 @@ focus:ring-emerald-500
 
                 <input
                   type="password"
+                  required
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   placeholder="********"

@@ -85,22 +85,12 @@ dark:border-zinc-800 fixed left-0 top-0 flex flex-col"
       >
         <div className="flex items-center gap-3">
           <Image
-            src="/logo/finwise-icon.png"
+            src="/logo/finwise-large-black1.png"
             alt="FinWise"
-            width={36}
-            height={36}
+            width={180}
+            height={50}
             className="shrink-0"
           />
-
-          <div>
-            <p className="font-bold text-gray-900 dark:text-white leading-none">
-              FinWise
-            </p>
-
-            <p className="text-xs text-gray-500 dark:text-zinc-400 mt-1">
-              India
-            </p>
-          </div>
         </div>
       </div>
 

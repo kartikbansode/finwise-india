@@ -102,87 +102,78 @@ export default function LoginPage() {
 
   return (
     <main
-      className="
-min-h-screen
-bg-white dark:bg-black
-grid lg:grid-cols-2
-"
-    >
-      {/* Left Side */}
-      <div
   className="
-hidden lg:flex
-relative
-flex-col
-justify-between
-p-16
-text-white
-overflow-hidden
-"
+  relative
+  min-h-screen
+  overflow-hidden
+  "
 >
-  {/* Background Video */}
-  <video
-    autoPlay
-    muted
-    loop
-    playsInline
-    className="
-    absolute
-    inset-0
-    w-full
-    h-full
-    object-cover
-    blur-sm
-    "
-  >
-    <source src="/landing/bg-video-1.mp4" type="video/mp4" />
-  </video>
-
-  {/* Dark Overlay */}
-  <div
-    className="
-    absolute
-    inset-0
-    bg-black/55
-    "
-  />
-
-  {/* Content Container */}
-  <div className="relative z-10 flex flex-col justify-between h-full">
-        <div className="fixed top-6 right-6 z-50">
+  <div className="fixed top-6 right-6 z-50">
   <button
     onClick={() => router.back()}
     className="
+    cursor-pointer
     flex items-center gap-2
-
-    bg-white/90
-    dark:bg-zinc-900/90
-
-    backdrop-blur-md
-
-    border
-    border-gray-200
-    dark:border-zinc-800
-
-    text-gray-700
-    dark:text-gray-300
-
     px-4 py-2.5
     rounded-xl
 
-    shadow-sm
-    hover:shadow-lg
+    bg-black/50
+    backdrop-blur-xl
 
-    hover:scale-105
+    border border-white/10
 
+    text-white
+
+    hover:bg-black/70
     transition-all
-    duration-200
     "
   >
     <ArrowLeft size={16} />
     Back
   </button>
 </div>
+  <video
+  autoPlay
+  muted
+  loop
+  playsInline
+  className="
+  absolute
+  inset-0
+  w-full
+  h-full
+  object-cover
+  blur-md
+  scale-110
+  "
+>
+  <source src="/landing/bg-video-1.mp4" type="video/mp4" />
+</video>
+
+<div className="absolute inset-0 bg-black/65" />
+      {/* Left Side */}
+      {/* Left Content */}
+<div
+  className="
+  hidden
+  lg:flex
+  absolute
+  left-0
+  top-0
+  h-full
+  flex-col
+  justify-between
+  p-16
+  text-white
+  z-10
+  "
+>
+  
+
+
+  {/* Content Container */}
+  <div className="relative z-10 flex flex-col justify-between h-full">
+        
         
         <div>
           
@@ -243,15 +234,27 @@ overflow-hidden
 
       {/* Right Side */}
       <div
-        className="
-flex
-items-center
-justify-center
-p-6
-lg:p-16
-bg-gray-50 dark:bg-zinc-950
-"
-      >
+  className="
+  relative
+  z-10
+  min-h-screen
+  "
+>
+  <div
+    className="
+    absolute
+
+    top-1/2
+    right-[12%]
+
+    -translate-y-1/2
+
+    w-full
+    max-w-md
+
+    px-6
+    "
+  >
         
         <div className="w-full max-w-md">
           {/* Mobile Logo */}
@@ -294,6 +297,7 @@ bg-gray-50 dark:bg-zinc-950
 
   
         </div>
+      </div>
       </div>
     </main>
   );

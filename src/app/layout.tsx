@@ -31,7 +31,7 @@ export default function RootLayout({
       <body>
         <ThemeProvider>
           <Sidebar />
-          <ClientLayout>{children}</ClientLayout>
+          {children}
         </ThemeProvider>
       </body>
     </html>

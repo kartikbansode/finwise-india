@@ -1,7 +1,6 @@
-"use client";
+'use client';
 
-import { usePathname } from "next/navigation";
-import MobileBlocker from "@/components/MobileBlocker";
+import { usePathname } from 'next/navigation';
 
 export default function ClientLayout({
   children,
@@ -10,27 +9,21 @@ export default function ClientLayout({
 }) {
   const pathname = usePathname();
 
-  const publicPages =
-    pathname === "/" ||
-    pathname === "/login" ||
-    pathname === "/signup" ||
-    pathname === "/onboarding" ||
-    pathname === "/privacy" ||
-    pathname === "/terms";
-
-  if (publicPages) {
-    return <main className="min-h-screen w-full">{children}</main>;
-  }
+  const hideSidebar =
+    pathname === '/' ||
+    pathname === '/login' ||
+    pathname === '/signup' ||
+    pathname === '/onboarding';
 
   return (
-    <>
-      {/* Mobile Users */}
-      <MobileBlocker />
-
-      {/* Desktop Users */}
-      <main className="hidden lg:block min-h-screen ml-64 bg-gray-50 dark:bg-zinc-950">
-        {children}
-      </main>
-    </>
+    <main
+      className={
+        hideSidebar
+          ? 'min-h-screen w-full'
+          : 'min-h-screen ml-64 bg-gray-50'
+      }
+    >
+      {children}
+    </main>
   );
 }

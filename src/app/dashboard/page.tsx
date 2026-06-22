@@ -9,7 +9,7 @@ import UserDropdown from "@/components/UserDropdown";
 import { calculateHealthScore } from "@/lib/healthScore";
 import IncomeTrendChart from "@/components/charts/IncomeTrendChart";
 import ExpensePieChart from "@/components/charts/ExpensePieChart";
-
+import MobileBlocker from "@/components/MobileBlocker";
 
 import {
   calculateFullTaxBreakdown,
@@ -17,6 +17,8 @@ import {
   TaxRegime,
 } from "@/lib/taxLogic";
 import TaxDisclaimer from "@/components/TaxDisclaimer";
+
+
 
 export default function DashboardPage() {
   const supabase = createClient();
@@ -27,6 +29,8 @@ export default function DashboardPage() {
   const [expenseData, setExpenseData] = useState<any[]>([]);
   const [profile, setProfile] = useState<any>(null);
   const router = useRouter();
+
+  
 
   useEffect(() => {
     async function load() {
@@ -172,6 +176,26 @@ dark:text-gray-400 mt-2"
     monthlyIncome > 0 ? Math.round((monthlyExpenses / monthlyIncome) * 100) : 0;
 
   const nextDue = getNextAdvanceTaxDueDate();
+  export default function DashboardPage() {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
+
+    checkMobile();
+
+    window.addEventListener("resize", checkMobile);
+
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  if (isMobile) {
+    return <MobileBlocker />;
+  }
+
+
 
   return (
     <main className="ml-64 min-h-screen bg-gray-50 dark:bg-zinc-950 p-6 md:p-10">

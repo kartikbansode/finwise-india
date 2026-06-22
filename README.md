@@ -131,7 +131,7 @@ The platform helps users:
 ### Clone Repository
 
 ```bash
-git clone https://github.com/kartikbansode/finwise-india.git
+git clone https://github.com/kartikbansode/finwise.git
 ```
 
 ### Install Dependencies
@@ -200,7 +200,7 @@ GitHub: https://github.com/kartikbansode
 
 Email: bansodekartik00@gmail.com 
 
-Repository: https://github.com/kartikbansode/finwise-india
+Repository: https://github.com/kartikbansode/finwise
 
 For licensing, collaboration, or business inquiries, please contact the author.
 

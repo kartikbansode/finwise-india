@@ -66,12 +66,7 @@ export default function Sidebar() {
   }
 
   return (
-    <div
-      className="w-64 h-screen bg-white
-dark:bg-zinc-950
-border-r
-dark:border-zinc-800 fixed left-0 top-0 flex flex-col"
-    >
+    <div className="hidden lg:flex w-64 h-screen bg-white dark:bg-zinc-950 border-r border-gray-200 dark:border-zinc-800 fixed left-0 top-0 flex-col">
       <div className="w-full flex justify-center items-center">
         <div className="flex items-center gap-3">
           {/* Light Mode Logo */}

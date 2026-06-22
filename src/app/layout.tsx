@@ -6,7 +6,6 @@ import Sidebar from "@/components/Sidebar";
 import ClientLayout from "@/components/ClientLayout";
 import { ThemeProvider } from "@/components/theme-provider";
 
-
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 
 export const metadata: Metadata = {
@@ -32,7 +31,7 @@ export default function RootLayout({
       <body>
         <ThemeProvider>
           <Sidebar />
-          {children}
+          <ClientLayout>{children}</ClientLayout>
         </ThemeProvider>
       </body>
     </html>

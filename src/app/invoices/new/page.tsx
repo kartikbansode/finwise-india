@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase";
 
 import InvoiceItemsTable from "@/components/invoices/InvoiceItemsTable";
 import InvoiceTotals from "@/components/invoices/InvoiceTotals";
+import MobileBlocker from "@/components/MobileBlocker";
 
 export default function NewInvoicePage() {
   const supabase = createClient();
@@ -173,6 +174,28 @@ export default function NewInvoicePage() {
     }
 
     router.push(`/invoices/${invoice.id}`);
+  }
+
+  const [isMobile, setIsMobile] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
+
+    checkMobile();
+
+    window.addEventListener("resize", checkMobile);
+
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  if (isMobile === null) {
+    return null;
+  }
+
+  if (isMobile) {
+    return <MobileBlocker />;
   }
 
   return (

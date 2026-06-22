@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase";
 import TaxDisclaimer from "@/components/TaxDisclaimer";
 import ThemeToggle from "@/components/ThemeToggle";
+import MobileBlocker from "@/components/MobileBlocker";
 
 export default function SettingsPage() {
   const supabase = createClient();
@@ -85,6 +86,8 @@ export default function SettingsPage() {
       </main>
     );
   }
+
+  
 
   return (
     <main className="ml-64 min-h-screen bg-gray-50 dark:bg-zinc-950 p-6 md:p-10">

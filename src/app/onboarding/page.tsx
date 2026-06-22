@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase";
+import MobileBlocker from "@/components/MobileBlocker";
 
 export default function OnboardingPage() {
   const router = useRouter();

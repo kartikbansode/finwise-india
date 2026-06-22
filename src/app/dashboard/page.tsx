@@ -28,19 +28,7 @@ export default function DashboardPage() {
   const [profile, setProfile] = useState<any>(null);
   const router = useRouter();
 
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 1024);
-    };
-
-    checkMobile();
-
-    window.addEventListener("resize", checkMobile);
-
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
+  
 
   useEffect(() => {
     async function load() {
@@ -187,9 +175,7 @@ dark:text-gray-400 mt-2"
 
   const nextDue = getNextAdvanceTaxDueDate();
 
-  if (isMobile) {
-    return <MobileBlocker />;
-  }
+  
 
   return (
     <main className="ml-64 min-h-screen bg-gray-50 dark:bg-zinc-950 p-6 md:p-10">

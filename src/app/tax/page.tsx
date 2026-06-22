@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase";
 import TaxDisclaimer from "@/components/TaxDisclaimer";
 import { calculate44ADA, calculate44AD } from "@/lib/presumptiveTax";
+import MobileBlocker from "@/components/MobileBlocker";
 
 export default function TaxPage() {
   const supabase = createClient();
@@ -84,6 +85,8 @@ export default function TaxPage() {
       </main>
     );
   }
+
+  
 
   return (
     <main className="ml-64 min-h-screen bg-gray-50 dark:bg-zinc-950 p-6 md:p-10">

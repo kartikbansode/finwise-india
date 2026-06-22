@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase";
 import TaxDisclaimer from "@/components/TaxDisclaimer";
+import MobileBlocker from "@/components/MobileBlocker";
 
 interface ExpenseEntry {
   id: string;
@@ -100,6 +101,28 @@ export default function ExpensesPage() {
       );
     })
     .reduce((sum, e) => sum + Number(e.amount), 0);
+
+  const [isMobile, setIsMobile] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
+
+    checkMobile();
+
+    window.addEventListener("resize", checkMobile);
+
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  if (isMobile === null) {
+    return null;
+  }
+
+  if (isMobile) {
+    return <MobileBlocker />;
+  }
 
   return (
     <main className="ml-64 min-h-screen bg-gray-50 dark:bg-zinc-950 p-6 md:p-10">

@@ -32,7 +32,7 @@ export default function DashboardPage() {
 
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(window.innerWidth < 1024); // lg breakpoint
+      setIsMobile(window.innerWidth < 1024);
     };
 
     checkMobile();
@@ -186,6 +186,7 @@ dark:text-gray-400 mt-2"
     monthlyIncome > 0 ? Math.round((monthlyExpenses / monthlyIncome) * 100) : 0;
 
   const nextDue = getNextAdvanceTaxDueDate();
+
   if (isMobile) {
     return <MobileBlocker />;
   }

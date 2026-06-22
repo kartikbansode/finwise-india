@@ -73,7 +73,7 @@ export default function MobileBlocker() {
             </p>
 
             <p className="text-zinc-500 text-sm">
-              Laptop, Desktop or Tablet Landscape.
+              Laptop, Desktop or Tablet Landscape
             </p>
           </div>
         </div>

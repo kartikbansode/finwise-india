@@ -1,149 +1,192 @@
+import Link from "next/link";
+import Image from "next/image";
+
 export default function PrivacyPolicyPage() {
   return (
-    <main className="ml-64 min-h-screen bg-gray-50 dark:bg-zinc-950 p-8 md:p-12">
-      <div
-        className="
-max-w-5xl
-mx-auto
-bg-white dark:bg-zinc-900
-border border-gray-200 dark:border-zinc-800
-rounded-2xl
-p-8 md:p-12
-"
-      >
-        <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-3">
-          Privacy Policy
-        </h1>
-        <div className="mb-10 inline-flex items-center rounded-full bg-emerald-100 dark:bg-emerald-900/20 px-4 py-2 text-sm text-emerald-700 dark:text-emerald-400">
-          FinWise India Legal Documentation
+    <main className="min-h-screen bg-zinc-950 text-zinc-300">
+      <div className="max-w-4xl mx-auto px-6 py-16 md:px-10 md:py-24">
+        <div className="text-center mb-16">
+          <Image
+            src="/logo/finwise-large-black1.png"
+            alt="FinWise"
+            width={240}
+            height={65}
+            className="mx-auto mb-8"
+          />
+
+          <h1 className="mt-2 text-5xl md:text-6xl font-bold text-white">
+            Privacy Policy
+          </h1>
+
+          <p className="mt-5 text-lg text-zinc-400 max-w-2xl mx-auto">
+            Your privacy and financial data security are important to us. This
+            policy explains how FinWise collects, uses and protects information
+            when you use our platform.
+          </p>
+
+          <p className="mt-6 text-sm text-zinc-500">
+            Effective Date: 23 June 2026
+          </p>
         </div>
 
-        <p className="text-gray-500 dark:text-gray-400 mb-10">
-          Effective Date: 17 June 2026
-        </p>
-
-        <div className="space-y-8 text-gray-700 dark:text-gray-300 leading-8">
+        <div className="space-y-12 leading-8">
           <section>
-            <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-3">
-              1. Introduction
+            <h2 className="text-2xl font-semibold text-white mb-4">
+              1. Information We Collect
             </h2>
 
             <p>
-              FinWise India (FinWise, we, our, or us) respects your privacy and
-              is committed to protecting your personal and financial
-              information. This Privacy Policy explains how we collect, use,
-              store, and protect information when you use our platform.
+              FinWise may collect information you provide directly while using
+              the platform, including:
             </p>
-          </section>
 
-          <section>
-            <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-3">
-              2. Information We Collect
-            </h2>
-
-            <ul className="list-disc ml-6 space-y-2">
+            <ul className="list-disc ml-6 mt-4 space-y-2">
               <li>Name and account information</li>
               <li>Email address</li>
-              <li>Google account authentication details</li>
+              <li>Authentication details</li>
               <li>Income records</li>
               <li>Expense records</li>
               <li>Invoice information</li>
-              <li>Tax and GST-related information</li>
-              <li>Platform usage analytics</li>
+              <li>GST and tax-related information</li>
+              <li>Platform usage information</li>
             </ul>
           </section>
 
           <section>
-            <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-3">
-              3. How We Use Information
+            <h2 className="text-2xl font-semibold text-white mb-4">
+              2. How We Use Information
             </h2>
 
-            <p>We use information collected through FinWise India to:</p>
+            <p>
+              Information is used solely to operate and improve FinWise,
+              including:
+            </p>
 
-            <ul className="list-disc ml-6 mt-3 space-y-2">
-              <li>Provide financial tracking services</li>
-              <li>Generate tax estimates</li>
-              <li>Generate invoices and reports</li>
-              <li>Improve platform performance</li>
-              <li>Provide customer support</li>
-              <li>Maintain security and prevent misuse</li>
+            <ul className="list-disc ml-6 mt-4 space-y-2">
+              <li>Providing dashboard functionality</li>
+              <li>Generating financial insights</li>
+              <li>Calculating tax estimates</li>
+              <li>Creating invoices and reports</li>
+              <li>Maintaining account security</li>
+              <li>Providing support and troubleshooting</li>
             </ul>
           </section>
 
           <section>
-            <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-3">
-              4. Data Storage & Security
+            <h2 className="text-2xl font-semibold text-white mb-4">
+              3. Data Storage & Security
             </h2>
 
             <p>
-              We use industry-standard security practices and third-party
-              infrastructure providers to store and process data. While
-              reasonable security measures are implemented, no electronic
-              transmission or storage method can be guaranteed to be completely
-              secure.
+              FinWise uses trusted infrastructure providers and industry
+              standard security practices to store and process data. While we
+              take reasonable measures to protect information, no online service
+              can guarantee absolute security.
             </p>
           </section>
 
           <section>
-            <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-3">
-              5. Third-Party Services
+            <h2 className="text-2xl font-semibold text-white mb-4">
+              4. Third-Party Services
             </h2>
 
             <p>
-              FinWise India relies on trusted service providers including
-              Supabase, Google Authentication, and Vercel to operate the
-              platform. These services may process information as necessary to
-              provide their services.
+              Certain platform functionality relies on third-party service
+              providers including authentication, hosting and database
+              infrastructure providers. These services may process information
+              only as required to deliver their services.
             </p>
           </section>
 
           <section>
-            <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-3">
-              6. Data Retention
+            <h2 className="text-2xl font-semibold text-white mb-4">
+              5. Data Retention
             </h2>
 
             <p>
-              User information may be retained for as long as an account remains
-              active or as required for operational, legal, tax, security, and
-              compliance purposes.
+              Information may be retained while an account remains active and
+              for reasonable periods necessary for security, operational,
+              compliance and legal purposes.
             </p>
           </section>
 
           <section>
-            <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-3">
-              7. User Rights
+            <h2 className="text-2xl font-semibold text-white mb-4">
+              6. Account Deletion
             </h2>
 
             <p>
-              Users may request correction, modification, or deletion of account
-              information by contacting us. Certain data may be retained where
-              required by law or platform security requirements.
+              Users may permanently delete their FinWise account through the
+              Settings page. Upon successful account deletion, associated
+              profile information and platform data are removed from our active
+              systems in accordance with our data management processes.
             </p>
           </section>
 
           <section>
-            <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-3">
-              8. Policy Updates
+            <h2 className="text-2xl font-semibold text-white mb-4">
+              7. Your Rights
             </h2>
 
             <p>
-              We may update this Privacy Policy from time to time. Continued use
-              of the platform after updates constitutes acceptance of the
-              revised policy.
+              You may review, update or request deletion of information
+              associated with your account subject to applicable laws and
+              operational requirements.
             </p>
           </section>
 
           <section>
-            <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-3">
+            <h2 className="text-2xl font-semibold text-white mb-4">
+              8. Policy Changes
+            </h2>
+
+            <p>
+              This Privacy Policy may be updated periodically. Continued use of
+              FinWise after updates constitutes acceptance of the revised
+              policy.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-semibold text-white mb-4">
               9. Contact
             </h2>
 
-            <p>Questions regarding this Privacy Policy may be sent to:</p>
+            <p>Questions regarding this Privacy Policy may be directed to:</p>
 
-            <p className="mt-3 font-medium text-emerald-600 dark:text-emerald-400">
+            <p className="mt-4 text-emerald-400 font-medium">
               bansodekartik@hotmail.com
             </p>
           </section>
+        </div>
+
+        <div className="mt-20 pt-8 border-t border-zinc-800 text-center">
+          <Link
+            href="/"
+            className="
+    inline-flex
+    items-center
+    gap-2
+
+    px-6 py-3
+
+    rounded-xl
+
+    border border-zinc-700
+    bg-zinc-900
+
+    text-white
+
+    hover:bg-zinc-800
+    transition
+    "
+          >
+            ← Back to Home
+          </Link>
+
+          <p className="mt-6 text-sm text-zinc-500">
+            © 2026 FinWise. All rights reserved.
+          </p>
         </div>
       </div>
     </main>

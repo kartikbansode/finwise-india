@@ -8,8 +8,15 @@ import MobileBlocker from "@/components/MobileBlocker";
 interface ExpenseEntry {
   id: string;
   description: string;
+  vendor: string | null;
   amount: number;
   category: string;
+  expense_type: string;
+  gst_paid: boolean;
+  payment_method: string;
+  recurring: boolean;
+  business_personal: string;
+  notes: string | null;
   entry_date: string;
 }
 
@@ -30,11 +37,21 @@ export default function ExpensesPage() {
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState("");
   const [category, setCategory] = useState("other");
+  const [vendor, setVendor] = useState("");
+  const [expenseType, setExpenseType] = useState("variable");
+  const [gstPaid, setGstPaid] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState("bank_transfer");
+  const [recurring, setRecurring] = useState(false);
+  const [businessPersonal, setBusinessPersonal] = useState("business");
+
+  const [notes, setNotes] = useState("");
   const [entryDate, setEntryDate] = useState(
     new Date().toISOString().split("T")[0],
   );
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
+  const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   async function loadEntries() {
     const { data: userData } = await supabase.auth.getUser();
@@ -71,17 +88,51 @@ export default function ExpensesPage() {
       .from("expense_entries")
       .insert({
         user_id: userData.user.id,
+
         description: description.trim(),
+
+        vendor,
+
         amount: Number(amount),
+
         category,
+
+        expense_type: expenseType,
+
+        gst_paid: gstPaid,
+
+        payment_method: paymentMethod,
+
+        recurring,
+
+        business_personal: businessPersonal,
+
+        notes,
+
         entry_date: entryDate,
       });
 
     if (insertError) setError("Something went wrong. Please try again.");
     else {
       setDescription("");
+
+      setVendor("");
+
       setAmount("");
+
       setCategory("other");
+
+      setExpenseType("variable");
+
+      setGstPaid(false);
+
+      setPaymentMethod("bank_transfer");
+
+      setRecurring(false);
+
+      setBusinessPersonal("business");
+
+      setNotes("");
       await loadEntries();
     }
     setSaving(false);
@@ -174,6 +225,30 @@ focus:ring-emerald-500
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Vendor
+              </label>
+
+              <input
+                type="text"
+                value={vendor}
+                onChange={(e) => setVendor(e.target.value)}
+                placeholder="Google, Adobe, Hostinger..."
+                className="
+w-full
+bg-white dark:bg-zinc-950
+border border-gray-300 dark:border-zinc-700
+text-gray-900 dark:text-white
+rounded-lg
+px-3 py-2
+text-sm
+focus:outline-none
+focus:ring-2
+focus:ring-emerald-500
+"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Amount (₹)
               </label>
               <input
@@ -224,6 +299,32 @@ focus:ring-emerald-500
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Expense Type
+              </label>
+
+              <select
+                value={expenseType}
+                onChange={(e) => setExpenseType(e.target.value)}
+                className="
+w-full
+bg-white dark:bg-zinc-950
+border border-gray-300 dark:border-zinc-700
+text-gray-900 dark:text-white
+rounded-lg
+px-3 py-2
+text-sm
+focus:outline-none
+focus:ring-2
+focus:ring-emerald-500
+"
+              >
+                <option value="fixed">Fixed Expense</option>
+
+                <option value="variable">Variable Expense</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Date
               </label>
               <input
@@ -244,6 +345,113 @@ focus:ring-emerald-500
 "
               />
             </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Payment Method
+              </label>
+
+              <select
+                value={paymentMethod}
+                onChange={(e) => setPaymentMethod(e.target.value)}
+                className="
+w-full
+bg-white dark:bg-zinc-950
+border border-gray-300 dark:border-zinc-700
+text-gray-900 dark:text-white
+rounded-lg
+px-3 py-2
+text-sm
+focus:outline-none
+focus:ring-2
+focus:ring-emerald-500
+"
+              >
+                <option value="upi">UPI</option>
+
+                <option value="bank_transfer">Bank Transfer</option>
+
+                <option value="card">Card</option>
+
+                <option value="cash">Cash</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Expense Usage
+              </label>
+
+              <select
+                value={businessPersonal}
+                onChange={(e) => setBusinessPersonal(e.target.value)}
+                className="
+w-full
+bg-white dark:bg-zinc-950
+border border-gray-300 dark:border-zinc-700
+text-gray-900 dark:text-white
+rounded-lg
+px-3 py-2
+text-sm
+focus:outline-none
+focus:ring-2
+focus:ring-emerald-500
+"
+              >
+                <option value="business">Business</option>
+
+                <option value="personal">Personal</option>
+              </select>
+            </div>
+            <div className="grid md:grid-cols-2 gap-4">
+              <label className="flex items-center gap-3">
+                <input
+                  type="checkbox"
+                  checked={gstPaid}
+                  onChange={(e) => setGstPaid(e.target.checked)}
+                  className="h-4 w-4"
+                />
+
+                <span className="text-sm text-gray-700 dark:text-gray-300">
+                  GST Paid
+                </span>
+              </label>
+
+              <label className="flex items-center gap-3">
+                <input
+                  type="checkbox"
+                  checked={recurring}
+                  onChange={(e) => setRecurring(e.target.checked)}
+                  className="h-4 w-4"
+                />
+
+                <span className="text-sm text-gray-700 dark:text-gray-300">
+                  Recurring Expense
+                </span>
+              </label>
+            </div>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Notes
+            </label>
+
+            <textarea
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+              rows={3}
+              placeholder="Optional notes..."
+              className="
+w-full
+bg-white dark:bg-zinc-950
+border border-gray-300 dark:border-zinc-700
+text-gray-900 dark:text-white
+rounded-lg
+px-3 py-2
+text-sm
+focus:outline-none
+focus:ring-2
+focus:ring-emerald-500
+"
+            />
           </div>
           {error && <p className="text-sm text-red-600">{error}</p>}
           <button

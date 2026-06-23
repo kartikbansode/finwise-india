@@ -197,7 +197,7 @@ export default function IncomePage() {
     .reduce((sum, e) => sum + Number(e.amount), 0);
 
   const averageIncome =
-    entries.length > 0
+    filteredEntries.length > 0
       ? filteredEntries.reduce((sum, entry) => sum + Number(entry.amount), 0) /
         entries.length
       : 0;
@@ -238,6 +238,9 @@ export default function IncomePage() {
     month,
     revenue,
   }));
+  const topClients = Object.entries(clientTotals)
+  .sort((a, b) => b[1] - a[1])
+  .slice(0, 5);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -294,46 +297,6 @@ export default function IncomePage() {
           </span>
         </p>
         <div className="grid md:grid-cols-4 gap-4 mb-8">
-          <div
-            className="
-  bg-white dark:bg-zinc-900
-  border border-gray-200 dark:border-zinc-800
-  rounded-xl
-  p-6
-  mb-8
-  "
-          >
-            <div className="mb-6">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                Revenue Trend
-              </h3>
-
-              <p className="text-sm text-gray-500 dark:text-gray-400">
-                Revenue over time
-              </p>
-            </div>
-
-            <div className="h-80">
-              <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={chartData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-
-                  <XAxis dataKey="month" />
-
-                  <YAxis />
-
-                  <Tooltip />
-
-                  <Area
-                    type="monotone"
-                    dataKey="revenue"
-                    stroke="#10b981"
-                    fill="#10b98120"
-                  />
-                </AreaChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
           <div
             className="
     bg-white dark:bg-zinc-900
@@ -398,6 +361,103 @@ export default function IncomePage() {
             <h3 className="text-2xl font-bold mt-2">{totalTransactions}</h3>
           </div>
         </div>
+        <div
+          className="
+  bg-white dark:bg-zinc-900
+  border border-gray-200 dark:border-zinc-800
+  rounded-xl
+  p-6
+  mb-8
+  "
+        >
+          <div className="mb-6">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+              Revenue Trend
+            </h3>
+
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              Revenue over time
+            </p>
+          </div>
+
+          <div className="h-80">
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart data={chartData}>
+                <CartesianGrid strokeDasharray="3 3" />
+
+                <XAxis dataKey="month" />
+
+                <YAxis
+                  tickFormatter={(value) => `₹${(value / 1000).toFixed(0)}k`}
+                />
+
+                <Tooltip
+                  formatter={(value) =>
+                    `₹${Number(value).toLocaleString("en-IN")}`
+                  }
+                />
+
+                <Area
+                  type="monotone"
+                  dataKey="revenue"
+                  stroke="#10b981"
+                  fill="#10b98120"
+                />
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+        <div
+  className="
+  bg-white dark:bg-zinc-900
+  border border-gray-200 dark:border-zinc-800
+  rounded-xl
+  p-6
+  mb-8
+  "
+>
+  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-6">
+    Top Clients
+  </h3>
+
+  {topClients.length === 0 ? (
+    <p className="text-gray-500 dark:text-gray-400">
+      No client data available.
+    </p>
+  ) : (
+    <div className="space-y-4">
+      {topClients.map(([client, amount], index) => (
+        <div
+          key={client}
+          className="flex items-center justify-between"
+        >
+          <div className="flex items-center gap-3">
+            <div
+              className="
+              w-8 h-8
+              rounded-full
+              bg-emerald-500/10
+              text-emerald-500
+              flex items-center justify-center
+              text-sm font-semibold
+              "
+            >
+              {index + 1}
+            </div>
+
+            <span className="font-medium text-gray-900 dark:text-white">
+              {client}
+            </span>
+          </div>
+
+          <span className="font-semibold text-gray-900 dark:text-white">
+            ₹{Number(amount).toLocaleString("en-IN")}
+          </span>
+        </div>
+      ))}
+    </div>
+  )}
+</div>
 
         <form
           onSubmit={handleAdd}

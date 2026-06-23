@@ -11,6 +11,7 @@ import IncomeTrendChart from "@/components/charts/IncomeTrendChart";
 import ExpensePieChart from "@/components/charts/ExpensePieChart";
 import MobileBlocker from "@/components/MobileBlocker";
 import { AnimatePresence, motion } from "framer-motion";
+import { useRef } from "react";
 
 import {
   calculateFullTaxBreakdown,
@@ -35,10 +36,15 @@ export default function DashboardPage() {
     "Loading income analytics...",
     "Calculating tax insights...",
     "Syncing business metrics...",
+    "Reviewing GST records...",
+    "Checking cash flow trends...",
     "Building your financial command center...",
+    "Almost ready...",
   ];
 
-  const [messageIndex, setMessageIndex] = useState(0);
+  const [messageIndex, setMessageIndex] = useState(() =>
+    Math.floor(Math.random() * loadingMessages.length),
+  );
 
   useEffect(() => {
     const interval = setInterval(() => {

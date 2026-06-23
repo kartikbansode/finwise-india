@@ -210,7 +210,19 @@ tracking-tight
             <br />
             Business From
             <br />
-            <span className="text-emerald-400">One Dashboard</span>
+            <span
+              className="
+            text-emerald-400
+              font-bold
+              text-5xl
+              md:text-7xl
+              inline-block
+              -rotate-1
+              "
+              style={{ fontFamily: "EduNSW" }}
+            >
+              One Dashboard
+            </span>
           </motion.h1>
 
           <motion.p
@@ -487,7 +499,18 @@ md:py-36
               transition={{ duration: 0.8 }}
             >
               <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">
-                Track Every Rupee.
+                Track Every{" "}
+                <span
+                  className="
+    text-emerald-400
+    text-[1.2em]
+    font-normal
+    inline-block
+    "
+                  style={{ fontFamily: "EduNSW" }}
+                >
+                  Rupee
+                </span>
               </h2>
               <p className="text-lg text-white/70 mb-6">
                 See where your money comes from and where it goes. Real-time
@@ -564,7 +587,19 @@ shadow-black/50
               className="order-1 md:order-2"
             >
               <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">
-                Know Your Tax Before Government Does.
+                Know Your{" "}
+                <span
+                  className="
+    text-emerald-400
+    text-[1.2em]
+    font-normal
+    inline-block
+    "
+                  style={{ fontFamily: "EduNSW" }}
+                >
+                  Tax
+                </span>{" "}
+                Before Government Does
               </h2>
               <p className="text-lg text-white/70 mb-6">
                 Accurate tax calculations for 44ADA, 44AD, GST, and advance tax.
@@ -600,7 +635,19 @@ shadow-black/50
               transition={{ duration: 0.8 }}
             >
               <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">
-                Professional Invoicing Built In.
+                Professional{" "}
+                <span
+                  className="
+    text-emerald-400
+    text-[1.2em]
+    font-normal
+    inline-block
+    "
+                  style={{ fontFamily: "EduNSW" }}
+                >
+                  Invoicing
+                </span>{" "}
+                Built In
               </h2>
               <p className="text-lg text-white/70 mb-6">
                 Create and send invoices in seconds. Built-in templates for
@@ -652,8 +699,19 @@ shadow-black/50
         id="why"
         className="py-20 md:py-32 px-4 md:px-6 max-w-7xl mx-auto"
       >
-        <h2 className="text-4xl md:text-5xl font-bold text-center mb-4">
-          Built for Indian Businesses
+        <h2 className="text-4xl md:text-5xl font-bold text-center mb-4 text-white">
+          Built for Indian{" "}
+          <span
+            className="
+    text-emerald-400
+    text-[1.2em]
+    font-normal
+    inline-block
+    "
+            style={{ fontFamily: "EduNSW" }}
+          >
+            Businesses
+          </span>
         </h2>
         <p className="text-lg text-gray-400 text-center max-w-2xl mx-auto mb-12 md:mb-16">
           Every feature is designed specifically for how you work and the taxes
@@ -734,8 +792,19 @@ shadow-black/50
         className="py-20 md:py-32 px-4 md:px-6 bg-zinc-900"
       >
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-4xl md:text-5xl font-bold text-center mb-12 md:mb-16">
-            Loved by Thousands
+          <h2 className="text-4xl md:text-5xl font-bold text-center mb-12 md:mb-16 text-white">
+            Loved by{" "}
+            <span
+              className="
+    text-emerald-400
+    text-[1.2em]
+    font-normal
+    inline-block
+    "
+              style={{ fontFamily: "EduNSW" }}
+            >
+              Thousands
+            </span>
           </h2>
 
           <div className="grid md:grid-cols-3 gap-6 md:gap-8">

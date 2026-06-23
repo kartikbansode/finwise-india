@@ -204,7 +204,19 @@ export default function LoginPage() {
 
             <div className="mt-16">
               <h2 className="text-6xl font-bold leading-tight max-w-xl">
-                India's Smartest Tax & Finance Platform
+                India's Smartest Tax &{" "}
+                <span
+                  className="
+    text-emerald-400
+    text-[1.15em]
+    font-normal
+    inline-block
+    "
+                  style={{ fontFamily: "EduNSW" }}
+                >
+                  Finance
+                </span>{" "}
+                Platform
               </h2>
 
               <p className="mt-6 text-xl text-white/80 max-w-lg">

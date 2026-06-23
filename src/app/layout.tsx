@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Geist } from "next/font/google";
 import { cn } from "@/lib/utils";
 import Sidebar from "@/components/Sidebar";
-import ClientLayout from "@/components/ClientLayout";
 import { ThemeProvider } from "@/components/theme-provider";
+import { Geist} from "next/font/google";
+
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 

@@ -10,6 +10,7 @@ import { calculateHealthScore } from "@/lib/healthScore";
 import IncomeTrendChart from "@/components/charts/IncomeTrendChart";
 import ExpensePieChart from "@/components/charts/ExpensePieChart";
 import MobileBlocker from "@/components/MobileBlocker";
+import { AnimatePresence, motion } from "framer-motion";
 
 import {
   calculateFullTaxBreakdown,
@@ -28,6 +29,24 @@ export default function DashboardPage() {
   const [profile, setProfile] = useState<any>(null);
   const router = useRouter();
   const [isMobile, setIsMobile] = useState<boolean | null>(null);
+  const loadingMessages = [
+    "Organizing your financial data...",
+    "Preparing your dashboard...",
+    "Loading income analytics...",
+    "Calculating tax insights...",
+    "Syncing business metrics...",
+    "Building your financial command center...",
+  ];
+
+  const [messageIndex, setMessageIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setMessageIndex((prev) => (prev + 1) % loadingMessages.length);
+    }, 2000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     async function load() {
@@ -130,12 +149,20 @@ export default function DashboardPage() {
 
           <h2 className="text-xl font-semibold">Loading your workspace...</h2>
 
-          <p
-            className="text-gray-500
-dark:text-gray-400 mt-2"
-          >
-            Please wait a moment.
-          </p>
+          <div className="h-8 mt-3 overflow-hidden">
+            <AnimatePresence mode="wait">
+              <motion.p
+                key={messageIndex}
+                initial={{ y: 30, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ y: -30, opacity: 0 }}
+                transition={{ duration: 0.4 }}
+                className="text-gray-500 dark:text-gray-400"
+              >
+                {loadingMessages[messageIndex]}
+              </motion.p>
+            </AnimatePresence>
+          </div>
         </div>
       </main>
     );

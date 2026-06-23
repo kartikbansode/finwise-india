@@ -140,7 +140,6 @@ export default function SignupPage() {
     }
   }
 
-
   return (
     <main
       className="
@@ -196,13 +195,13 @@ export default function SignupPage() {
 
       <div className="absolute inset-0 bg-black/65 pointer-events-none" />
       {!videoLoaded && (
-  <div className="fixed inset-0 z-[999] bg-black flex items-center justify-center">
-    <div className="text-center">
-      <div className="w-12 h-12 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-      <p className="text-zinc-400">Loading FinWise...</p>
-    </div>
-  </div>
-)}
+        <div className="fixed inset-0 z-[999] bg-black flex items-center justify-center">
+          <div className="text-center">
+            <div className="w-12 h-12 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+            <p className="text-zinc-400">Loading FinWise...</p>
+          </div>
+        </div>
+      )}
       {/* Left Side */}
       <div
         className="
@@ -234,7 +233,18 @@ export default function SignupPage() {
 
           <div className="mt-16">
             <h2 className="text-6xl font-bold leading-tight max-w-xl">
-              Build Your Financial Command Center
+              Build Your Financial{" "}
+              <span
+                className="
+    text-emerald-400
+    text-[1.15em]
+    font-normal
+    inline-block
+    "
+                style={{ fontFamily: "EduNSW" }}
+              >
+                Command Center
+              </span>
             </h2>
 
             <p className="mt-6 text-xl text-white/80 max-w-lg">

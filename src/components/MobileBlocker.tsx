@@ -1,22 +1,34 @@
 "use client";
 
+import Link from "next/link";
+import { createClient } from "@/lib/supabase";
 import { MonitorSmartphone, Laptop } from "lucide-react";
 
 export default function MobileBlocker() {
+  async function handleLogout() {
+    const supabase = createClient();
+
+    await supabase.auth.signOut();
+
+    window.location.href = "/";
+  }
+
   return (
     <div className="lg:hidden min-h-screen flex items-center justify-center p-6 bg-zinc-950">
       <div
         className="
         max-w-md
         w-full
+
         text-center
 
         bg-zinc-900/80
         backdrop-blur-xl
 
-        border border-zinc-800
-        rounded-3xl
+        border
+        border-zinc-800
 
+        rounded-3xl
         p-8
         "
       >
@@ -76,6 +88,55 @@ export default function MobileBlocker() {
               Laptop, Desktop or Tablet Landscape
             </p>
           </div>
+        </div>
+
+        <div className="mt-6 flex flex-col gap-3">
+          <Link
+            href="/"
+            className="
+            w-full
+
+            bg-emerald-600
+            hover:bg-emerald-700
+
+            text-white
+            font-medium
+
+            py-3
+            rounded-xl
+
+            transition-colors
+
+            flex
+            items-center
+            justify-center
+            "
+          >
+            Go to Home
+          </Link>
+
+          <button
+            onClick={handleLogout}
+            className="
+            w-full
+
+            bg-zinc-800
+            hover:bg-zinc-700
+
+            border
+            border-zinc-700
+
+            text-zinc-300
+            font-medium
+
+            py-3
+            rounded-xl
+
+            transition-colors
+            "
+          >
+            Logout
+          </button>
         </div>
       </div>
     </div>

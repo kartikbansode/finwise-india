@@ -7,11 +7,16 @@ import MobileBlocker from "@/components/MobileBlocker";
 
 interface IncomeEntry {
   id: string;
-  client_name: string;
+  client_name: string | null;
+  income_source: string | null;
   amount: number;
   category: string;
-  entry_date: string;
+  gst_included: boolean;
+  invoice_linked: boolean;
+  payment_status: string;
+  payment_method: string;
   notes: string | null;
+  entry_date: string;
 }
 
 const CATEGORIES = [
@@ -36,6 +41,11 @@ export default function IncomePage() {
   const [notes, setNotes] = useState("");
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
+  const [incomeSource, setIncomeSource] = useState("");
+  const [gstIncluded, setGstIncluded] = useState(false);
+  const [invoiceLinked, setInvoiceLinked] = useState(false);
+  const [paymentStatus, setPaymentStatus] = useState("received");
+  const [paymentMethod, setPaymentMethod] = useState("bank_transfer");
 
   async function loadEntries() {
     const { data: userData } = await supabase.auth.getUser();
@@ -76,20 +86,47 @@ export default function IncomePage() {
       .from("income_entries")
       .insert({
         user_id: userData.user.id,
-        client_name: clientName.trim(),
+
+        client_name: clientName,
+
+        income_source: incomeSource,
+
         amount: Number(amount),
+
         category,
+
+        gst_included: gstIncluded,
+
+        invoice_linked: invoiceLinked,
+
+        payment_status: paymentStatus,
+
+        payment_method: paymentMethod,
+
+        notes,
+
         entry_date: entryDate,
-        notes: notes.trim() || null,
       });
 
     if (insertError) {
       setError("Something went wrong. Please try again.");
     } else {
       setClientName("");
+      setIncomeSource("");
+
       setAmount("");
-      setNotes("");
+
       setCategory("other");
+
+      setGstIncluded(false);
+
+      setInvoiceLinked(false);
+
+      setPaymentStatus("received");
+
+      setPaymentMethod("bank_transfer");
+
+      setNotes("");
       await loadEntries();
     }
     setSaving(false);
@@ -231,6 +268,84 @@ focus:ring-emerald-500
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Income Source
+              </label>
+
+              <input
+                type="text"
+                value={incomeSource}
+                onChange={(e) => setIncomeSource(e.target.value)}
+                placeholder="Freelancing, Consulting, Retainer..."
+                className="
+w-full
+bg-white dark:bg-zinc-950
+border border-gray-300 dark:border-zinc-700
+text-gray-900 dark:text-white
+rounded-lg
+px-3 py-2
+text-sm
+focus:outline-none
+focus:ring-2
+focus:ring-emerald-500
+"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Payment Method
+              </label>
+
+              <select
+                value={paymentMethod}
+                onChange={(e) => setPaymentMethod(e.target.value)}
+                className="
+w-full
+bg-white dark:bg-zinc-950
+border border-gray-300 dark:border-zinc-700
+text-gray-900 dark:text-white
+rounded-lg
+px-3 py-2
+text-sm
+focus:outline-none
+focus:ring-2
+focus:ring-emerald-500
+"
+              >
+                <option value="bank_transfer">Bank Transfer</option>
+                <option value="upi">UPI</option>
+                <option value="cash">Cash</option>
+                <option value="card">Card</option>
+                <option value="cheque">Cheque</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Payment Status
+              </label>
+
+              <select
+                value={paymentStatus}
+                onChange={(e) => setPaymentStatus(e.target.value)}
+                className="
+w-full
+bg-white dark:bg-zinc-950
+border border-gray-300 dark:border-zinc-700
+text-gray-900 dark:text-white
+rounded-lg
+px-3 py-2
+text-sm
+focus:outline-none
+focus:ring-2
+focus:ring-emerald-500
+"
+              >
+                <option value="received">Received</option>
+                <option value="pending">Pending</option>
+                <option value="overdue">Overdue</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Date received
               </label>
               <input
@@ -251,6 +366,33 @@ focus:ring-emerald-500
 "
               />
             </div>
+          </div>
+          <div className="grid md:grid-cols-2 gap-4">
+            <label className="flex items-center gap-3">
+              <input
+                type="checkbox"
+                checked={gstIncluded}
+                onChange={(e) => setGstIncluded(e.target.checked)}
+                className="h-4 w-4"
+              />
+
+              <span className="text-sm text-gray-700 dark:text-gray-300">
+                GST Included
+              </span>
+            </label>
+
+            <label className="flex items-center gap-3">
+              <input
+                type="checkbox"
+                checked={invoiceLinked}
+                onChange={(e) => setInvoiceLinked(e.target.checked)}
+                className="h-4 w-4"
+              />
+
+              <span className="text-sm text-gray-700 dark:text-gray-300">
+                Linked To Invoice
+              </span>
+            </label>
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">

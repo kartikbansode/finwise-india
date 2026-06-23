@@ -56,6 +56,7 @@ export default function IncomePage() {
   const [paymentStatus, setPaymentStatus] = useState("received");
   const [paymentMethod, setPaymentMethod] = useState("bank_transfer");
   const [dateFilter, setDateFilter] = useState("this_month");
+  const [deleting, setDeleting] = useState(false);
 
   async function loadEntries() {
     const { data: userData } = await supabase.auth.getUser();
@@ -715,9 +716,7 @@ focus:ring-emerald-500
 "
         >
           {filteredEntries.length === 0 ? (
-            <p className="p-5 text-sm dark:text-gray-400">
-              No income logged.
-            </p>
+            <p className="p-5 text-sm dark:text-gray-400">No income logged.</p>
           ) : (
             <table className="w-full text-sm">
               <thead className="bg-gray-50 dark:bg-zinc-800 text-left dark:text-gray-400">
@@ -1006,20 +1005,29 @@ ${
               </button>
 
               <button
+                disabled={deleting}
                 onClick={async () => {
-                  await handleDelete(deleteId);
+                  try {
+                    setDeleting(true);
 
-                  setDeleteId(null);
+                    await handleDelete(deleteId);
+
+                    setDeleteId(null);
+                  } finally {
+                    setDeleting(false);
+                  }
                 }}
                 className="
-          px-4 py-2
-          rounded-xl
-          bg-red-600
-          hover:bg-red-700
-          text-white
-          "
+  px-4 py-2
+  rounded-xl
+  bg-red-600
+  hover:bg-red-700
+  disabled:opacity-50
+  disabled:cursor-not-allowed
+  text-white
+  "
               >
-                Delete
+                {deleting ? "Deleting..." : "Delete"}
               </button>
             </div>
           </div>

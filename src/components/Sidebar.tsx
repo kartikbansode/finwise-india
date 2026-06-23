@@ -137,7 +137,7 @@ py-2
         </Link>
 
         <p className="text-xs text-gray-400 dark:text-gray-500 mt-4">
-          FinWise India v1.3.2
+          FinWise India v1.3.3
         </p>
       </div>
     </div>

@@ -1,37 +1,38 @@
-import { createClient } from "@supabase/supabase-js";
 import { NextResponse } from "next/server";
+import { createClient } from "@supabase/supabase-js";
 
 export async function POST(req: Request) {
   try {
-    const { userId } = await req.json();
+    const authHeader = req.headers.get("Authorization");
+
+    if (!authHeader?.startsWith("Bearer ")) {
+      return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+
+    const token = authHeader.replace("Bearer ", "");
 
     const supabaseAdmin = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.SUPABASE_SERVICE_ROLE_KEY!
     );
 
-    await supabaseAdmin
-      .from("income_entries")
-      .delete()
-      .eq("user_id", userId);
+    const {
+      data: { user },
+      error: userError,
+    } = await supabaseAdmin.auth.getUser(token);
 
-    await supabaseAdmin
-      .from("expense_entries")
-      .delete()
-      .eq("user_id", userId);
-
-    await supabaseAdmin
-      .from("invoices")
-      .delete()
-      .eq("user_id", userId);
-
-    await supabaseAdmin
-      .from("profiles")
-      .delete()
-      .eq("id", userId);
+    if (userError || !user) {
+      return NextResponse.json(
+        { error: "Invalid session" },
+        { status: 401 }
+      );
+    }
 
     const { error } =
-      await supabaseAdmin.auth.admin.deleteUser(userId);
+      await supabaseAdmin.auth.admin.deleteUser(user.id);
 
     if (error) {
       return NextResponse.json(
@@ -44,6 +45,8 @@ export async function POST(req: Request) {
       success: true,
     });
   } catch (error) {
+    console.error(error);
+
     return NextResponse.json(
       { error: "Failed to delete account" },
       { status: 500 }

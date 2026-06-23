@@ -24,6 +24,7 @@ export default function SettingsPage() {
 
   const [deleteConfirm, setDeleteConfirm] = useState("");
   const [deleting, setDeleting] = useState(false);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
   useEffect(() => {
     async function load() {
@@ -96,25 +97,26 @@ export default function SettingsPage() {
   }
 
   async function handleDeleteAccount() {
-    if (deleteConfirm !== "DELETE") return;
+    if (deleteConfirm !== "DELETE") {
+      return;
+    }
 
     try {
       setDeleting(true);
 
       const {
-        data: { user },
-      } = await supabase.auth.getUser();
+        data: { session },
+      } = await supabase.auth.getSession();
 
-      if (!user) return;
+      if (!session) {
+        throw new Error("Not authenticated");
+      }
 
       const response = await fetch("/api/delete-account", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+          Authorization: `Bearer ${session.access_token}`,
         },
-        body: JSON.stringify({
-          userId: user.id,
-        }),
       });
 
       const result = await response.json();
@@ -122,6 +124,8 @@ export default function SettingsPage() {
       if (!response.ok) {
         throw new Error(result.error);
       }
+      setDeleteModalOpen(false);
+      setDeleteConfirm("");
 
       await supabase.auth.signOut();
 
@@ -388,6 +392,55 @@ py-3
               <ThemeToggle />
             </div>
           </div>
+          <div
+            className="
+  mt-6
+  pt-6
+
+  border border-red-200
+  dark:border-red-900/50
+
+  bg-red-50/50
+  dark:bg-red-950/20
+
+  rounded-2xl
+  p-6
+  "
+          >
+            <div className="flex items-start justify-between gap-6">
+              <div>
+                <h2 className="text-lg font-semibold text-red-700 dark:text-red-400">
+                  Danger Zone
+                </h2>
+
+                <p className="text-sm text-red-600/80 dark:text-red-300/80 mt-2">
+                  Permanently delete your account and all associated financial
+                  data. This action cannot be undone.
+                </p>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setDeleteModalOpen(true)}
+                className="
+  bg-red-600
+  hover:bg-red-700
+
+  text-white
+
+  px-5 py-3
+  rounded-xl
+
+  font-medium
+  transition
+
+  whitespace-nowrap
+  "
+              >
+                Delete Account
+              </button>
+            </div>
+          </div>
           <div className="pt-6 border-t border-gray-200 dark:border-zinc-800">
             <button
               type="submit"
@@ -412,71 +465,118 @@ py-3
             )}
           </div>
         </form>
-        <div
-          className="
-  mt-8
-
-  bg-red-950/20
-  border border-red-500/20
-
-  rounded-xl
-  p-6
-  "
-        >
-          <h2 className="text-lg font-semibold text-red-400">Danger Zone</h2>
-
-          <p className="text-sm text-gray-400 mt-2">
-            Permanently delete your FinWise account and all associated data.
-            This action cannot be undone.
-          </p>
-
-          <div className="mt-5">
-            <label className="block text-sm text-gray-300 mb-2">
-              Type DELETE to confirm
-            </label>
-
-            <input
-              value={deleteConfirm}
-              onChange={(e) => setDeleteConfirm(e.target.value)}
-              placeholder="DELETE"
-              className="
-      w-full
-
-      bg-zinc-950
-      border border-red-500/20
-
-      text-white
-
-      rounded-xl
-      px-4 py-3
-      "
-            />
-          </div>
-
-          <button
-            onClick={handleDeleteAccount}
-            disabled={deleteConfirm !== "DELETE" || deleting}
-            className="
-    mt-4
-
-    bg-red-600
-    hover:bg-red-700
-
-    disabled:opacity-50
-    disabled:cursor-not-allowed
-
-    text-white
-
-    px-5 py-3
-    rounded-xl
-    font-medium
-    "
-          >
-            {deleting ? "Deleting Account..." : "Delete Account"}
-          </button>
-        </div>
         <TaxDisclaimer />
       </div>
+      {deleteModalOpen && (
+        <div
+          className="
+    fixed inset-0 z-[9999]
+
+    bg-black/60
+    backdrop-blur-sm
+
+    flex items-center justify-center
+
+    p-4
+    "
+        >
+          <div
+            className="
+      w-full max-w-md
+
+      bg-white dark:bg-zinc-900
+
+      border border-gray-200 dark:border-zinc-800
+
+      rounded-2xl
+
+      p-6
+      "
+          >
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+              Delete Account
+            </h3>
+
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-3">
+              Deleting your account will permanently remove your profile,
+              invoices, income records, expense records and all associated
+              FinWise data.
+            </p>
+
+            <p className="text-sm text-red-500 mt-3 font-medium">
+              This action cannot be undone.
+            </p>
+
+            <div className="mt-5">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Type DELETE to confirm
+              </label>
+
+              <input
+                type="text"
+                value={deleteConfirm}
+                onChange={(e) => setDeleteConfirm(e.target.value)}
+                placeholder="DELETE"
+                className="
+          w-full
+
+          bg-white dark:bg-zinc-950
+
+          border border-gray-300 dark:border-zinc-700
+
+          text-gray-900 dark:text-white
+
+          rounded-xl
+
+          px-4 py-3
+          "
+              />
+            </div>
+
+            <div className="flex justify-end gap-3 mt-6">
+              <button
+                type="button"
+                onClick={() => {
+                  setDeleteModalOpen(false);
+                  setDeleteConfirm("");
+                }}
+                className="
+          px-4 py-2
+
+          rounded-xl
+
+          border border-gray-300 dark:border-zinc-700
+
+          text-gray-900 dark:text-white
+          "
+              >
+                Cancel
+              </button>
+
+              <button
+                type="button"
+                onClick={handleDeleteAccount}
+                disabled={deleteConfirm !== "DELETE" || deleting}
+                className="
+          px-4 py-2
+
+          rounded-xl
+
+          bg-red-600
+          hover:bg-red-700
+
+          text-white
+
+          disabled:opacity-50
+          disabled:cursor-not-allowed
+          "
+              >
+                {deleting ? "Deleting..." : "Delete Forever"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }

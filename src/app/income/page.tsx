@@ -147,6 +147,26 @@ export default function IncomePage() {
     await loadEntries();
   }
 
+  async function updateStatus(id: string, status: string) {
+    await supabase
+      .from("income_entries")
+      .update({
+        payment_status: status,
+      })
+      .eq("id", id);
+
+    setEntries((prev) =>
+      prev.map((entry) =>
+        entry.id === id
+          ? {
+              ...entry,
+              payment_status: status,
+            }
+          : entry,
+      ),
+    );
+  }
+
   const filteredEntries = entries.filter((entry) => {
     const entryDate = new Date(entry.entry_date);
 
@@ -219,8 +239,7 @@ export default function IncomePage() {
     Object.entries(clientTotals).sort((a, b) => b[1] - a[1])[0]?.[0] || "-";
   const [isMobile, setIsMobile] = useState<boolean | null>(null);
 
-  const [deleteId, setDeleteId] =
-  useState<string | null>(null);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
 
   const revenueByMonth = filteredEntries.reduce(
     (acc, entry) => {
@@ -311,6 +330,24 @@ export default function IncomePage() {
 
   if (isMobile) {
     return <MobileBlocker />;
+  }
+
+  if (loading || isMobile === null) {
+    return (
+      <main className="ml-64 min-h-screen bg-gray-50 dark:bg-zinc-950 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-12 h-12 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+            Loading Income Center
+          </h2>
+
+          <p className="text-gray-500 dark:text-gray-400 mt-2">
+            Preparing financial data...
+          </p>
+        </div>
+      </main>
+    );
   }
 
   return (
@@ -833,121 +870,120 @@ focus:ring-emerald-500
           ) : (
             <table className="w-full text-sm">
               <thead className="bg-gray-50 dark:bg-zinc-800 text-left dark:text-gray-400">
-  <tr>
-    <th className="px-4 py-3 font-medium">Client</th>
+                <tr>
+                  <th className="px-4 py-3 font-medium">Client</th>
 
-    <th className="px-4 py-3 font-medium">Source</th>
+                  <th className="px-4 py-3 font-medium">Source</th>
 
-    <th className="px-4 py-3 font-medium">Payment</th>
+                  <th className="px-4 py-3 font-medium">Payment</th>
 
-    <th className="px-4 py-3 font-medium">Status</th>
+                  <th className="px-4 py-3 font-medium">Status</th>
 
-    <th className="px-4 py-3 font-medium">GST</th>
+                  <th className="px-4 py-3 font-medium">GST</th>
 
-    <th className="px-4 py-3 font-medium">Date</th>
+                  <th className="px-4 py-3 font-medium">Date</th>
 
-    <th className="px-4 py-3 font-medium text-right">
-      Amount
-    </th>
+                  <th className="px-4 py-3 font-medium text-right">Amount</th>
 
-    <th className="px-4 py-3"></th>
-  </tr>
-</thead>
+                  <th className="px-4 py-3"></th>
+                </tr>
+              </thead>
               <tbody>
-  {filteredEntries.map((entry) => (
-    <tr
-      key={entry.id}
-      className="
+                {filteredEntries.map((entry) => (
+                  <tr
+                    key={entry.id}
+                    className="
       border-t border-gray-100 dark:border-zinc-800
       hover:bg-gray-50 dark:hover:bg-zinc-800/50
       "
-    >
-      <td className="px-4 py-3">
-        <div>
-          <p className="font-medium text-gray-900 dark:text-white">
-            {entry.client_name || "-"}
-          </p>
+                  >
+                    <td className="px-4 py-3">
+                      <div>
+                        <p className="font-medium text-gray-900 dark:text-white">
+                          {entry.client_name || "-"}
+                        </p>
 
-          {entry.notes && (
-            <p className="text-xs text-gray-500 truncate max-w-[180px]">
-              {entry.notes}
-            </p>
-          )}
-        </div>
-      </td>
+                        {entry.notes && (
+                          <p className="text-xs text-gray-500 truncate max-w-[180px]">
+                            {entry.notes}
+                          </p>
+                        )}
+                      </div>
+                    </td>
 
-      <td className="px-4 py-3 dark:text-gray-400">
-        {entry.income_source || "-"}
-      </td>
+                    <td className="px-4 py-3 dark:text-gray-400">
+                      {entry.income_source || "-"}
+                    </td>
 
-      <td className="px-4 py-3 dark:text-gray-400 capitalize">
-        {entry.payment_method?.replace("_", " ")}
-      </td>
+                    <td className="px-4 py-3 dark:text-gray-400 capitalize">
+                      {entry.payment_method?.replace("_", " ")}
+                    </td>
 
-      <td className="px-4 py-3">
-        <span
-          className={`px-2 py-1 rounded-full text-xs font-medium ${
-            entry.payment_status === "received"
-              ? "bg-emerald-500/10 text-emerald-500"
-              : entry.payment_status === "pending"
-                ? "bg-amber-500/10 text-amber-500"
-                : "bg-red-500/10 text-red-500"
-          }`}
-        >
-          {entry.payment_status}
-        </span>
-      </td>
+                    <td className="px-4 py-3">
+                      <select
+                        value={entry.payment_status}
+                        onChange={(e) => updateStatus(entry.id, e.target.value)}
+                        className={`px-3 py-2 rounded-lg text-xs font-medium border appearance-none cursor-pointer
 
-      <td className="px-4 py-3">
-        {entry.gst_included ? (
-          <span className="text-emerald-500 font-medium">
-            Yes
-          </span>
-        ) : (
-          <span className="text-gray-400">
-            No
-          </span>
-        )}
-      </td>
+${
+  entry.payment_status === "received"
+    ? "bg-emerald-500/10 text-emerald-500 border-emerald-500/20"
+    : entry.payment_status === "pending"
+      ? "bg-amber-500/10 text-amber-500 border-amber-500/20"
+      : "bg-red-500/10 text-red-500 border-red-500/20"
+}`}
+                      >
+                        <option value="received">Received</option>
 
-      <td className="px-4 py-3 dark:text-gray-400">
-        {new Date(entry.entry_date).toLocaleDateString(
-          "en-IN",
-        )}
-      </td>
+                        <option value="pending">Pending</option>
 
-      <td className="px-4 py-3 text-right font-semibold text-gray-900 dark:text-white">
-        ₹
-        {Number(entry.amount).toLocaleString(
-          "en-IN",
-        )}
-      </td>
+                        <option value="overdue">Overdue</option>
+                      </select>
+                    </td>
 
-      <td className="px-4 py-3 text-right">
-        <button
-          onClick={() => setDeleteId(entry.id)}
-          className="
+                    <td className="px-4 py-3">
+                      {entry.gst_included ? (
+                        <span className="text-emerald-500 font-medium">
+                          Yes
+                        </span>
+                      ) : (
+                        <span className="text-gray-400">No</span>
+                      )}
+                    </td>
+
+                    <td className="px-4 py-3 dark:text-gray-400">
+                      {new Date(entry.entry_date).toLocaleDateString("en-IN")}
+                    </td>
+
+                    <td className="px-4 py-3 text-right font-semibold text-gray-900 dark:text-white">
+                      ₹{Number(entry.amount).toLocaleString("en-IN")}
+                    </td>
+
+                    <td className="px-4 py-3 text-right">
+                      <button
+                        onClick={() => setDeleteId(entry.id)}
+                        className="
           text-red-500
           hover:text-red-700
           text-xs
           font-medium
           "
-        >
-          Delete
-        </button>
-      </td>
-    </tr>
-  ))}
-</tbody>
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
             </table>
           )}
         </div>
         <TaxDisclaimer />
       </div>
       {deleteId && (
-  <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50">
-    <div
-      className="
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50">
+          <div
+            className="
       bg-white dark:bg-zinc-900
       border border-gray-200 dark:border-zinc-800
       rounded-2xl
@@ -955,48 +991,48 @@ focus:ring-emerald-500
       w-full
       max-w-md
       "
-    >
-      <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">
-        Delete Income Entry
-      </h3>
+          >
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">
+              Delete Income Entry
+            </h3>
 
-      <p className="text-gray-500 dark:text-gray-400 mb-6">
-        This income record will be permanently removed.
-      </p>
+            <p className="text-gray-500 dark:text-gray-400 mb-6">
+              This income record will be permanently removed.
+            </p>
 
-      <div className="flex justify-end gap-3">
-        <button
-          onClick={() => setDeleteId(null)}
-          className="
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={() => setDeleteId(null)}
+                className="
           px-4 py-2
           rounded-xl
           border border-gray-300
           dark:border-zinc-700
           "
-        >
-          Cancel
-        </button>
+              >
+                Cancel
+              </button>
 
-        <button
-          onClick={async () => {
-            await handleDelete(deleteId);
+              <button
+                onClick={async () => {
+                  await handleDelete(deleteId);
 
-            setDeleteId(null);
-          }}
-          className="
+                  setDeleteId(null);
+                }}
+                className="
           px-4 py-2
           rounded-xl
           bg-red-600
           hover:bg-red-700
           text-white
           "
-        >
-          Delete
-        </button>
-      </div>
-    </div>
-  </div>
-)}
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }

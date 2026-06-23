@@ -2,20 +2,22 @@
 
 Smart Finance & Tax Management Platform for Indian Freelancers, Consultants, Agencies & Small Businesses
 
->**Version:** 1.3.2
+>**Version:** 1.3.3
 >
 >**Release Date:** June 23, 2026
 
 
-## What's new in v1.3.2
+## What's new in v1.3.3
 
-- Updated landing, login, and signup background videos for a more premium experience.
-- Added desktop-only 3D dashboard showcase section on the landing page.
-- Added mobile device blocker for dashboard and workspace pages.
-- Improved login and signup page responsiveness and dark-mode consistency.
-- Added animated loading messages across dashboard loading screens.
-- Added automatic user dropdown close when clicking outside the menu.
-
+- Added secure account deletion with permanent data removal
+- Added account deletion confirmation flow with DELETE verification
+- Redesigned Privacy Policy page with modern responsive layout
+- Redesigned Terms & Conditions page with improved legal structure
+- Added Cookie Policy page
+- Added DPDP-aligned cookie consent banner
+- Added Cookie Preferences management
+- Improved privacy, compliance and user data controls
+- Added legal page loading screens for smoother experience
 
 ## Dashboard Preview -
 ![Image loading error!](</public/images/readme dash preview.png>)

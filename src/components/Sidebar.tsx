@@ -60,7 +60,8 @@ export default function Sidebar() {
     pathname === "/signup" ||
     pathname === "/onboarding" ||
     pathname === "/privacy" ||
-    pathname === "/terms"
+    pathname === "/terms" ||
+    pathname === "/cookie-policy"
   ) {
     return null;
   }

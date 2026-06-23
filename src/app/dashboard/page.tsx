@@ -42,7 +42,15 @@ export default function DashboardPage() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setMessageIndex((prev) => (prev + 1) % loadingMessages.length);
+      setMessageIndex((prev) => {
+        let next;
+
+        do {
+          next = Math.floor(Math.random() * loadingMessages.length);
+        } while (next === prev);
+
+        return next;
+      });
     }, 2000);
 
     return () => clearInterval(interval);

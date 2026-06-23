@@ -46,6 +46,7 @@ export default function IncomePage() {
   const [invoiceLinked, setInvoiceLinked] = useState(false);
   const [paymentStatus, setPaymentStatus] = useState("received");
   const [paymentMethod, setPaymentMethod] = useState("bank_transfer");
+  const [dateFilter, setDateFilter] = useState("this_month");
 
   async function loadEntries() {
     const { data: userData } = await supabase.auth.getUser();
@@ -137,6 +138,45 @@ export default function IncomePage() {
     await loadEntries();
   }
 
+  const filteredEntries = entries.filter((entry) => {
+    const entryDate = new Date(entry.entry_date);
+
+    const now = new Date();
+
+    switch (dateFilter) {
+      case "this_month":
+        return (
+          entryDate.getMonth() === now.getMonth() &&
+          entryDate.getFullYear() === now.getFullYear()
+        );
+
+      case "last_month": {
+        const lastMonth = new Date();
+
+        lastMonth.setMonth(lastMonth.getMonth() - 1);
+
+        return (
+          entryDate.getMonth() === lastMonth.getMonth() &&
+          entryDate.getFullYear() === lastMonth.getFullYear()
+        );
+      }
+
+      case "last_3_months": {
+        const threeMonthsAgo = new Date();
+
+        threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
+
+        return entryDate >= threeMonthsAgo;
+      }
+
+      case "this_year":
+        return entryDate.getFullYear() === now.getFullYear();
+
+      default:
+        return true;
+    }
+  });
+
   const totalThisMonth = entries
     .filter((e) => {
       const d = new Date(e.entry_date);
@@ -146,6 +186,28 @@ export default function IncomePage() {
       );
     })
     .reduce((sum, e) => sum + Number(e.amount), 0);
+
+  const averageIncome =
+    entries.length > 0
+      ? filteredEntries.reduce((sum, entry) => sum + Number(entry.amount), 0) /
+        entries.length
+      : 0;
+
+  const totalTransactions = filteredEntries.length;
+
+  const clientTotals = filteredEntries.reduce(
+    (acc, entry) => {
+      const client = entry.client_name || "Unknown";
+
+      acc[client] = (acc[client] || 0) + Number(entry.amount);
+
+      return acc;
+    },
+    {} as Record<string, number>,
+  );
+
+  const topClient =
+    Object.entries(clientTotals).sort((a, b) => b[1] - a[1])[0]?.[0] || "-";
   const [isMobile, setIsMobile] = useState<boolean | null>(null);
 
   useEffect(() => {
@@ -174,12 +236,99 @@ export default function IncomePage() {
         <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
           Income
         </h1>
+        <div className="mt-4 mb-6">
+          <select
+            value={dateFilter}
+            onChange={(e) => setDateFilter(e.target.value)}
+            className="
+    bg-white dark:bg-zinc-900
+    border border-gray-300 dark:border-zinc-700
+    rounded-xl
+    px-4 py-2
+    "
+          >
+            <option value="this_month">This Month</option>
+
+            <option value="last_month">Last Month</option>
+
+            <option value="last_3_months">Last 3 Months</option>
+
+            <option value="this_year">This Year</option>
+
+            <option value="all_time">All Time</option>
+          </select>
+        </div>
         <p className="text-gray-500 dark:text-gray-400 mt-1 mb-6">
           Total this month:{" "}
           <span className="font-semibold text-emerald-700">
             ₹{totalThisMonth.toLocaleString("en-IN")}
           </span>
         </p>
+        <div className="grid md:grid-cols-4 gap-4 mb-8">
+          <div
+            className="
+    bg-white dark:bg-zinc-900
+    border border-gray-200 dark:border-zinc-800
+    rounded-xl
+    p-5
+    "
+          >
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              Monthly Revenue
+            </p>
+
+            <h3 className="text-2xl font-bold mt-2">
+              ₹{totalThisMonth.toLocaleString("en-IN")}
+            </h3>
+          </div>
+
+          <div
+            className="
+    bg-white dark:bg-zinc-900
+    border border-gray-200 dark:border-zinc-800
+    rounded-xl
+    p-5
+    "
+          >
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              Average Income
+            </p>
+
+            <h3 className="text-2xl font-bold mt-2">
+              ₹{Math.round(averageIncome).toLocaleString("en-IN")}
+            </h3>
+          </div>
+
+          <div
+            className="
+    bg-white dark:bg-zinc-900
+    border border-gray-200 dark:border-zinc-800
+    rounded-xl
+    p-5
+    "
+          >
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              Top Client
+            </p>
+
+            <h3 className="text-lg font-bold mt-2 truncate">{topClient}</h3>
+          </div>
+
+          <div
+            className="
+    bg-white dark:bg-zinc-900
+    border border-gray-200 dark:border-zinc-800
+    rounded-xl
+    p-5
+    "
+          >
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              Transactions
+            </p>
+
+            <h3 className="text-2xl font-bold mt-2">{totalTransactions}</h3>
+          </div>
+        </div>
 
         <form
           onSubmit={handleAdd}
@@ -455,7 +604,7 @@ focus:ring-emerald-500
                 </tr>
               </thead>
               <tbody>
-                {entries.map((entry) => (
+                {filteredEntries.map((entry) => (
                   <tr
                     key={entry.id}
                     className="

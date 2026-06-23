@@ -18,6 +18,7 @@ export default function LoginPage() {
 
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [videoLoaded, setVideoLoaded] = useState(false);
 
   async function checkSession() {
     const {
@@ -149,6 +150,7 @@ export default function LoginPage() {
         muted
         loop
         playsInline
+        onLoadedData={() => setVideoLoaded(true)}
         className="
   absolute
   inset-0
@@ -163,6 +165,14 @@ export default function LoginPage() {
       </video>
 
       <div className="absolute inset-0 bg-black/65" />
+      {!videoLoaded && (
+        <div className="fixed inset-0 z-[999] bg-black flex items-center justify-center">
+          <div className="text-center">
+            <div className="w-12 h-12 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+            <p className="text-zinc-400">Loading FinWise...</p>
+          </div>
+        </div>
+      )}
       {/* Left Side */}
       {/* Left Content */}
       <div

@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
+
 import {
   motion,
   useScroll,
@@ -25,8 +26,7 @@ import {
 
 export default function LandingPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [income, setIncome] = useState(500000);
-  const [expenses, setExpenses] = useState(150000);
+  const [heroVideoLoaded, setHeroVideoLoaded] = useState(false);
   const { scrollYProgress } = useScroll();
 
   // Navbar shrink on scroll
@@ -34,6 +34,14 @@ export default function LandingPage() {
 
   return (
     <div className="bg-zinc-950 text-white overflow-hidden">
+      {!heroVideoLoaded && (
+        <div className="fixed inset-0 z-[9999] bg-black flex items-center justify-center">
+          <div className="text-center">
+            <div className="w-12 h-12 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+            <p className="text-zinc-400">Loading FinWise...</p>
+          </div>
+        </div>
+      )}
       {/* Floating Glass Navbar */}
       <motion.nav
         style={{ height: navbarHeight }}
@@ -159,6 +167,7 @@ overflow-hidden
           muted
           loop
           playsInline
+          onLoadedData={() => setHeroVideoLoaded(true)}
           className="
 absolute
 inset-0
@@ -184,8 +193,6 @@ bg-black/65
 
         {/* Content */}
         <div className="relative z-10 max-w-7xl mx-auto px-6 text-center text-white">
- 
-
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -326,11 +333,11 @@ mx-auto
 
       {/* 3D Dashboard Showcase. */}
       <motion.section
-  initial={{ opacity: 0 }}
-  whileInView={{ opacity: 1 }}
-  transition={{ duration: 0.8 }}
-  className="hidden lg:block py-32 px-6 max-w-7xl mx-auto"
->
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        transition={{ duration: 0.8 }}
+        className="hidden lg:block py-32 px-6 max-w-7xl mx-auto"
+      >
         <div className="relative">
           {/* Main Dashboard Image with 3D effect */}
           <motion.div
@@ -637,8 +644,6 @@ shadow-black/50
         </div>
       </section>
 
-     
-
       {/* Why FinWise */}
       <motion.section
         initial={{ opacity: 0 }}
@@ -771,9 +776,7 @@ shadow-black/50
                   <p className="font-semibold text-white">
                     {testimonial.author}
                   </p>
-                  <p className="text-sm text-gray-400">
-                    {testimonial.role}
-                  </p>
+                  <p className="text-sm text-gray-400">{testimonial.role}</p>
                   <p className="text-sm text-gray-400">
                     {testimonial.location}
                   </p>

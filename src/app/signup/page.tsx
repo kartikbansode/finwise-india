@@ -20,6 +20,7 @@ export default function SignupPage() {
 
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [videoLoaded, setVideoLoaded] = useState(false);
 
   async function checkSession() {
     const {
@@ -139,6 +140,7 @@ export default function SignupPage() {
     }
   }
 
+
   return (
     <main
       className="
@@ -178,6 +180,7 @@ export default function SignupPage() {
         muted
         loop
         playsInline
+        onLoadedData={() => setVideoLoaded(true)}
         className="
   absolute
   inset-0
@@ -192,6 +195,14 @@ export default function SignupPage() {
       </video>
 
       <div className="absolute inset-0 bg-black/65 pointer-events-none" />
+      {!videoLoaded && (
+  <div className="fixed inset-0 z-[999] bg-black flex items-center justify-center">
+    <div className="text-center">
+      <div className="w-12 h-12 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+      <p className="text-zinc-400">Loading FinWise...</p>
+    </div>
+  </div>
+)}
       {/* Left Side */}
       <div
         className="
@@ -495,10 +506,7 @@ transition-colors
 
             <p className="text-center text-sm text-gray-400 mt-6">
               Already have an account?{" "}
-              <Link
-                href="/login"
-                className="text-emerald-400 font-medium"
-              >
+              <Link href="/login" className="text-emerald-400 font-medium">
                 Sign In
               </Link>
             </p>

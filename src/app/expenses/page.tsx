@@ -15,10 +15,8 @@ import {
   PieChart,
   Pie,
   Cell,
-  Legend
+  Legend,
 } from "recharts";
-
-
 
 interface ExpenseEntry {
   id: string;
@@ -310,6 +308,25 @@ export default function ExpensesPage() {
     value,
   }));
 
+  const topVendors = Object.entries(vendorTotals)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 5);
+
+  const recurringExpenses = filteredEntries.filter((entry) => entry.recurring);
+
+  const recurringAmount = recurringExpenses.reduce(
+    (sum, entry) => sum + Number(entry.amount),
+    0,
+  );
+
+  const businessExpense = filteredEntries
+    .filter((entry) => entry.business_personal === "business")
+    .reduce((sum, entry) => sum + Number(entry.amount), 0);
+
+  const personalExpense = filteredEntries
+    .filter((entry) => entry.business_personal === "personal")
+    .reduce((sum, entry) => sum + Number(entry.amount), 0);
+
   const [isMobile, setIsMobile] = useState<boolean | null>(null);
 
   useEffect(() => {
@@ -360,7 +377,7 @@ export default function ExpensesPage() {
             <option value="all_time">All Time</option>
           </select>
         </div>
-        <div className="grid md:grid-cols-5 gap-4 mt-6 mb-8">
+        <div className="grid md:grid-cols-6 gap-4 mt-6 mb-8">
           <div
             className="
     bg-white dark:bg-zinc-900
@@ -444,6 +461,22 @@ export default function ExpensesPage() {
             >
               {Number(expenseGrowth) >= 0 ? "+" : ""}
               {expenseGrowth}%
+            </h3>
+          </div>
+          <div
+            className="
+  bg-white dark:bg-zinc-900
+  border border-gray-200 dark:border-zinc-800
+  rounded-xl
+  p-5
+  "
+          >
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              Recurring
+            </p>
+
+            <h3 className="text-2xl font-bold mt-2">
+              ₹{recurringAmount.toLocaleString("en-IN")}
             </h3>
           </div>
         </div>
@@ -780,50 +813,37 @@ disabled:opacity-50
         </div>
 
         <div
-  className="
+          className="
   bg-white dark:bg-zinc-900
   border border-gray-200 dark:border-zinc-800
   rounded-xl
   p-6
   mb-8
   "
->
-  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-6">
-    Expense Breakdown
-  </h3>
-
-  <div className="h-80">
-    <ResponsiveContainer
-      width="100%"
-      height="100%"
-    >
-      <PieChart>
-        <Pie
-          data={categoryData}
-          dataKey="value"
-          nameKey="name"
-          outerRadius={100}
         >
-          {categoryData.map(
-            (_, index) => (
-              <Cell
-                key={index}
-                fill={
-                  COLORS[
-                    index %
-                      COLORS.length
-                  ]
-                }
-              />
-            ),
-          )}
-        </Pie>
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-6">
+            Expense Breakdown
+          </h3>
 
-        <Legend />
-      </PieChart>
-    </ResponsiveContainer>
-  </div>
-</div>
+          <div className="h-80">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie
+                  data={categoryData}
+                  dataKey="value"
+                  nameKey="name"
+                  outerRadius={100}
+                >
+                  {categoryData.map((_, index) => (
+                    <Cell key={index} fill={COLORS[index % COLORS.length]} />
+                  ))}
+                </Pie>
+
+                <Legend />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
 
         <div
           className="
@@ -886,6 +906,89 @@ disabled:opacity-50
               </tbody>
             </table>
           )}
+        </div>
+        <div
+          className="
+  bg-white dark:bg-zinc-900
+  border border-gray-200 dark:border-zinc-800
+  rounded-xl
+  p-6
+  mb-8
+  "
+        >
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-6">
+            Top Vendors
+          </h3>
+
+          {topVendors.length === 0 ? (
+            <p className="text-gray-500 dark:text-gray-400">
+              No vendor data available.
+            </p>
+          ) : (
+            <div className="space-y-4">
+              {topVendors.map(([vendor, amount], index) => (
+                <div key={vendor} className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div
+                      className="
+              w-8 h-8
+              rounded-full
+              bg-red-500/10
+              text-red-500
+              flex items-center justify-center
+              text-sm font-semibold
+              "
+                    >
+                      {index + 1}
+                    </div>
+
+                    <span className="font-medium text-gray-900 dark:text-white">
+                      {vendor}
+                    </span>
+                  </div>
+
+                  <span className="font-semibold text-gray-900 dark:text-white">
+                    ₹{Number(amount).toLocaleString("en-IN")}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+        <div className="grid md:grid-cols-2 gap-4 mb-8">
+          <div
+            className="
+    bg-white dark:bg-zinc-900
+    border border-emerald-500/20
+    rounded-xl
+    p-6
+    "
+          >
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              Business Expenses
+            </p>
+
+            <h3 className="text-2xl font-bold text-emerald-500 mt-2">
+              ₹{businessExpense.toLocaleString("en-IN")}
+            </h3>
+          </div>
+
+          <div
+            className="
+    bg-white dark:bg-zinc-900
+    border border-blue-500/20
+    rounded-xl
+    p-6
+    "
+          >
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              Personal Expenses
+            </p>
+
+            <h3 className="text-2xl font-bold text-blue-500 mt-2">
+              ₹{personalExpense.toLocaleString("en-IN")}
+            </h3>
+          </div>
         </div>
         <TaxDisclaimer />
       </div>

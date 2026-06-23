@@ -165,16 +165,6 @@ export default function ExpensesPage() {
     await loadEntries();
   }
 
-  const totalThisMonth = entries
-    .filter((e) => {
-      const d = new Date(e.entry_date);
-      const now = new Date();
-      return (
-        d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear()
-      );
-    })
-    .reduce((sum, e) => sum + Number(e.amount), 0);
-
   const filteredEntries = entries.filter((entry) => {
     const entryDate = new Date(entry.entry_date);
 
@@ -222,7 +212,7 @@ export default function ExpensesPage() {
 
   const totalTransactions = filteredEntries.length;
 
-  const vendorTotals = entries.reduce(
+  const vendorTotals = filteredEntries.reduce(
     (acc, entry) => {
       const vendor = entry.vendor || "Unknown";
 
@@ -257,9 +247,21 @@ export default function ExpensesPage() {
     amount,
   }));
 
+  const monthlyEntries = Object.entries(expenseByMonth);
+
+  const highestExpenseMonth =
+    monthlyEntries.length > 0
+      ? monthlyEntries.reduce((a, b) => (a[1] > b[1] ? a : b))
+      : null;
+
   const now = new Date();
 
-  const currentMonthExpense = filteredEntries
+  const totalExpenses = filteredEntries.reduce(
+    (sum, entry) => sum + Number(entry.amount),
+    0,
+  );
+
+  const currentMonthExpense = entries
     .filter((entry) => {
       const date = new Date(entry.entry_date);
 
@@ -349,6 +351,24 @@ export default function ExpensesPage() {
     return <MobileBlocker />;
   }
 
+  if (loading || isMobile === null) {
+    return (
+      <main className="ml-64 min-h-screen bg-gray-50 dark:bg-zinc-950 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-12 h-12 border-4 border-red-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+            Loading Expense Center
+          </h2>
+
+          <p className="text-gray-500 dark:text-gray-400 mt-2">
+            Preparing expense analytics...
+          </p>
+        </div>
+      </main>
+    );
+  }
+
   return (
     <main className="ml-64 min-h-screen bg-gray-50 dark:bg-zinc-950 p-6 md:p-10">
       <div className="w-full">
@@ -377,7 +397,7 @@ export default function ExpensesPage() {
             <option value="all_time">All Time</option>
           </select>
         </div>
-        <div className="grid md:grid-cols-6 gap-4 mt-6 mb-8">
+        <div className="grid md:grid-cols-7 gap-4 mt-6 mb-8">
           <div
             className="
     bg-white dark:bg-zinc-900
@@ -391,7 +411,7 @@ export default function ExpensesPage() {
             </p>
 
             <h3 className="text-2xl font-bold mt-2">
-              ₹{currentMonthExpense.toLocaleString("en-IN")}
+              ₹{totalExpenses.toLocaleString("en-IN")}
             </h3>
           </div>
 
@@ -477,6 +497,22 @@ export default function ExpensesPage() {
 
             <h3 className="text-2xl font-bold mt-2">
               ₹{recurringAmount.toLocaleString("en-IN")}
+            </h3>
+          </div>
+          <div
+            className="
+  bg-white dark:bg-zinc-900
+  border border-gray-200 dark:border-zinc-800
+  rounded-xl
+  p-5
+  "
+          >
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              Highest Month
+            </p>
+
+            <h3 className="text-lg font-bold mt-2">
+              {highestExpenseMonth?.[0] || "-"}
             </h3>
           </div>
         </div>
@@ -764,6 +800,123 @@ disabled:opacity-50
             {saving ? "Saving..." : "Add expense"}
           </button>
         </form>
+        <div
+          className="
+  bg-white dark:bg-zinc-900
+  border border-gray-200 dark:border-zinc-700
+  rounded-xl
+  overflow-hidden mb-8
+"
+        >
+          {filteredEntries.length === 0 ? (
+            <p className="p-5 text-sm text-gray-500 dark:text-gray-400">
+              No expenses logged.
+            </p>
+          ) : (
+            <table className="w-full text-sm">
+              <thead className="bg-gray-50 dark:bg-zinc-800 text-left text-gray-500 dark:text-gray-400">
+                <tr>
+                  <th className="px-4 py-3 font-medium">Vendor</th>
+
+                  <th className="px-4 py-3 font-medium">Description</th>
+
+                  <th className="px-4 py-3 font-medium">Category</th>
+
+                  <th className="px-4 py-3 font-medium">Type</th>
+
+                  <th className="px-4 py-3 font-medium">Payment</th>
+
+                  <th className="px-4 py-3 font-medium">GST</th>
+
+                  <th className="px-4 py-3 font-medium">Recurring</th>
+
+                  <th className="px-4 py-3 font-medium">Date</th>
+
+                  <th className="px-4 py-3 font-medium text-right">Amount</th>
+
+                  <th className="px-4 py-3"></th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredEntries.map((entry) => (
+                  <tr
+                    key={entry.id}
+                    className="
+      border-t border-gray-100 dark:border-zinc-800
+      hover:bg-gray-50 dark:hover:bg-zinc-800/50
+      "
+                  >
+                    <td className="px-4 py-3 font-medium text-gray-900 dark:text-white">
+                      {entry.vendor || "-"}
+                    </td>
+
+                    <td className="px-4 py-3">
+                      <div>
+                        <p className="text-gray-900 dark:text-white">
+                          {entry.description}
+                        </p>
+
+                        {entry.notes && (
+                          <p className="text-xs text-gray-500 truncate max-w-[180px]">
+                            {entry.notes}
+                          </p>
+                        )}
+                      </div>
+                    </td>
+
+                    <td className="px-4 py-3 capitalize">{entry.category}</td>
+
+                    <td className="px-4 py-3 capitalize">
+                      {entry.expense_type}
+                    </td>
+
+                    <td className="px-4 py-3 capitalize">
+                      {entry.payment_method?.replace("_", " ")}
+                    </td>
+
+                    <td className="px-4 py-3">
+                      {entry.gst_paid ? (
+                        <span className="text-emerald-500">Yes</span>
+                      ) : (
+                        <span className="text-gray-400">No</span>
+                      )}
+                    </td>
+
+                    <td className="px-4 py-3">
+                      {entry.recurring ? (
+                        <span className="text-blue-500">Monthly</span>
+                      ) : (
+                        <span className="text-gray-400">One-time</span>
+                      )}
+                    </td>
+
+                    <td className="px-4 py-3 text-gray-500 dark:text-gray-400">
+                      {new Date(entry.entry_date).toLocaleDateString("en-IN")}
+                    </td>
+
+                    <td className="px-4 py-3 text-right font-semibold">
+                      ₹{Number(entry.amount).toLocaleString("en-IN")}
+                    </td>
+
+                    <td className="px-4 py-3 text-right">
+                      <button
+                        onClick={() => setDeleteId(entry.id)}
+                        className="
+          text-red-500
+          hover:text-red-700
+          text-xs
+          font-medium
+          "
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </div>
 
         <div
           className="
@@ -845,68 +998,6 @@ disabled:opacity-50
           </div>
         </div>
 
-        <div
-          className="
-  bg-white dark:bg-zinc-900
-  border border-gray-200 dark:border-zinc-700
-  rounded-xl
-  overflow-hidden
-"
-        >
-          {loading ? (
-            <p className="p-5 text-sm text-gray-500 dark:text-gray-400">
-              Loading...
-            </p>
-          ) : filteredEntries.length === 0 ? (
-            <p className="p-5 text-sm text-gray-500 dark:text-gray-400">
-              No expenses logged.
-            </p>
-          ) : (
-            <table className="w-full text-sm">
-              <thead className="bg-gray-50 dark:bg-zinc-800 text-left text-gray-500 dark:text-gray-400">
-                <tr>
-                  <th className="px-4 py-3 font-medium">Description</th>
-                  <th className="px-4 py-3 font-medium">Category</th>
-                  <th className="px-4 py-3 font-medium">Date</th>
-                  <th className="px-4 py-3 font-medium text-right">Amount</th>
-                  <th className="px-4 py-3"></th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredEntries.map((entry) => (
-                  <tr
-                    key={entry.id}
-                    className="
-  border-t border-gray-100 dark:border-zinc-800
-  hover:bg-gray-50 dark:hover:bg-zinc-800/50
-"
-                  >
-                    <td className="px-4 py-3 text-gray-900 dark:text-white">
-                      {entry.description}
-                    </td>
-                    <td className="px-4 py-3 text-gray-500 dark:text-gray-400 capitalize">
-                      {entry.category}
-                    </td>
-                    <td className="px-4 py-3 text-gray-500 dark:text-gray-400">
-                      {new Date(entry.entry_date).toLocaleDateString("en-IN")}
-                    </td>
-                    <td className="px-4 py-3 text-right font-medium text-gray-900 dark:text-white">
-                      ₹{Number(entry.amount).toLocaleString("en-IN")}
-                    </td>
-                    <td className="px-4 py-3 text-right">
-                      <button
-                        onClick={() => handleDelete(entry.id)}
-                        className="text-red-500 hover:text-red-700 text-xs"
-                      >
-                        Delete
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
-        </div>
         <div
           className="
   bg-white dark:bg-zinc-900
@@ -992,6 +1083,67 @@ disabled:opacity-50
         </div>
         <TaxDisclaimer />
       </div>
+      {deleteId && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50">
+          <div
+            className="
+      bg-white dark:bg-zinc-900
+      border border-gray-200 dark:border-zinc-800
+      rounded-2xl
+      p-6
+      w-full
+      max-w-md
+      "
+          >
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">
+              Delete Expense Entry
+            </h3>
+
+            <p className="text-gray-500 dark:text-gray-400 mb-6">
+              This expense record will be permanently removed.
+            </p>
+
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={() => setDeleteId(null)}
+                className="
+          px-4 py-2
+          rounded-xl
+          border border-gray-300
+          dark:border-zinc-700
+          "
+              >
+                Cancel
+              </button>
+
+              <button
+                disabled={deleting}
+                onClick={async () => {
+                  try {
+                    setDeleting(true);
+
+                    await handleDelete(deleteId);
+
+                    setDeleteId(null);
+                  } finally {
+                    setDeleting(false);
+                  }
+                }}
+                className="
+          px-4 py-2
+          rounded-xl
+          bg-red-600
+          hover:bg-red-700
+          disabled:opacity-50
+          text-white
+          "
+              >
+                {deleting ? "Deleting..." : "Delete"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }

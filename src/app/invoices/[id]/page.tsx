@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 
 import { useParams } from "next/navigation";
-
+import MobileBlocker from "@/components/MobileBlocker";
 import { createClient } from "@/lib/supabase";
 export default function InvoiceViewPage() {
   const supabase = createClient();
@@ -13,10 +13,30 @@ export default function InvoiceViewPage() {
   const [invoice, setInvoice] = useState<any>(null);
 
   const [items, setItems] = useState<any[]>([]);
+  const [isMobile, setIsMobile] = useState<boolean | null>(null);
 
   useEffect(() => {
     loadInvoice();
   }, []);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
+
+    checkMobile();
+
+    window.addEventListener("resize", checkMobile);
+
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+  if (isMobile === null) {
+    return null;
+  }
+
+  if (isMobile) {
+    return <MobileBlocker />;
+  }
 
   function formatCurrency(amount: number) {
     return Number(amount).toLocaleString("en-IN", {

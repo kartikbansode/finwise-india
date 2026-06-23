@@ -27,8 +27,7 @@ export default function DashboardPage() {
   const [expenseData, setExpenseData] = useState<any[]>([]);
   const [profile, setProfile] = useState<any>(null);
   const router = useRouter();
-
-  
+  const [isMobile, setIsMobile] = useState<boolean | null>(null);
 
   useEffect(() => {
     async function load() {
@@ -104,6 +103,25 @@ export default function DashboardPage() {
 
     load();
   }, []);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
+
+    checkMobile();
+
+    window.addEventListener("resize", checkMobile);
+
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+  if (isMobile === null) {
+    return null;
+  }
+
+  if (isMobile) {
+    return <MobileBlocker />;
+  }
   if (checkingAuth || loading) {
     return (
       <main className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-zinc-950">
@@ -174,10 +192,6 @@ dark:text-gray-400 mt-2"
     monthlyIncome > 0 ? Math.round((monthlyExpenses / monthlyIncome) * 100) : 0;
 
   const nextDue = getNextAdvanceTaxDueDate();
-
-  
-
-  
 
   return (
     <main className="ml-64 min-h-screen bg-gray-50 dark:bg-zinc-950 p-6 md:p-10">

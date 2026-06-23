@@ -647,7 +647,7 @@ focus:ring-emerald-500
             </div>
           </div>
           <div className="grid md:grid-cols-2 gap-4">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between rounded-xl border border-gray-200 dark:border-zinc-800 p-3">
               <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
                 GST Included
               </label>
@@ -669,18 +669,27 @@ focus:ring-emerald-500
               </button>
             </div>
 
-            <label className="flex items-center gap-3">
-              <input
-                type="checkbox"
-                checked={invoiceLinked}
-                onChange={(e) => setInvoiceLinked(e.target.checked)}
-                className="h-4 w-4"
-              />
-
-              <span className="text-sm text-gray-700 dark:text-gray-300">
+            <div className="flex items-center justify-between rounded-xl border border-gray-200 dark:border-zinc-800 p-3">
+              <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
                 Linked To Invoice
-              </span>
-            </label>
+              </label>
+
+              <button
+                type="button"
+                onClick={() => setInvoiceLinked(!invoiceLinked)}
+                className={`w-12 h-6 rounded-full relative transition ${
+                  invoiceLinked
+                    ? "bg-emerald-600"
+                    : "bg-gray-300 dark:bg-zinc-700"
+                }`}
+              >
+                <span
+                  className={`absolute top-1 left-1 w-4 h-4 bg-white rounded-full transition ${
+                    invoiceLinked ? "translate-x-6" : ""
+                  }`}
+                />
+              </button>
+            </div>
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">

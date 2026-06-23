@@ -777,7 +777,7 @@ px-3 py-2
                   <option value="custom">Custom</option>
                 </select>
               </div>
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between rounded-xl border border-gray-200 dark:border-zinc-800 p-3">
                 <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
                   GST Paid
                 </label>

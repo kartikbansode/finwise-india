@@ -711,7 +711,7 @@ focus:ring-emerald-500
   bg-white dark:bg-zinc-900
   border border-gray-200 dark:border-zinc-800
   rounded-xl
-  overflow-hidden
+  overflow-hidden mb-6
 "
         >
           {filteredEntries.length === 0 ? (

@@ -1,47 +1,26 @@
 # FinWise India
 
->**Version:** 1.3.1
->
->**Release Date:** June 19, 2026
-
-
----
 Smart Finance & Tax Management Platform for Indian Freelancers, Consultants, Agencies & Small Businesses
 
----
+>**Version:** 1.3.2
+>
+>**Release Date:** June 23, 2026
 
-## What's new in v1.3.1  
 
-Authentication Experience Upgrade
+## What's new in v1.3.2
 
-- Complete redesign of Login & Signup pages with premium glassmorphism UI.
-- Full-screen animated video backgrounds.
-- Improved desktop and mobile layouts.
+- Updated landing, login, and signup background videos for a more premium experience.
+- Added desktop-only 3D dashboard showcase section on the landing page.
+- Added mobile device blocker for dashboard and workspace pages.
+- Improved login and signup page responsiveness and dark-mode consistency.
+- Added animated loading messages across dashboard loading screens.
+- Added automatic user dropdown close when clicking outside the menu.
 
-Mobile UX Improvements
 
-- Responsive Login & Signup pages.
-- Optimized logo, back button, and form positioning.
-- Better spacing and alignment across all screen sizes.
-
-Dark Mode Standardization
-
-- Landing, Login and Signup page now use a consistent dark-first experience.
-- Unified colors, inputs, buttons, alerts, and typography.
-
-Authentication Improvements
-
-- Added email and password validation.
-- Improved signup validation and error handling.
-- Enhanced success/error notification styling.
-
-Branding Updates
-
-- New FinWise logo integration across authentication pages and sidebar.
-- Improved logo alignment and theme-aware branding support.
+## Dashboard Preview -
+![Image loading error!](</public/images/readme dash preview.png>)
 
 ---
-
 
 ## About
 
@@ -61,38 +40,38 @@ The platform helps users:
 
 ## Features
 
-### 📊 Dashboard
+### Dashboard
 
 - Financial Overview
 - Revenue Tracking
 - Expense Analytics
 - Business Insights
 
-### 💰 Income Tracking
+### Income Tracking
 
 - Add Income Sources
 - Revenue History
 
-### 💸 Expense Management
+### Expense Management
 
 - Track Expenses
 - Categorize Spending
 - Expense Reports
 
-### 🧾 Invoice Tracker
+### Invoice Tracker
 
 - Create Invoices
 - Manage Client Records
 - Track Invoice Status
 - Payment Monitoring
 
-### 🧮 Tax Center
+### Tax Center
 
 - Tax Estimation
 - GST Support
 - Tax Planning
 
-### ⚙️ Settings
+### Settings
 
 - Profile Management
 - Business Information

@@ -740,16 +740,16 @@ focus:ring-emerald-500
                 <option value="personal">Personal</option>
               </select>
             </div>
-            <div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Recurring Schedule
-                </label>
 
-                <select
-                  value={recurringFrequency}
-                  onChange={(e) => setRecurringFrequency(e.target.value)}
-                  className="
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Recurring Schedule
+              </label>
+
+              <select
+                value={recurringFrequency}
+                onChange={(e) => setRecurringFrequency(e.target.value)}
+                className="
 w-full
 bg-white dark:bg-zinc-950
 border border-gray-300 dark:border-zinc-700
@@ -757,26 +757,25 @@ text-gray-900 dark:text-white
 rounded-lg
 px-3 py-2
 "
-                >
-                  <option value="one_time">One Time</option>
+              >
+                <option value="one_time">One Time</option>
 
-                  <option value="daily">Daily</option>
+                <option value="daily">Daily</option>
 
-                  <option value="weekly">Weekly</option>
+                <option value="weekly">Weekly</option>
 
-                  <option value="monthly">Monthly</option>
+                <option value="monthly">Monthly</option>
 
-                  <option value="2_months">Every 2 Months</option>
+                <option value="2_months">Every 2 Months</option>
 
-                  <option value="3_months">Every 3 Months</option>
+                <option value="3_months">Every 3 Months</option>
 
-                  <option value="6_months">Every 6 Months</option>
+                <option value="6_months">Every 6 Months</option>
 
-                  <option value="yearly">Yearly</option>
+                <option value="yearly">Yearly</option>
 
-                  <option value="custom">Custom</option>
-                </select>
-              </div>
+                <option value="custom">Custom</option>
+              </select>
 
               {recurringFrequency === "custom" && (
                 <div className="mt-3">

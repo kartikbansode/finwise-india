@@ -2,22 +2,23 @@
 
 Smart Finance & Tax Management Platform for Indian Freelancers, Consultants, Agencies & Small Businesses
 
->**Version:** 1.3.3
+>**Version:** 1.4.0
 >
 >**Release Date:** June 23, 2026
 
 
-## What's new in v1.3.3
+## What's new in v1.4.0 — Real Financial Data Engine (Income & Expense Page)
 
-- Added secure account deletion with permanent data removal
-- Added account deletion confirmation flow with DELETE verification
-- Redesigned Privacy Policy page with modern responsive layout
-- Redesigned Terms & Conditions page with improved legal structure
-- Added Cookie Policy page
-- Added DPDP-aligned cookie consent banner
-- Added Cookie Preferences management
-- Improved privacy, compliance and user data controls
-- Added legal page loading screens for smoother experience
+
+- Completely redesigned Income Center with advanced income tracking and analytics
+- Introduced revenue analytics including growth tracking, top clients, and income insights
+- Added interactive revenue charts and category breakdowns
+- Completely redesigned Expense Center with vendor tracking and detailed expense classification
+- Added recurring expenses, GST tracking, payment methods, and business vs personal expense management
+- Introduced expense analytics including top vendors, category analysis, recurring costs, and spending trends
+- Added advanced expense charts and visual reporting
+- Added date-based filtering across financial records and analytics
+- Improved data organization, financial insights, and overall platform performance
 
 ## Dashboard Preview -
 ![Image loading error!](</public/images/readme dash preview.png>)

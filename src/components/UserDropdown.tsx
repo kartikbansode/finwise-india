@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { ChevronDown, Settings, LogOut, User } from "lucide-react";
 import { createClient } from "@/lib/supabase";
@@ -17,6 +17,25 @@ export default function UserDropdown({ name, userType }: Props) {
 
   const [open, setOpen] = useState(false);
 
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setOpen(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   async function logout() {
     await supabase.auth.signOut();
 
@@ -28,7 +47,7 @@ export default function UserDropdown({ name, userType }: Props) {
   }
 
   return (
-    <div className="relative">
+    <div ref={dropdownRef} className="relative">
       <button
         onClick={() => setOpen(!open)}
         className="

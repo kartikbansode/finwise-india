@@ -18,6 +18,7 @@ export default function SettingsPage() {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [gstNumber, setGstNumber] = useState("");
+  const [isMobile, setIsMobile] = useState<boolean | null>(null);
 
   const [companyAddress, setCompanyAddress] = useState("");
 
@@ -51,6 +52,18 @@ export default function SettingsPage() {
     load();
   }, []);
 
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
+
+    checkMobile();
+
+    window.addEventListener("resize", checkMobile);
+
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
   async function handleSave(e: React.FormEvent) {
     e.preventDefault();
     setSaving(true);
@@ -78,6 +91,13 @@ export default function SettingsPage() {
     setSaved(true);
     setTimeout(() => setSaved(false), 2500);
   }
+  if (isMobile === null) {
+    return null;
+  }
+
+  if (isMobile) {
+    return <MobileBlocker />;
+  }
 
   if (loading) {
     return (
@@ -86,8 +106,6 @@ export default function SettingsPage() {
       </main>
     );
   }
-
-  
 
   return (
     <main className="ml-64 min-h-screen bg-gray-50 dark:bg-zinc-950 p-6 md:p-10">

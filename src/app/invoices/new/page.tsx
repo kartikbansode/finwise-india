@@ -40,6 +40,7 @@ export default function NewInvoicePage() {
   const [notes, setNotes] = useState("");
 
   const [terms, setTerms] = useState("Payment due within 15 days.");
+  
 
   const [items, setItems] = useState([
     {

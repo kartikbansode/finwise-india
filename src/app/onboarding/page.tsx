@@ -24,6 +24,7 @@ export default function OnboardingPage() {
   const [taxRegime, setTaxRegime] = useState("new");
   const [taxMethod, setTaxMethod] = useState("normal");
   const [monthlyExpenseEstimate, setMonthlyExpenseEstimate] = useState("20000");
+  const [isMobile, setIsMobile] = useState<boolean | null>(null);
 
   const [error, setError] = useState("");
 
@@ -76,12 +77,25 @@ export default function OnboardingPage() {
       setCheckingProfile(false);
     }
   }
+
   useEffect(() => {
     async function init() {
       await loadProfile();
     }
 
     init();
+  }, []);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
+
+    checkMobile();
+
+    window.addEventListener("resize", checkMobile);
+
+    return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
   async function handleContinue() {
@@ -135,7 +149,13 @@ export default function OnboardingPage() {
 
     router.replace("/dashboard");
   }
+  if (isMobile === null) {
+    return null;
+  }
 
+  if (isMobile) {
+    return <MobileBlocker />;
+  }
   if (checkingProfile) {
     return (
       <main className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-zinc-950">

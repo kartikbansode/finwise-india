@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase";
+import MobileBlocker from "@/components/MobileBlocker";
 
 interface Invoice {
   id: string;
@@ -19,6 +20,8 @@ export default function InvoicesPage() {
   const [invoices, setInvoices] = useState<Invoice[]>([]);
 
   const [loading, setLoading] = useState(true);
+
+  const [isMobile, setIsMobile] = useState<boolean | null>(null);
 
   async function loadInvoices() {
     const {
@@ -57,6 +60,24 @@ export default function InvoicesPage() {
       ),
     );
   }
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
+
+    checkMobile();
+
+    window.addEventListener("resize", checkMobile);
+
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  if (isMobile === null) {
+    return <div className="min-h-screen bg-zinc-950" />;
+  }
+
+  if (isMobile) return <MobileBlocker />;
 
   return (
     <main className="ml-64 min-h-screen bg-gray-50 dark:bg-zinc-950 p-8">

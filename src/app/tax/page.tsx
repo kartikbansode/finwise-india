@@ -13,9 +13,21 @@ export default function TaxPage() {
   const [profile, setProfile] = useState<any>(null);
   const [annualIncome, setAnnualIncome] = useState(0);
   const [taxableIncome, setTaxableIncome] = useState(0);
+  const [isMobile, setIsMobile] = useState<boolean | null>(null);
 
   useEffect(() => {
     loadData();
+  }, []);
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
+
+    checkMobile();
+
+    window.addEventListener("resize", checkMobile);
+
+    return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
   async function loadData() {
@@ -72,6 +84,13 @@ export default function TaxPage() {
 
     setLoading(false);
   }
+  if (isMobile === null) {
+    return null;
+  }
+
+  if (isMobile) {
+    return <MobileBlocker />;
+  }
 
   if (loading) {
     return (
@@ -85,8 +104,6 @@ export default function TaxPage() {
       </main>
     );
   }
-
-  
 
   return (
     <main className="ml-64 min-h-screen bg-gray-50 dark:bg-zinc-950 p-6 md:p-10">
@@ -208,7 +225,9 @@ p-6"
             <div className="space-y-2">
               <p className="text-gray-700 dark:text-gray-300">
                 Current Method:
-                <span className="font-medium ml-2 text-gray-900 dark:text-white">{profile?.tax_method}</span>
+                <span className="font-medium ml-2 text-gray-900 dark:text-white">
+                  {profile?.tax_method}
+                </span>
               </p>
 
               <p className="text-gray-700 dark:text-gray-300">

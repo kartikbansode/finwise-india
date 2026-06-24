@@ -45,6 +45,11 @@ export default function DashboardPage() {
 
   const [topVendors, setTopVendors] = useState<[string, number][]>([]);
 
+  const [healthResult, setHealthResult] = useState({
+    score: 0,
+    status: "Needs Improvement",
+  });
+
   const [monthlyChartData, setMonthlyChartData] = useState<
     {
       month: string;
@@ -252,12 +257,14 @@ export default function DashboardPage() {
           `${upcomingExpensesData.length} recurring obligations are scheduled.`,
         );
       }
-      const healthResult = calculateHealthScore(
+      const calculatedHealth = calculateHealthScore(
         incomeTotal,
         expenseTotal,
         profileData?.gst_registered ?? false,
         profileData?.onboarding_completed ?? false,
       );
+
+      setHealthResult(calculatedHealth);
 
       const grouped = (expenses || []).reduce((acc: any, item: any) => {
         const category = item.category || "Other";
@@ -343,7 +350,7 @@ export default function DashboardPage() {
       setCheckingAuth(false);
       setLoading(false);
       generatedInsights.unshift(
-        `Financial Health: ${healthResult.score}/100 (${healthResult.status})`,
+        `Financial Health: ${calculatedHealth.score}/100 (${calculatedHealth.status})`,
       );
       setInsights(generatedInsights.slice(0, 3));
     }
@@ -623,73 +630,6 @@ export default function DashboardPage() {
             <p className="text-2xl font-bold mt-3 text-cyan-800 dark:text-cyan-300">
               ₹{safeToSpend.toLocaleString("en-IN")}
             </p>
-          </div>
-        </div>
-
-        <div
-          className="
-  bg-white dark:bg-zinc-900
-  border border-gray-200 dark:border-zinc-800
-  rounded-2xl
-  p-6
-  mb-6
-  "
-        >
-          <div className="flex items-center justify-between mb-6">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-              Financial Health
-            </h3>
-
-            <div
-              className={`
-      px-3 py-1 rounded-full text-sm font-medium
-      ${
-        healthScore >= 80
-          ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400"
-          : healthScore >= 60
-            ? "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400"
-            : "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"
-      }
-      `}
-            >
-              {healthScore}/100
-            </div>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-6">
-            <div>
-              <div className="flex justify-between mb-2">
-                <span className="text-sm text-gray-500">Profit Margin</span>
-
-                <span className="font-medium">{profitMargin}%</span>
-              </div>
-
-              <div className="h-2 rounded-full bg-gray-200 dark:bg-zinc-800">
-                <div
-                  className="h-2 rounded-full bg-emerald-500"
-                  style={{
-                    width: `${Math.min(profitMargin, 100)}%`,
-                  }}
-                />
-              </div>
-            </div>
-
-            <div>
-              <div className="flex justify-between mb-2">
-                <span className="text-sm text-gray-500">Savings Rate</span>
-
-                <span className="font-medium">{savingsRate}%</span>
-              </div>
-
-              <div className="h-2 rounded-full bg-gray-200 dark:bg-zinc-800">
-                <div
-                  className="h-2 rounded-full bg-blue-500"
-                  style={{
-                    width: `${Math.min(savingsRate, 100)}%`,
-                  }}
-                />
-              </div>
-            </div>
           </div>
         </div>
 

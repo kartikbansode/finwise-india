@@ -2,9 +2,8 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { ChevronDown, Settings, LogOut, User } from "lucide-react";
 import { createClient } from "@/lib/supabase";
-import ThemeToggle from "./ThemeToggle";
+import { ChevronDown, Settings, LogOut } from "lucide-react";
 
 interface Props {
   name: string;
@@ -47,15 +46,18 @@ export default function UserDropdown({ name, userType }: Props) {
   }
 
   return (
-    <div ref={dropdownRef} className="relative">
+    <div ref={dropdownRef} className="relative w-full">
       <button
         onClick={() => setOpen(!open)}
         className="
+w-full
 flex items-center gap-3
-bg-white dark:bg-zinc-900
+bg-gray-50 dark:bg-zinc-900
 border border-gray-200 dark:border-zinc-800
-rounded-xl px-4 py-2
-hover:shadow-md transition
+rounded-xl
+px-3 py-3
+hover:bg-gray-100 dark:hover:bg-zinc-800
+transition
 "
       >
         <div className="w-10 h-10 rounded-full bg-emerald-600 text-white flex items-center justify-center font-semibold">
@@ -78,7 +80,7 @@ hover:shadow-md transition
       {open && (
         <div
           className="
-  absolute right-0 mt-2 w-64
+  absolute bottom-full mb-2 left-0 w-full min-w-[240px]
   bg-white dark:bg-zinc-900
   border border-gray-200 dark:border-zinc-800
   rounded-xl shadow-lg
@@ -88,55 +90,24 @@ hover:shadow-md transition
           <button
             onClick={() => router.push("/settings")}
             className="
-w-full px-4 py-3 text-left flex items-center gap-3
-text-gray-900 dark:text-white
-hover:bg-gray-50 dark:hover:bg-zinc-800
-"
+  w-full px-4 py-3 text-left
+  flex items-center gap-3
+  text-gray-900 dark:text-white
+  hover:bg-gray-50 dark:hover:bg-zinc-800
+  "
           >
             <Settings size={16} />
             Settings
           </button>
 
           <button
-            onClick={() => router.push("/settings")}
-            className="
-w-full px-4 py-3 text-left flex items-center gap-3
-text-gray-900 dark:text-white
-hover:bg-gray-50 dark:hover:bg-zinc-800
-"
-          >
-            <User size={16} />
-            Profile
-          </button>
-          <div
-            className="
-  px-4 py-3
-  flex items-center justify-between
-  border-t border-gray-200 dark:border-zinc-800
-  "
-          >
-            <div>
-              <p className="text-sm font-medium text-gray-900 dark:text-white">
-                Dark Mode
-              </p>
-
-              <p className="text-xs text-gray-500 dark:text-gray-400">
-                Toggle appearance
-              </p>
-            </div>
-
-            <ThemeToggle />
-          </div>
-
-          <div className="border-t border-gray-200 dark:border-zinc-800" />
-
-          <button
             onClick={logout}
             className="
-w-full px-4 py-3 text-left flex items-center gap-3
-text-red-500
-hover:bg-red-50 dark:hover:bg-red-950/30
-"
+  w-full px-4 py-3 text-left
+  flex items-center gap-3
+  text-red-500
+  hover:bg-red-50 dark:hover:bg-red-950/30
+  "
           >
             <LogOut size={16} />
             Logout

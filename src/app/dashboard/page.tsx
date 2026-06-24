@@ -5,7 +5,6 @@ import Link from "next/link";
 import { calculate44ADA, calculate44AD } from "@/lib/presumptiveTax";
 import { createClient } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
-import UserDropdown from "@/components/UserDropdown";
 import { calculateHealthScore } from "@/lib/healthScore";
 import ExpensePieChart from "@/components/charts/ExpensePieChart";
 import MobileBlocker from "@/components/MobileBlocker";
@@ -172,18 +171,16 @@ export default function DashboardPage() {
 
       setMonthlyExpenses(expenseTotal);
 
-      const vendorTotals: Record<string, number> =
-  (expenses || []).reduce(
-    (acc: Record<string, number>, item: any) => {
-      const vendor = item.vendor || "Unknown";
+      const vendorTotals: Record<string, number> = (expenses || []).reduce(
+        (acc: Record<string, number>, item: any) => {
+          const vendor = item.vendor || "Unknown";
 
-      acc[vendor] =
-        (acc[vendor] || 0) + Number(item.amount);
+          acc[vendor] = (acc[vendor] || 0) + Number(item.amount);
 
-      return acc;
-    },
-    {},
-  );
+          return acc;
+        },
+        {},
+      );
 
       setTopVendors(
         (Object.entries(vendorTotals) as [string, number][])
@@ -489,8 +486,6 @@ dark:text-gray-400"
               </div>
             </div>
           </div>
-
-          <UserDropdown name={profile.full_name} userType={profile.user_type} />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-6 gap-4 mb-6">

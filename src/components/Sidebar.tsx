@@ -3,6 +3,9 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
+import UserDropdown from "@/components/UserDropdown";
+import { useEffect, useState } from "react";
+import { createClient } from "@/lib/supabase";
 
 import {
   LayoutDashboard,
@@ -10,7 +13,6 @@ import {
   Receipt,
   Calculator,
   TrendingUp,
-  Settings,
   FileText,
 } from "lucide-react";
 
@@ -45,26 +47,32 @@ const items = [
     href: "/investments",
     icon: TrendingUp,
   },
-  {
-    name: "Settings",
-    href: "/settings",
-    icon: Settings,
-  },
 ];
 
 export default function Sidebar() {
   const pathname = usePathname();
-  if (
-    pathname === "/" ||
-    pathname === "/login" ||
-    pathname === "/signup" ||
-    pathname === "/onboarding" ||
-    pathname === "/privacy" ||
-    pathname === "/terms" ||
-    pathname === "/cookie-policy"
-  ) {
-    return null;
-  }
+
+  const supabase = createClient();
+
+  const [profile, setProfile] = useState<any>(null);
+
+  useEffect(() => {
+    async function loadProfile() {
+      const { data: userData } = await supabase.auth.getUser();
+
+      if (!userData.user) return;
+
+      const { data } = await supabase
+        .from("profiles")
+        .select("full_name,user_type")
+        .eq("id", userData.user.id)
+        .single();
+
+      setProfile(data);
+    }
+
+    loadProfile();
+  }, []);
 
   return (
     <div className="hidden lg:flex w-64 h-screen bg-white dark:bg-zinc-950 border-r border-gray-200 dark:border-zinc-800 fixed left-0 top-0 flex-col">
@@ -111,6 +119,12 @@ export default function Sidebar() {
         })}
       </div>
       <div className="mt-auto p-4 border-t border-gray-200 dark:border-zinc-800">
+        <div className="mb-4">
+          <UserDropdown
+            name={profile?.full_name || "User"}
+            userType={profile?.user_type || "freelancer"}
+          />
+        </div>
         <Link
           href="/privacy"
           className="
@@ -138,7 +152,7 @@ py-2
         </Link>
 
         <p className="text-xs text-gray-400 dark:text-gray-500 mt-4">
-          FinWise India v1.4.0
+          FinWise India v1.4.1
         </p>
       </div>
     </div>

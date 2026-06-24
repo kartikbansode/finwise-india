@@ -10,6 +10,7 @@ import ExpensePieChart from "@/components/charts/ExpensePieChart";
 import MobileBlocker from "@/components/MobileBlocker";
 import { AnimatePresence, motion } from "framer-motion";
 import RevenueExpenseChart from "@/components/charts/RevenueExpenseChart";
+import { processRecurringExpenses } from "@/lib/processRecurringExpenses";
 
 import {
   calculateFullTaxBreakdown,
@@ -102,6 +103,7 @@ export default function DashboardPage() {
 
   useEffect(() => {
     async function load() {
+      await processRecurringExpenses();
       const { data: userData } = await supabase.auth.getUser();
 
       if (!userData.user) {

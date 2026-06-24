@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase";
 import TaxDisclaimer from "@/components/TaxDisclaimer";
+import { processRecurringExpenses } from "@/lib/processRecurringExpenses";
 import MobileBlocker from "@/components/MobileBlocker";
 import {
   ResponsiveContainer,
@@ -89,7 +90,13 @@ export default function ExpensesPage() {
   }
 
   useEffect(() => {
-    loadEntries();
+    async function initialize() {
+      await processRecurringExpenses();
+
+      await loadEntries();
+    }
+
+    initialize();
   }, []);
 
   async function handleAdd(e: React.FormEvent) {
@@ -111,33 +118,24 @@ export default function ExpensesPage() {
       .from("expense_entries")
       .insert({
         user_id: userData.user.id,
-
         description: description.trim(),
-
         vendor,
-
         amount: Number(amount),
-
         category,
-
         expense_type: expenseType,
-
         gst_paid: gstPaid,
-
         payment_method: paymentMethod,
-
         recurring: recurringFrequency !== "one_time",
-
         recurring_frequency:
           recurringFrequency === "custom"
             ? `custom_${customMonths}`
             : recurringFrequency,
-
         business_personal: businessPersonal,
-
         notes,
-
         entry_date: entryDate,
+        next_due_date: recurringFrequency !== "one_time" ? entryDate : null,
+        auto_generated: false,
+        parent_recurring_id: null,
       });
 
     if (insertError) setError("Something went wrong. Please try again.");

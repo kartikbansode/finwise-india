@@ -51,38 +51,57 @@ export default function UserDropdown({ name, userType }: Props) {
         onClick={() => setOpen(!open)}
         className="
 w-full
-flex items-center gap-3
-bg-gray-50 dark:bg-zinc-900
-border border-gray-200 dark:border-zinc-800
-rounded-xl
-px-3 py-3
-hover:bg-gray-100 dark:hover:bg-zinc-800
-transition
+flex items-center
+gap-3
+bg-zinc-900
+border border-zinc-800
+rounded-2xl
+px-4 py-3
+hover:border-zinc-700
+hover:bg-zinc-800/80
+transition-all
+duration-200
 "
       >
-        <div className="w-10 h-10 rounded-full bg-emerald-600 text-white flex items-center justify-center font-semibold">
+        <div
+          className="
+  w-10 h-10
+  rounded-full
+  bg-gradient-to-br
+  from-emerald-500
+  to-emerald-700
+  text-white
+  flex items-center justify-center
+  font-semibold
+  shadow-lg
+  "
+        >
           {name?.charAt(0)}
         </div>
 
-        <div className="text-left">
-          <p className="font-medium text-sm text-gray-900 dark:text-white">
-            {name}
-          </p>
+        <div className="text-left flex-1 min-w-0">
+          <p className="font-medium text-sm text-white truncate">{name}</p>
 
-          <p className="text-xs text-gray-500 dark:text-gray-400 capitalize">
+          <p className="text-xs text-zinc-400 capitalize truncate">
             {userType}
           </p>
         </div>
 
-        <ChevronDown size={18} className="text-gray-500 dark:text-gray-400" />
+        <ChevronDown
+          size={18}
+          className={`text-gray-500 dark:text-gray-400 transition-transform duration-200 ${
+            open ? "rotate-180" : ""
+          }`}
+        />
       </button>
 
       {open && (
         <div
           className="
-  absolute bottom-full mb-2 left-0 w-full min-w-[240px]
-  bg-white dark:bg-zinc-900
-  border border-gray-200 dark:border-zinc-800
+  absolute bottom-full left-0 mb-3 w-full
+bg-zinc-900
+  border border-zinc-800
+  backdrop-blur-xl
   rounded-xl shadow-lg
   z-50 overflow-hidden
 "
@@ -90,24 +109,38 @@ transition
           <button
             onClick={() => router.push("/settings")}
             className="
-  w-full px-4 py-3 text-left
-  flex items-center gap-3
-  text-gray-900 dark:text-white
-  hover:bg-gray-50 dark:hover:bg-zinc-800
-  "
+w-full
+px-4 py-3
+text-left
+flex items-center gap-3
+text-white
+hover:bg-zinc-800
+transition
+"
           >
             <Settings size={16} />
             Settings
           </button>
 
           <button
-            onClick={logout}
+            onClick={() => {
+              const confirmed = window.confirm(
+                "Are you sure you want to logout?",
+              );
+
+              if (confirmed) {
+                logout();
+              }
+            }}
             className="
-  w-full px-4 py-3 text-left
-  flex items-center gap-3
-  text-red-500
-  hover:bg-red-50 dark:hover:bg-red-950/30
-  "
+w-full
+px-4 py-3
+text-left
+flex items-center gap-3
+text-red-400
+hover:bg-red-950/30
+transition
+"
           >
             <LogOut size={16} />
             Logout

@@ -120,10 +120,12 @@ export default function Sidebar() {
       </div>
       <div className="mt-auto p-4 border-t border-gray-200 dark:border-zinc-800">
         <div className="mb-4">
-          <UserDropdown
-            name={profile?.full_name || "User"}
-            userType={profile?.user_type || "freelancer"}
-          />
+          {profile && (
+            <UserDropdown
+              name={profile.full_name}
+              userType={profile.user_type}
+            />
+          )}
         </div>
         <Link
           href="/privacy"

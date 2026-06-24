@@ -51,12 +51,12 @@ export default function UserDropdown({ name, userType }: Props) {
 w-full
 flex items-center
 gap-3
-bg-zinc-900
-border border-zinc-800
+bg-white dark:bg-zinc-900
+border border-gray-200 dark:border-zinc-800
 rounded-2xl
 px-4 py-3
-hover:border-zinc-700
-hover:bg-zinc-800/80
+hover:bg-gray-50 dark:hover:bg-zinc-800
+hover:border-gray-300 dark:hover:border-zinc-700 
 transition-all
 duration-200
 "
@@ -78,16 +78,18 @@ duration-200
         </div>
 
         <div className="text-left flex-1 min-w-0">
-          <p className="font-medium text-sm text-white truncate">{name}</p>
+          <p className="font-medium text-sm text-gray-900 dark:text-white truncate">
+            {name}
+          </p>
 
           <p className="text-xs text-zinc-400 capitalize truncate">
-            {userType}
+            {userType === "business" ? "Business" : "Freelancer"}
           </p>
         </div>
 
         <ChevronDown
           size={18}
-          className={`text-gray-500 dark:text-gray-400 transition-transform duration-200 ${
+          className={`text-gray-400 dark:text-gray-500 transition-transform duration-200 ${
             open ? "rotate-180" : ""
           }`}
         />
@@ -97,9 +99,9 @@ duration-200
         <div
           className="
   absolute bottom-full left-0 mb-3 w-full
-bg-zinc-900
-  border border-zinc-800
-  backdrop-blur-xl
+bg-white dark:bg-zinc-900
+border border-gray-200 dark:border-zinc-800
+backdrop-blur-xl
   rounded-xl shadow-lg
   z-50 overflow-hidden
 "
@@ -114,8 +116,8 @@ w-full
 px-4 py-3
 text-left
 flex items-center gap-3
-text-white
-hover:bg-zinc-800
+text-gray-900 dark:text-white
+hover:bg-gray-50 dark:hover:bg-zinc-800
 transition
 "
           >

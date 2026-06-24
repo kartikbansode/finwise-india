@@ -41,9 +41,18 @@ export default function DashboardPage() {
     "Almost ready...",
   ];
 
-  const [topClients, setTopClients] = useState<any[]>([]);
-  const [topVendors, setTopVendors] = useState<any[]>([]);
-  const [monthlyChartData, setMonthlyChartData] = useState<any[]>([]);
+  const [topClients, setTopClients] = useState<[string, number][]>([]);
+
+  const [topVendors, setTopVendors] = useState<[string, number][]>([]);
+
+  const [monthlyChartData, setMonthlyChartData] = useState<
+    {
+      month: string;
+      income: number;
+      expense: number;
+      profit: number;
+    }[]
+  >([]);
 
   const [dateFilter, setDateFilter] = useState("this_month");
 
@@ -144,36 +153,43 @@ export default function DashboardPage() {
         (s, e) => s + Number(e.amount),
         0,
       );
-      const clientTotals = (clientData || []).reduce((acc: any, item: any) => {
-        const client = item.client_name || "Unknown";
+      const clientTotals: Record<string, number> = (clientData || []).reduce(
+        (acc: Record<string, number>, item: any) => {
+          const client = item.client_name || "Unknown";
 
-        acc[client] = (acc[client] || 0) + Number(item.amount);
+          acc[client] = (acc[client] || 0) + Number(item.amount);
 
-        return acc;
-      }, {});
+          return acc;
+        },
+        {},
+      );
 
       setTopClients(
-        Object.entries(clientTotals)
-          .sort((a: any, b: any) => b[1] - a[1])
+        (Object.entries(clientTotals) as [string, number][])
+          .sort((a, b) => b[1] - a[1])
           .slice(0, 5),
       );
 
       setMonthlyExpenses(expenseTotal);
 
-      const vendorTotals = (expenses || []).reduce((acc: any, item: any) => {
-        const vendor = item.vendor || "Unknown";
+      const vendorTotals: Record<string, number> =
+  (expenses || []).reduce(
+    (acc: Record<string, number>, item: any) => {
+      const vendor = item.vendor || "Unknown";
 
-        acc[vendor] = (acc[vendor] || 0) + Number(item.amount);
+      acc[vendor] =
+        (acc[vendor] || 0) + Number(item.amount);
 
-        return acc;
-      }, {});
+      return acc;
+    },
+    {},
+  );
 
       setTopVendors(
-        Object.entries(vendorTotals)
-          .sort((a: any, b: any) => b[1] - a[1])
+        (Object.entries(vendorTotals) as [string, number][])
+          .sort((a, b) => b[1] - a[1])
           .slice(0, 5),
       );
-
       const grouped = (expenses || []).reduce((acc: any, item: any) => {
         const category = item.category || "Other";
 
@@ -226,6 +242,7 @@ export default function DashboardPage() {
       (allIncome || []).forEach((item) => {
         const month = new Date(item.entry_date).toLocaleString("en-IN", {
           month: "short",
+          year: "2-digit",
         });
 
         if (chartMap[month]) {
@@ -236,6 +253,7 @@ export default function DashboardPage() {
       (allExpenses || []).forEach((item) => {
         const month = new Date(item.entry_date).toLocaleString("en-IN", {
           month: "short",
+          year: "2-digit",
         });
 
         if (chartMap[month]) {
@@ -336,12 +354,14 @@ export default function DashboardPage() {
     profile.monthly_expense_estimate || 0,
   );
 
-  const healthScore = calculateHealthScore(
+  const healthResult = calculateHealthScore(
     monthlyIncome,
     monthlyExpenses,
     profile.gst_registered,
     profile.onboarding_completed,
   );
+
+  const healthScore = healthResult.score;
 
   const monthlyProfit = monthlyIncome - monthlyExpenses;
 
@@ -381,7 +401,10 @@ export default function DashboardPage() {
 
           <select
             value={dateFilter}
-            onChange={(e) => setDateFilter(e.target.value)}
+            onChange={(e) => {
+              setLoading(true);
+              setDateFilter(e.target.value);
+            }}
             className="
     bg-white dark:bg-zinc-900
     border border-gray-300 dark:border-zinc-700
@@ -652,7 +675,7 @@ dark:bg-red-900/20 border border-red-200 rounded-xl p-4 mb-6"
               <div className="space-y-4">
                 {topClients.map(([client, amount]: any, index) => (
                   <div
-                    key={client}
+                    key={`${client}-${index}`}
                     className="flex items-center justify-between"
                   >
                     <div className="flex items-center gap-3">
@@ -700,7 +723,7 @@ dark:bg-red-900/20 border border-red-200 rounded-xl p-4 mb-6"
               <div className="space-y-4">
                 {topVendors.map(([vendor, amount]: any, index) => (
                   <div
-                    key={vendor}
+                    key={`${vendor}-${index}`}
                     className="flex items-center justify-between"
                   >
                     <div className="flex items-center gap-3">

@@ -39,6 +39,7 @@ export default function DashboardPage() {
     "Building your financial command center...",
     "Almost ready...",
   ];
+  const [insights, setInsights] = useState<string[]>([]);
 
   const [topClients, setTopClients] = useState<[string, number][]>([]);
 
@@ -187,6 +188,37 @@ export default function DashboardPage() {
           .sort((a, b) => b[1] - a[1])
           .slice(0, 5),
       );
+      const generatedInsights: string[] = [];
+      if (monthlyIncome > 0) {
+        generatedInsights.push(
+          `Revenue recorded: ₹${monthlyIncome.toLocaleString("en-IN")}`,
+        );
+      }
+      if (monthlyExpenses > 0) {
+        generatedInsights.push(
+          `Expenses recorded: ₹${monthlyExpenses.toLocaleString("en-IN")}`,
+        );
+      }
+      if (monthlyIncome > monthlyExpenses) {
+        generatedInsights.push("Business is currently profitable.");
+      } else if (monthlyExpenses > monthlyIncome) {
+        generatedInsights.push("Expenses currently exceed revenue.");
+      }
+      const biggestVendor = Object.entries(vendorTotals).sort(
+        (a: any, b: any) => b[1] - a[1],
+      )[0];
+      const biggestClient = Object.entries(clientTotals).sort(
+        (a: any, b: any) => b[1] - a[1],
+      )[0];
+      if (biggestClient) {
+        generatedInsights.push(`${biggestClient[0]} is your largest client.`);
+      }
+      if (biggestVendor) {
+        generatedInsights.push(
+          `${biggestVendor[0]} is your largest expense source.`,
+        );
+      }
+
       const grouped = (expenses || []).reduce((acc: any, item: any) => {
         const category = item.category || "Other";
 
@@ -268,6 +300,7 @@ export default function DashboardPage() {
 
       setCheckingAuth(false);
       setLoading(false);
+      setInsights(generatedInsights);
     }
 
     load();
@@ -745,6 +778,42 @@ dark:bg-red-900/20 border border-red-200 rounded-xl p-4 mb-6"
                 ))}
               </div>
             )}
+          </div>
+        </div>
+        <div
+          className="
+  bg-white dark:bg-zinc-900
+  border border-gray-200 dark:border-zinc-800
+  rounded-2xl
+  p-6
+  mb-6
+  "
+        >
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-5">
+            Business Insights
+          </h3>
+
+          <div className="space-y-3">
+            {insights.map((insight, index) => (
+              <div
+                key={index}
+                className="
+        flex items-start gap-3
+        text-gray-700 dark:text-gray-300
+        "
+              >
+                <div
+                  className="
+          w-2 h-2
+          rounded-full
+          bg-emerald-500
+          mt-2
+          "
+                />
+
+                <p>{insight}</p>
+              </div>
+            ))}
           </div>
         </div>
 

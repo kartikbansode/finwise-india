@@ -21,7 +21,6 @@ export default function DashboardPage() {
   const [checkingAuth, setCheckingAuth] = useState(true);
   const [monthlyIncome, setMonthlyIncome] = useState(0);
   const [monthlyExpenses, setMonthlyExpenses] = useState(0);
-  const [dateFilter, setDateFilter] = useState("month");
   const [expenseData, setExpenseData] = useState<any[]>([]);
   const [profile, setProfile] = useState<any>(null);
   const router = useRouter();
@@ -44,11 +43,6 @@ export default function DashboardPage() {
   const [topClients, setTopClients] = useState<[string, number][]>([]);
 
   const [topVendors, setTopVendors] = useState<[string, number][]>([]);
-
-  const [healthResult, setHealthResult] = useState({
-    score: 0,
-    status: "Needs Improvement",
-  });
 
   const [monthlyChartData, setMonthlyChartData] = useState<
     {
@@ -79,31 +73,6 @@ export default function DashboardPage() {
     return () => clearInterval(interval);
   }, []);
 
-  function getStartDate(filter: string) {
-    const now = new Date();
-
-    switch (filter) {
-      case "last_month": {
-        return new Date(now.getFullYear(), now.getMonth() - 1, 1).toISOString();
-      }
-
-      case "last_3_months": {
-        const d = new Date();
-        d.setMonth(d.getMonth() - 3);
-        return d.toISOString();
-      }
-
-      case "this_year":
-        return new Date(now.getFullYear(), 0, 1).toISOString();
-
-      case "all_time":
-        return "2000-01-01";
-
-      default:
-        return new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
-    }
-  }
-
   useEffect(() => {
     async function load() {
       await processRecurringExpenses();
@@ -129,28 +98,7 @@ export default function DashboardPage() {
 
       const now = new Date();
 
-      let startDate: Date;
-
-      switch (dateFilter) {
-        case "month":
-          startDate = new Date(now.getFullYear(), now.getMonth(), 1);
-          break;
-
-        case "lastMonth":
-          startDate = new Date(now.getFullYear(), now.getMonth() - 1, 1);
-          break;
-
-        case "3months":
-          startDate = new Date(now.getFullYear(), now.getMonth() - 3, 1);
-          break;
-
-        case "year":
-          startDate = new Date(now.getFullYear(), 0, 1);
-          break;
-
-        default:
-          startDate = new Date("2020-01-01");
-      }
+      const startDate = new Date(now.getFullYear(), now.getMonth(), 1);
 
       const { data: incomeData } = await supabase
         .from("income_entries")
@@ -264,8 +212,6 @@ export default function DashboardPage() {
         profileData?.onboarding_completed ?? false,
       );
 
-      setHealthResult(calculatedHealth);
-
       const grouped = (expenses || []).reduce((acc: any, item: any) => {
         const category = item.category || "Other";
 
@@ -356,7 +302,7 @@ export default function DashboardPage() {
     }
 
     load();
-  }, [dateFilter]);
+  }, []);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -447,26 +393,18 @@ export default function DashboardPage() {
 
   const monthlyProfit = monthlyIncome - monthlyExpenses;
 
-  const cashFlow = monthlyIncome - monthlyExpenses;
-
   const safeToSpend = Math.max(
     0,
     monthlyIncome - monthlyExpenses - breakdown.incomeTax - breakdown.gstAmount,
   );
   Math.max(0, breakdown.safeToSpend);
 
-  const profitMargin =
-    monthlyIncome > 0 ? Math.round((monthlyProfit / monthlyIncome) * 100) : 0;
-
-  const savingsRate =
-    monthlyIncome > 0 ? Math.round((monthlyProfit / monthlyIncome) * 100) : 0;
-
   const taxReserve = breakdown.incomeTax;
 
   return (
     <main className="ml-64 min-h-screen bg-gray-50 dark:bg-zinc-950 p-6 md:p-10">
       <div className="w-full">
-        <div className="flex justify-between items-center mb-6">
+        <div className="mb-6">
           <div>
             <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
               Dashboard
@@ -476,26 +414,6 @@ export default function DashboardPage() {
               Financial overview of your business.
             </p>
           </div>
-
-          <select
-            value={dateFilter}
-            onChange={(e) => {
-              setLoading(true);
-              setDateFilter(e.target.value);
-            }}
-            className="
-    bg-white dark:bg-zinc-900
-    border border-gray-300 dark:border-zinc-700
-    rounded-xl
-    px-4 py-2
-    "
-          >
-            <option value="month">This Month</option>
-            <option value="lastMonth">Last Month</option>
-            <option value="3months">Last 3 Months</option>
-            <option value="year">This Year</option>
-            <option value="all">All Time</option>
-          </select>
         </div>
         <div className="flex flex-col lg:flex-row lg:justify-between lg:items-start gap-6 mb-6">
           <div className="grid lg:grid-cols-2 gap-6 mb-6 items-start">
@@ -571,7 +489,7 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-6 gap-4 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-4 mb-6">
           <div className="rounded-2xl border border-emerald-500/20 bg-emerald-50 dark:bg-emerald-950/30 p-5">
             <p className="text-xs uppercase tracking-wide text-emerald-700 dark:text-emerald-400">
               Revenue
@@ -602,16 +520,6 @@ export default function DashboardPage() {
             </p>
           </div>
 
-          <div className="rounded-2xl border border-violet-500/20 bg-violet-50 dark:bg-violet-950/30 p-5">
-            <p className="text-xs uppercase tracking-wide text-violet-700 dark:text-violet-400">
-              Cash Flow
-            </p>
-
-            <p className="text-2xl font-bold mt-3 text-violet-800 dark:text-violet-300">
-              ₹{cashFlow.toLocaleString("en-IN")}
-            </p>
-          </div>
-
           <div className="rounded-2xl border border-amber-500/20 bg-amber-50 dark:bg-amber-950/30 p-5">
             <p className="text-xs uppercase tracking-wide text-amber-700 dark:text-amber-400">
               Recommended Tax Reserve
@@ -619,16 +527,6 @@ export default function DashboardPage() {
 
             <p className="text-2xl font-bold mt-3 text-amber-800 dark:text-amber-300">
               ₹{taxReserve.toLocaleString("en-IN")}
-            </p>
-          </div>
-
-          <div className="rounded-2xl border border-cyan-500/20 bg-cyan-50 dark:bg-cyan-950/30 p-5">
-            <p className="text-xs uppercase tracking-wide text-cyan-700 dark:text-cyan-400">
-              Safe To Spend
-            </p>
-
-            <p className="text-2xl font-bold mt-3 text-cyan-800 dark:text-cyan-300">
-              ₹{safeToSpend.toLocaleString("en-IN")}
             </p>
           </div>
         </div>

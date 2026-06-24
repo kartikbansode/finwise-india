@@ -419,23 +419,22 @@ export default function DashboardPage() {
           <div className="grid lg:grid-cols-2 gap-6 mb-6 items-start">
             <div
               className="
-    bg-white dark:bg-zinc-900
-    border dark:border-zinc-800
-    rounded-2xl
-    p-8
-    "
+  bg-white dark:bg-zinc-900
+  border dark:border-zinc-800
+  rounded-2xl
+  p-8
+  "
             >
+              <p className="text-sm text-gray-500 dark:text-gray-400">
+                Available Balance
+              </p>
+
               <h2 className="text-4xl font-bold mt-3 text-gray-900 dark:text-white">
                 ₹{safeToSpend.toLocaleString("en-IN")}
               </h2>
 
-              <p className="text-gray-500 dark:text-gray-400 mt-2">
-                Available Balance
-              </p>
-
               <p className="text-sm text-gray-500 dark:text-gray-400 mt-6">
-                Estimated amount available after expenses, taxes and business
-                obligations.
+                After expenses, tax reserve and GST obligations.
               </p>
             </div>
 

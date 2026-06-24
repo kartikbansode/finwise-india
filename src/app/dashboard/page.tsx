@@ -7,11 +7,10 @@ import { createClient } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
 import UserDropdown from "@/components/UserDropdown";
 import { calculateHealthScore } from "@/lib/healthScore";
-import IncomeTrendChart from "@/components/charts/IncomeTrendChart";
 import ExpensePieChart from "@/components/charts/ExpensePieChart";
 import MobileBlocker from "@/components/MobileBlocker";
 import { AnimatePresence, motion } from "framer-motion";
-import { useRef } from "react";
+import RevenueExpenseChart from "@/components/charts/RevenueExpenseChart";
 
 import {
   calculateFullTaxBreakdown,
@@ -41,6 +40,10 @@ export default function DashboardPage() {
     "Building your financial command center...",
     "Almost ready...",
   ];
+
+  const [topClients, setTopClients] = useState<any[]>([]);
+  const [topVendors, setTopVendors] = useState<any[]>([]);
+  const [monthlyChartData, setMonthlyChartData] = useState<any[]>([]);
 
   const [dateFilter, setDateFilter] = useState("this_month");
 
@@ -125,6 +128,12 @@ export default function DashboardPage() {
       );
       setMonthlyIncome(incomeTotal);
 
+      const { data: clientData } = await supabase
+        .from("income_entries")
+        .select("client_name, amount")
+        .eq("user_id", userData.user.id)
+        .gte("entry_date", startDate);
+
       const { data: expenses } = await supabase
         .from("expense_entries")
         .select("*")
@@ -135,8 +144,35 @@ export default function DashboardPage() {
         (s, e) => s + Number(e.amount),
         0,
       );
+      const clientTotals = (clientData || []).reduce((acc: any, item: any) => {
+        const client = item.client_name || "Unknown";
+
+        acc[client] = (acc[client] || 0) + Number(item.amount);
+
+        return acc;
+      }, {});
+
+      setTopClients(
+        Object.entries(clientTotals)
+          .sort((a: any, b: any) => b[1] - a[1])
+          .slice(0, 5),
+      );
 
       setMonthlyExpenses(expenseTotal);
+
+      const vendorTotals = (expenses || []).reduce((acc: any, item: any) => {
+        const vendor = item.vendor || "Unknown";
+
+        acc[vendor] = (acc[vendor] || 0) + Number(item.amount);
+
+        return acc;
+      }, {});
+
+      setTopVendors(
+        Object.entries(vendorTotals)
+          .sort((a: any, b: any) => b[1] - a[1])
+          .slice(0, 5),
+      );
 
       const grouped = (expenses || []).reduce((acc: any, item: any) => {
         const category = item.category || "Other";
@@ -150,6 +186,68 @@ export default function DashboardPage() {
         Object.entries(grouped).map(([name, value]) => ({
           name,
           value,
+        })),
+      );
+
+      const { data: allIncome } = await supabase
+        .from("income_entries")
+        .select("amount, entry_date")
+        .eq("user_id", userData.user.id);
+
+      const { data: allExpenses } = await supabase
+        .from("expense_entries")
+        .select("amount, entry_date")
+        .eq("user_id", userData.user.id);
+
+      const chartMap: Record<
+        string,
+        {
+          income: number;
+          expense: number;
+        }
+      > = {};
+
+      for (let i = 11; i >= 0; i--) {
+        const date = new Date();
+
+        date.setMonth(date.getMonth() - i);
+
+        const key = date.toLocaleString("en-IN", {
+          month: "short",
+          year: "2-digit",
+        });
+
+        chartMap[key] = {
+          income: 0,
+          expense: 0,
+        };
+      }
+
+      (allIncome || []).forEach((item) => {
+        const month = new Date(item.entry_date).toLocaleString("en-IN", {
+          month: "short",
+        });
+
+        if (chartMap[month]) {
+          chartMap[month].income += Number(item.amount);
+        }
+      });
+
+      (allExpenses || []).forEach((item) => {
+        const month = new Date(item.entry_date).toLocaleString("en-IN", {
+          month: "short",
+        });
+
+        if (chartMap[month]) {
+          chartMap[month].expense += Number(item.amount);
+        }
+      });
+      setMonthlyChartData(
+        Object.entries(chartMap).map(([month, values]) => ({
+          month,
+          income: values.income,
+          expense: values.expense,
+          profit: values.income - values.expense,
         })),
       );
 
@@ -247,13 +345,23 @@ export default function DashboardPage() {
 
   const monthlyProfit = monthlyIncome - monthlyExpenses;
 
-  const taxReserve = breakdown.incomeTax;
+  const cashFlow = monthlyIncome - monthlyExpenses;
+
+  const safeToSpend = Math.max(
+    0,
+    monthlyIncome - monthlyExpenses - breakdown.incomeTax - breakdown.gstAmount,
+  );
+
+  const profitMargin =
+    monthlyIncome > 0 ? Math.round((monthlyProfit / monthlyIncome) * 100) : 0;
 
   const savingsRate =
     monthlyIncome > 0 ? Math.round((monthlyProfit / monthlyIncome) * 100) : 0;
 
   const expenseRatio =
     monthlyIncome > 0 ? Math.round((monthlyExpenses / monthlyIncome) * 100) : 0;
+
+  const taxReserve = breakdown.incomeTax;
 
   const nextDue = getNextAdvanceTaxDueDate();
 
@@ -362,77 +470,149 @@ dark:text-gray-400"
           <UserDropdown name={profile.full_name} userType={profile.user_type} />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-          <div
-            className="
-    rounded-2xl
-    border border-emerald-500/20
-    bg-emerald-50
-    dark:bg-emerald-950/30
-    p-5
-  "
-          >
+        <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-6 gap-4 mb-6">
+          <div className="rounded-2xl border border-emerald-500/20 bg-emerald-50 dark:bg-emerald-950/30 p-5">
             <p className="text-xs uppercase tracking-wide text-emerald-700 dark:text-emerald-400">
-              Monthly Profit
+              Revenue
             </p>
 
-            <p className="text-3xl font-bold text-emerald-800 dark:text-emerald-300 mt-3">
+            <p className="text-2xl font-bold mt-3 text-emerald-800 dark:text-emerald-300">
+              ₹{monthlyIncome.toLocaleString("en-IN")}
+            </p>
+          </div>
+
+          <div className="rounded-2xl border border-red-500/20 bg-red-50 dark:bg-red-950/30 p-5">
+            <p className="text-xs uppercase tracking-wide text-red-700 dark:text-red-400">
+              Expenses
+            </p>
+
+            <p className="text-2xl font-bold mt-3 text-red-800 dark:text-red-300">
+              ₹{monthlyExpenses.toLocaleString("en-IN")}
+            </p>
+          </div>
+
+          <div className="rounded-2xl border border-blue-500/20 bg-blue-50 dark:bg-blue-950/30 p-5">
+            <p className="text-xs uppercase tracking-wide text-blue-700 dark:text-blue-400">
+              Profit
+            </p>
+
+            <p className="text-2xl font-bold mt-3 text-blue-800 dark:text-blue-300">
               ₹{monthlyProfit.toLocaleString("en-IN")}
             </p>
           </div>
 
-          <div
-            className="
-    rounded-2xl
-    border border-blue-500/20
-    bg-blue-50
-    dark:bg-blue-950/30
-    p-5
-  "
-          >
-            <p className="text-xs uppercase tracking-wide text-blue-700 dark:text-blue-400">
-              Savings Rate
+          <div className="rounded-2xl border border-violet-500/20 bg-violet-50 dark:bg-violet-950/30 p-5">
+            <p className="text-xs uppercase tracking-wide text-violet-700 dark:text-violet-400">
+              Cash Flow
             </p>
 
-            <p className="text-3xl font-bold text-blue-800 dark:text-blue-300 mt-3">
-              {savingsRate}%
+            <p className="text-2xl font-bold mt-3 text-violet-800 dark:text-violet-300">
+              ₹{cashFlow.toLocaleString("en-IN")}
             </p>
           </div>
 
-          <div
-            className="
-    rounded-2xl
-    border border-amber-500/20
-    bg-amber-50
-    dark:bg-amber-950/30
-    p-5
-  "
-          >
+          <div className="rounded-2xl border border-amber-500/20 bg-amber-50 dark:bg-amber-950/30 p-5">
             <p className="text-xs uppercase tracking-wide text-amber-700 dark:text-amber-400">
               Tax Reserve
             </p>
 
-            <p className="text-3xl font-bold text-amber-800 dark:text-amber-300 mt-3">
+            <p className="text-2xl font-bold mt-3 text-amber-800 dark:text-amber-300">
               ₹{taxReserve.toLocaleString("en-IN")}
             </p>
           </div>
 
-          <div
-            className="
-    rounded-2xl
-    border border-violet-500/20
-    bg-violet-50
-    dark:bg-violet-950/30
-    p-5
-  "
-          >
-            <p className="text-xs uppercase tracking-wide text-violet-700 dark:text-violet-400">
-              Expense Ratio
+          <div className="rounded-2xl border border-cyan-500/20 bg-cyan-50 dark:bg-cyan-950/30 p-5">
+            <p className="text-xs uppercase tracking-wide text-cyan-700 dark:text-cyan-400">
+              Safe To Spend
             </p>
 
-            <p className="text-3xl font-bold text-violet-800 dark:text-violet-300 mt-3">
-              {expenseRatio}%
+            <p className="text-2xl font-bold mt-3 text-cyan-800 dark:text-cyan-300">
+              ₹{safeToSpend.toLocaleString("en-IN")}
             </p>
+          </div>
+        </div>
+
+        <div
+          className="
+  bg-white dark:bg-zinc-900
+  border border-gray-200 dark:border-zinc-800
+  rounded-2xl
+  p-6
+  mb-6
+  "
+        >
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+              Financial Health
+            </h3>
+
+            <div
+              className={`
+      px-3 py-1 rounded-full text-sm font-medium
+      ${
+        healthScore >= 80
+          ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400"
+          : healthScore >= 60
+            ? "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400"
+            : "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"
+      }
+      `}
+            >
+              {healthScore}/100
+            </div>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-6">
+            <div>
+              <div className="flex justify-between mb-2">
+                <span className="text-sm text-gray-500">Profit Margin</span>
+
+                <span className="font-medium">{profitMargin}%</span>
+              </div>
+
+              <div className="h-2 rounded-full bg-gray-200 dark:bg-zinc-800">
+                <div
+                  className="h-2 rounded-full bg-emerald-500"
+                  style={{
+                    width: `${Math.min(profitMargin, 100)}%`,
+                  }}
+                />
+              </div>
+            </div>
+
+            <div>
+              <div className="flex justify-between mb-2">
+                <span className="text-sm text-gray-500">Savings Rate</span>
+
+                <span className="font-medium">{savingsRate}%</span>
+              </div>
+
+              <div className="h-2 rounded-full bg-gray-200 dark:bg-zinc-800">
+                <div
+                  className="h-2 rounded-full bg-blue-500"
+                  style={{
+                    width: `${Math.min(savingsRate, 100)}%`,
+                  }}
+                />
+              </div>
+            </div>
+
+            <div>
+              <div className="flex justify-between mb-2">
+                <span className="text-sm text-gray-500">Expense Ratio</span>
+
+                <span className="font-medium">{expenseRatio}%</span>
+              </div>
+
+              <div className="h-2 rounded-full bg-gray-200 dark:bg-zinc-800">
+                <div
+                  className="h-2 rounded-full bg-red-500"
+                  style={{
+                    width: `${Math.min(expenseRatio, 100)}%`,
+                  }}
+                />
+              </div>
+            </div>
           </div>
         </div>
 
@@ -448,8 +628,106 @@ dark:bg-red-900/20 border border-red-200 rounded-xl p-4 mb-6"
         )}
 
         <div className="mb-6 w-full hiddenscrollbar">
-          <IncomeTrendChart income={monthlyIncome} />
+          <RevenueExpenseChart data={monthlyChartData} />
           <ExpensePieChart data={expenseData} />
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-6 mb-6">
+          {/* Top Clients */}
+          <div
+            className="
+    bg-white dark:bg-zinc-900
+    border border-gray-200 dark:border-zinc-800
+    rounded-2xl
+    p-6
+    "
+          >
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-5">
+              Top Clients
+            </h3>
+
+            {topClients.length === 0 ? (
+              <p className="text-gray-500">No client data available.</p>
+            ) : (
+              <div className="space-y-4">
+                {topClients.map(([client, amount]: any, index) => (
+                  <div
+                    key={client}
+                    className="flex items-center justify-between"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div
+                        className="
+                  w-8 h-8
+                  rounded-full
+                  bg-emerald-500/10
+                  text-emerald-500
+                  flex items-center justify-center
+                  text-sm font-semibold
+                  "
+                      >
+                        {index + 1}
+                      </div>
+
+                      <span className="font-medium">{client}</span>
+                    </div>
+
+                    <span className="font-semibold">
+                      ₹{Number(amount).toLocaleString("en-IN")}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Top Vendors */}
+          <div
+            className="
+    bg-white dark:bg-zinc-900
+    border border-gray-200 dark:border-zinc-800
+    rounded-2xl
+    p-6
+    "
+          >
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-5">
+              Top Vendors
+            </h3>
+
+            {topVendors.length === 0 ? (
+              <p className="text-gray-500">No vendor data available.</p>
+            ) : (
+              <div className="space-y-4">
+                {topVendors.map(([vendor, amount]: any, index) => (
+                  <div
+                    key={vendor}
+                    className="flex items-center justify-between"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div
+                        className="
+                  w-8 h-8
+                  rounded-full
+                  bg-red-500/10
+                  text-red-500
+                  flex items-center justify-center
+                  text-sm font-semibold
+                  "
+                      >
+                        {index + 1}
+                      </div>
+
+                      <span className="font-medium">{vendor}</span>
+                    </div>
+
+                    <span className="font-semibold">
+                      ₹{Number(amount).toLocaleString("en-IN")}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Tax Method */}

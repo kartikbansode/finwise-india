@@ -21,18 +21,38 @@ import {
 
 interface ExpenseEntry {
   id: string;
+
   description: string;
+
   vendor: string | null;
+
   amount: number;
+
   category: string;
+
   expense_type: string;
+
   gst_paid: boolean;
+
   payment_method: string;
+
   recurring: boolean;
+
   recurring_frequency: string;
+
   business_personal: string;
+
   notes: string | null;
+
   entry_date: string;
+
+  next_due_date: string | null;
+
+  recurrence_end_date: string | null;
+
+  auto_generated: boolean;
+
+  parent_recurring_id: string | null;
 }
 
 const EXPENSE_CATEGORIES = [
@@ -53,6 +73,45 @@ const COLORS = [
   "#8b5cf6",
   "#14b8a6",
 ];
+
+function calculateNextDate(currentDate: string, frequency: string) {
+  const date = new Date(currentDate);
+
+  switch (frequency) {
+    case "daily":
+      date.setDate(date.getDate() + 1);
+      break;
+
+    case "weekly":
+      date.setDate(date.getDate() + 7);
+      break;
+
+    case "monthly":
+      date.setMonth(date.getMonth() + 1);
+      break;
+
+    case "quarterly":
+      date.setMonth(date.getMonth() + 3);
+      break;
+
+    case "half_yearly":
+      date.setMonth(date.getMonth() + 6);
+      break;
+
+    case "yearly":
+      date.setFullYear(date.getFullYear() + 1);
+      break;
+
+    default:
+      if (frequency.startsWith("custom_")) {
+        const months = Number(frequency.replace("custom_", ""));
+
+        date.setMonth(date.getMonth() + months);
+      }
+  }
+
+  return date.toISOString().split("T")[0];
+}
 
 export default function ExpensesPage() {
   const supabase = createClient();
@@ -80,6 +139,7 @@ export default function ExpensesPage() {
   async function loadEntries() {
     const { data: userData } = await supabase.auth.getUser();
     if (!userData.user) return;
+
     const { data, error } = await supabase
       .from("expense_entries")
       .select("*")
@@ -133,7 +193,15 @@ export default function ExpensesPage() {
         business_personal: businessPersonal,
         notes,
         entry_date: entryDate,
-        next_due_date: recurringFrequency !== "one_time" ? entryDate : null,
+        next_due_date:
+          recurringFrequency !== "one_time"
+            ? calculateNextDate(
+                entryDate,
+                recurringFrequency === "custom"
+                  ? `custom_${customMonths}`
+                  : recurringFrequency,
+              )
+            : null,
         auto_generated: false,
         parent_recurring_id: null,
       });
@@ -881,6 +949,8 @@ disabled:opacity-50
 
                   <th className="px-4 py-3 font-medium">Category</th>
 
+                  <th className="px-4 py-3 font-medium">Status</th>
+
                   <th className="px-4 py-3 font-medium">Type</th>
 
                   <th className="px-4 py-3 font-medium">Payment</th>
@@ -912,7 +982,10 @@ disabled:opacity-50
                     <td className="px-4 py-3">
                       <div>
                         <p className="text-gray-900 dark:text-white">
-                          {entry.description}
+                          <>
+                            {entry.auto_generated && "🔁 "}
+                            {entry.description}
+                          </>
                         </p>
 
                         {entry.notes && (
@@ -924,6 +997,54 @@ disabled:opacity-50
                     </td>
 
                     <td className="px-4 py-3 capitalize">{entry.category}</td>
+                    <td className="px-4 py-3">
+                      {entry.auto_generated ? (
+                        <span
+                          className="
+      px-2 py-1
+      rounded-full
+      text-xs
+      font-medium
+      bg-blue-100
+      text-blue-700
+      dark:bg-blue-900/30
+      dark:text-blue-300
+      "
+                        >
+                          Auto Generated
+                        </span>
+                      ) : entry.recurring ? (
+                        <span
+                          className="
+      px-2 py-1
+      rounded-full
+      text-xs
+      font-medium
+      bg-emerald-100
+      text-emerald-700
+      dark:bg-emerald-900/30
+      dark:text-emerald-300
+      "
+                        >
+                          Recurring Template
+                        </span>
+                      ) : (
+                        <span
+                          className="
+      px-2 py-1
+      rounded-full
+      text-xs
+      font-medium
+      bg-gray-100
+      text-gray-700
+      dark:bg-zinc-800
+      dark:text-gray-300
+      "
+                        >
+                          One-Time
+                        </span>
+                      )}
+                    </td>
 
                     <td className="px-4 py-3 capitalize">
                       {entry.expense_type}

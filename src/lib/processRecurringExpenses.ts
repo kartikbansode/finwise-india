@@ -19,6 +19,17 @@ export async function processRecurringExpenses() {
       expense.recurring_frequency,
     );
 
+    const { data: existing } = await supabase
+      .from("expense_entries")
+      .select("id")
+      .eq("parent_recurring_id", expense.id)
+      .eq("entry_date", expense.next_due_date)
+      .maybeSingle();
+
+    if (existing) {
+      continue;
+    }
+
     await supabase.from("expense_entries").insert({
       user_id: expense.user_id,
 
@@ -56,10 +67,7 @@ export async function processRecurringExpenses() {
   }
 }
 
-function calculateNextDate(
-  currentDate: string,
-  frequency: string,
-) {
+function calculateNextDate(currentDate: string, frequency: string) {
   const date = new Date(currentDate);
 
   switch (frequency) {
@@ -89,9 +97,7 @@ function calculateNextDate(
 
     default:
       if (frequency.startsWith("custom_")) {
-        const months = Number(
-          frequency.replace("custom_", ""),
-        );
+        const months = Number(frequency.replace("custom_", ""));
 
         date.setMonth(date.getMonth() + months);
       }

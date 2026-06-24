@@ -231,6 +231,9 @@ export default function DashboardPage() {
 
       setUpcomingExpenses(upcomingExpensesData);
       const generatedInsights: string[] = [];
+      generatedInsights.push(
+        `Financial Health Score: ${healthScore.score}/100 (${healthScore.label})`,
+      );
       if (monthlyIncome > monthlyExpenses) {
         generatedInsights.push("Business is currently profitable.");
       } else if (monthlyExpenses > monthlyIncome) {
@@ -242,6 +245,7 @@ export default function DashboardPage() {
       const biggestClient = Object.entries(clientTotals).sort(
         (a: any, b: any) => b[1] - a[1],
       )[0];
+
       if (biggestClient) {
         generatedInsights.push(`${biggestClient[0]} is your largest client.`);
       }
@@ -565,7 +569,15 @@ export default function DashboardPage() {
             "
                     />
 
-                    <p>{insight}</p>
+                    <p
+                      className={
+                        insight.includes("Financial Health")
+                          ? "font-medium text-emerald-600 dark:text-emerald-400"
+                          : ""
+                      }
+                    >
+                      {insight}
+                    </p>
                   </div>
                 ))}
               </div>

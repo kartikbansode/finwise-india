@@ -56,6 +56,16 @@ export default function Sidebar() {
 
   const [profile, setProfile] = useState<any>(null);
 
+  const hiddenRoutes = new Set([
+    "/",
+    "/login",
+    "/signup",
+    "/onboarding",
+    "/privacy",
+    "/terms",
+    "/cookie-policy",
+  ]);
+
   useEffect(() => {
     async function loadProfile() {
       const { data: userData } = await supabase.auth.getUser();
@@ -73,6 +83,10 @@ export default function Sidebar() {
 
     loadProfile();
   }, []);
+
+  if (hiddenRoutes.has(pathname)) {
+    return null;
+  }
 
   return (
     <div className="hidden lg:flex w-64 h-screen bg-white dark:bg-zinc-950 border-r border-gray-200 dark:border-zinc-800 fixed left-0 top-0 flex-col">

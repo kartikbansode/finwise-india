@@ -227,7 +227,9 @@ export default function DashboardPage() {
         })
         .limit(5);
 
-      setUpcomingExpenses(upcoming || []);
+      const upcomingExpensesData = upcoming ?? [];
+
+      setUpcomingExpenses(upcomingExpensesData);
       const generatedInsights: string[] = [];
       if (monthlyIncome > monthlyExpenses) {
         generatedInsights.push("Business is currently profitable.");
@@ -248,9 +250,9 @@ export default function DashboardPage() {
           `${biggestVendor[0]} is your largest expense source.`,
         );
       }
-      if ((upcoming || []).length > 0) {
+      if (upcomingExpensesData.length > 0) {
         generatedInsights.push(
-          `${upcoming.length} recurring obligations are scheduled.`,
+          `${upcomingExpensesData.length} recurring obligations are scheduled.`,
         );
       }
       if (monthlyIncome > 0) {

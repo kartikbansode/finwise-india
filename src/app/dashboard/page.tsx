@@ -425,10 +425,6 @@ export default function DashboardPage() {
     p-8
     "
             >
-              <p className="text-sm text-gray-500 dark:text-gray-400">
-                Financial Overview
-              </p>
-
               <h2 className="text-4xl font-bold mt-3 text-gray-900 dark:text-white">
                 ₹{safeToSpend.toLocaleString("en-IN")}
               </h2>

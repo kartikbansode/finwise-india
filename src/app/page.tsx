@@ -82,6 +82,12 @@ export default function LandingPage() {
               >
                 Why FinWise
               </a>
+              <a
+                href="/dashboard"
+                className="text-sm hover:text-emerald-600 transition"
+              >
+                Dashboard
+              </a>
             </div>
 
             {/* Desktop Auth */}
@@ -129,13 +135,19 @@ export default function LandingPage() {
                     href="#tax"
                     className="block text-sm hover:text-emerald-600"
                   >
-                    Tax Center
+                    Pricing
                   </a>
                   <a
                     href="#why"
                     className="block text-sm hover:text-emerald-600"
                   >
                     Why FinWise
+                  </a>
+                  <a
+                    href="/dashboard"
+                    className="block text-sm hover:text-emerald-600"
+                  >
+                    Dashboard
                   </a>
                   <div className="flex gap-3 pt-4">
                     <Link

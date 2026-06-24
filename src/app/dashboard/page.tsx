@@ -24,6 +24,7 @@ export default function DashboardPage() {
   const [checkingAuth, setCheckingAuth] = useState(true);
   const [monthlyIncome, setMonthlyIncome] = useState(0);
   const [monthlyExpenses, setMonthlyExpenses] = useState(0);
+  const [dateFilter, setDateFilter] = useState("month");
   const [expenseData, setExpenseData] = useState<any[]>([]);
   const [profile, setProfile] = useState<any>(null);
   const router = useRouter();
@@ -53,8 +54,6 @@ export default function DashboardPage() {
       profit: number;
     }[]
   >([]);
-
-  const [dateFilter, setDateFilter] = useState("this_month");
 
   const [messageIndex, setMessageIndex] = useState(() =>
     Math.floor(Math.random() * loadingMessages.length),
@@ -124,13 +123,35 @@ export default function DashboardPage() {
       }
 
       const now = new Date();
-      const startDate = getStartDate(dateFilter);
+
+      let startDate: Date;
+
+      switch (dateFilter) {
+        case "month":
+          startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+          break;
+
+        case "lastMonth":
+          startDate = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+          break;
+
+        case "3months":
+          startDate = new Date(now.getFullYear(), now.getMonth() - 3, 1);
+          break;
+
+        case "year":
+          startDate = new Date(now.getFullYear(), 0, 1);
+          break;
+
+        default:
+          startDate = new Date("2020-01-01");
+      }
 
       const { data: incomeData } = await supabase
         .from("income_entries")
         .select("amount")
         .eq("user_id", userData.user.id)
-        .gte("entry_date", startDate);
+        .gte("entry_date", startDate.toISOString());
       const incomeTotal = (incomeData || []).reduce(
         (s, e) => s + Number(e.amount),
         0,
@@ -141,13 +162,13 @@ export default function DashboardPage() {
         .from("income_entries")
         .select("client_name, amount")
         .eq("user_id", userData.user.id)
-        .gte("entry_date", startDate);
+        .gte("entry_date", startDate.toISOString());
 
       const { data: expenses } = await supabase
         .from("expense_entries")
         .select("*")
         .eq("user_id", userData.user.id)
-        .gte("entry_date", startDate);
+        .gte("entry_date", startDate.toISOString());
 
       const expenseTotal = (expenses || []).reduce(
         (s, e) => s + Number(e.amount),
@@ -189,16 +210,6 @@ export default function DashboardPage() {
           .slice(0, 5),
       );
       const generatedInsights: string[] = [];
-      if (monthlyIncome > 0) {
-        generatedInsights.push(
-          `Revenue recorded: ₹${monthlyIncome.toLocaleString("en-IN")}`,
-        );
-      }
-      if (monthlyExpenses > 0) {
-        generatedInsights.push(
-          `Expenses recorded: ₹${monthlyExpenses.toLocaleString("en-IN")}`,
-        );
-      }
       if (monthlyIncome > monthlyExpenses) {
         generatedInsights.push("Business is currently profitable.");
       } else if (monthlyExpenses > monthlyIncome) {
@@ -216,6 +227,16 @@ export default function DashboardPage() {
       if (biggestVendor) {
         generatedInsights.push(
           `${biggestVendor[0]} is your largest expense source.`,
+        );
+      }
+      if (monthlyIncome > 0) {
+        generatedInsights.push(
+          `Revenue recorded: ₹${monthlyIncome.toLocaleString("en-IN")}`,
+        );
+      }
+      if (monthlyExpenses > 0) {
+        generatedInsights.push(
+          `Expenses recorded: ₹${monthlyExpenses.toLocaleString("en-IN")}`,
         );
       }
 
@@ -237,12 +258,14 @@ export default function DashboardPage() {
       const { data: allIncome } = await supabase
         .from("income_entries")
         .select("amount, entry_date")
-        .eq("user_id", userData.user.id);
+        .eq("user_id", userData.user.id)
+        .gte("entry_date", startDate.toISOString());
 
       const { data: allExpenses } = await supabase
         .from("expense_entries")
         .select("amount, entry_date")
-        .eq("user_id", userData.user.id);
+        .eq("user_id", userData.user.id)
+        .gte("entry_date", startDate.toISOString());
 
       const chartMap: Record<
         string,
@@ -460,13 +483,6 @@ dark:bg-zinc-900
 border
 dark:border-zinc-800 rounded-2xl p-8 lg:max-w-2xl"
           >
-            <p
-              className="text-sm text-gray-500
-dark:text-gray-400"
-            >
-              Financial Overview
-            </p>
-
             <h2 className="text-4xl font-bold mt-3 text-gray-900 dark:text-white">
               ₹{Math.max(0, breakdown.safeToSpend).toLocaleString("en-IN")}
             </h2>
@@ -478,49 +494,35 @@ dark:text-gray-400 mt-2"
               Available Balance
             </p>
 
-            <div className="grid grid-cols-3 gap-6 mt-8">
-              <div>
-                <p
-                  className="text-xs text-gray-500
-dark:text-gray-400"
-                >
-                  Income
-                </p>
-
-                <p className="font-semibold text-lg">
-                  ₹{monthlyIncome.toLocaleString("en-IN")}
-                </p>
-              </div>
-
-              <div>
-                <p
-                  className="text-xs text-gray-500
-dark:text-gray-400"
-                >
-                  Expenses
-                </p>
-
-                <p className="font-semibold text-lg">
-                  ₹{monthlyExpenses.toLocaleString("en-IN")}
-                </p>
-              </div>
-
-              <div>
-                <p
-                  className="text-xs text-gray-500
-dark:text-gray-400"
-                >
-                  Profit
-                </p>
-
-                <p className="font-semibold text-lg">
-                  ₹{monthlyProfit.toLocaleString("en-IN")}
-                </p>
-              </div>
-            </div>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-6">
+              Estimated amount available after expenses, tax reserves, and
+              business obligations.
+            </p>
           </div>
         </div>
-
+        <div className="flex justify-end mb-4">
+          <select
+            value={dateFilter}
+            onChange={(e) => {
+              setLoading(true);
+              setDateFilter(e.target.value);
+            }}
+            className="
+    px-4 py-2
+    rounded-xl
+    border border-gray-200
+    dark:border-zinc-700
+    bg-white dark:bg-zinc-900
+    text-sm
+    "
+          >
+            <option value="month">This Month</option>
+            <option value="lastMonth">Last Month</option>
+            <option value="3months">Last 3 Months</option>
+            <option value="year">This Year</option>
+            <option value="all">All Time</option>
+          </select>
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-6 gap-4 mb-6">
           <div className="rounded-2xl border border-emerald-500/20 bg-emerald-50 dark:bg-emerald-950/30 p-5">
             <p className="text-xs uppercase tracking-wide text-emerald-700 dark:text-emerald-400">
@@ -871,24 +873,6 @@ dark:text-gray-400"
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-          {profile.gst_registered && (
-            <div
-              className="bg-white
-dark:bg-zinc-900
-border
-dark:border-zinc-800 rounded-xl border-gray-200 p-5"
-            >
-              <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                GST collected this month
-              </p>
-              <p
-                className="text-xl font-semibold text-gray-900
-dark:text-white"
-              >
-                ₹{breakdown.gstAmount.toLocaleString("en-IN")}
-              </p>
-            </div>
-          )}
           <div
             className="bg-white
 dark:bg-zinc-900
@@ -927,22 +911,6 @@ dark:border-zinc-800 rounded-xl border-gray-200 p-5"
               </p>
             </div>
           )}
-          <div
-            className="bg-white
-dark:bg-zinc-900
-border
-dark:border-zinc-800 rounded-xl border-gray-200 p-5"
-          >
-            <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Net profit this month
-            </p>
-            <p
-              className="text-xl font-semibold text-gray-900
-dark:text-white"
-            >
-              ₹{(monthlyIncome - monthlyExpenses).toLocaleString("en-IN")}
-            </p>
-          </div>
         </div>
 
         <TaxDisclaimer />

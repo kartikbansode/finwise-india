@@ -131,14 +131,20 @@ transition
               setShowLogoutModal(true);
             }}
             className="
-  w-full
-  px-4 py-3
-  text-left
-  flex items-center gap-3
-  text-red-400
-  hover:bg-red-950/30
-  transition
-  "
+w-full
+px-4 py-3
+text-left
+flex items-center gap-3
+
+text-red-600
+dark:text-red-400
+
+hover:bg-red-50
+dark:hover:bg-red-950/30
+
+transition-colors
+duration-200
+"
           >
             <LogOut size={16} />
             Logout

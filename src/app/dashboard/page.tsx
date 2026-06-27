@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { calculate44ADA, calculate44AD } from "@/lib/presumptiveTax";
 import { createClient } from "@/lib/supabase";
@@ -11,6 +11,11 @@ import MobileBlocker from "@/components/MobileBlocker";
 import { AnimatePresence, motion } from "framer-motion";
 import RevenueExpenseChart from "@/components/charts/RevenueExpenseChart";
 import { processRecurringExpenses } from "@/lib/processRecurringExpenses";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { Search, ArrowUpRight, ArrowDownRight, Calendar, Target, Shield, Sparkles, CreditCard, FileText, PieChart, BarChart3, TrendingUp, TrendingDown } from "lucide-react";
 
 import { calculateFullTaxBreakdown, TaxRegime } from "@/lib/taxLogic";
 import TaxDisclaimer from "@/components/TaxDisclaimer";
@@ -23,8 +28,22 @@ export default function DashboardPage() {
   const [monthlyExpenses, setMonthlyExpenses] = useState(0);
   const [expenseData, setExpenseData] = useState<any[]>([]);
   const [profile, setProfile] = useState<any>(null);
-  const router = useRouter();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [activeFilter, setActiveFilter] = useState("this_month");
   const [isMobile, setIsMobile] = useState<boolean | null>(null);
+  const [upcomingExpenses, setUpcomingExpenses] = useState<any[]>([]);
+  const [topClients, setTopClients] = useState<[string, number][]>([]);
+  const [topVendors, setTopVendors] = useState<[string, number][]>([]);
+  const [monthlyChartData, setMonthlyChartData] = useState<
+    {
+      month: string;
+      income: number;
+      expense: number;
+      profit: number;
+    }[]
+  >([]);
+  const [insights, setInsights] = useState<string[]>([]);
+  const router = useRouter();
   const loadingMessages = [
     "Organizing your financial data...",
     "Preparing your dashboard...",
@@ -36,22 +55,6 @@ export default function DashboardPage() {
     "Building your financial command center...",
     "Almost ready...",
   ];
-  const [insights, setInsights] = useState<string[]>([]);
-
-  const [upcomingExpenses, setUpcomingExpenses] = useState<any[]>([]);
-
-  const [topClients, setTopClients] = useState<[string, number][]>([]);
-
-  const [topVendors, setTopVendors] = useState<[string, number][]>([]);
-
-  const [monthlyChartData, setMonthlyChartData] = useState<
-    {
-      month: string;
-      income: number;
-      expense: number;
-      profit: number;
-    }[]
-  >([]);
 
   const [messageIndex, setMessageIndex] = useState(() =>
     Math.floor(Math.random() * loadingMessages.length),
@@ -392,301 +395,305 @@ export default function DashboardPage() {
   );
 
   const monthlyProfit = monthlyIncome - monthlyExpenses;
-
-  const safeToSpend = Math.max(
-    0,
-    monthlyIncome - monthlyExpenses - breakdown.incomeTax - breakdown.gstAmount,
-  );
-  Math.max(0, breakdown.safeToSpend);
-
+  const safeToSpend = Math.max(0, monthlyIncome - monthlyExpenses - breakdown.incomeTax - breakdown.gstAmount);
   const taxReserve = breakdown.incomeTax;
+  const cashFlowIn = monthlyIncome;
+  const cashFlowOut = monthlyExpenses;
+  const netProfit = monthlyProfit;
+  const budgetUsed = monthlyIncome ? Math.min(100, (monthlyExpenses / monthlyIncome) * 100) : 0;
+  const savingsRate = monthlyIncome ? ((monthlyIncome - monthlyExpenses) / monthlyIncome) * 100 : 0;
+  const topClient = topClients[0];
+  const topVendor = topVendors[0];
+  const filterOptions = [
+    { value: "this_month", label: "This Month" },
+    { value: "last_month", label: "Last Month" },
+    { value: "this_quarter", label: "This Quarter" },
+    { value: "this_year", label: "This Year" },
+    { value: "all_time", label: "All Time" },
+  ];
+  const activeFilterLabel = filterOptions.find((option) => option.value === activeFilter)?.label || "This Month";
 
   return (
-    <main className="ml-64 min-h-screen bg-gray-50 dark:bg-zinc-950 p-6 md:p-10">
-      <div className="w-full">
-        <div className="mb-6">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-              Dashboard
-            </h1>
-
-            <p className="text-gray-500 dark:text-gray-400 mt-1">
-              Financial overview of your business.
-            </p>
-          </div>
-        </div>
-        <div className="flex flex-col lg:flex-row lg:justify-between lg:items-start gap-6 mb-6">
-          <div className="grid lg:grid-cols-2 gap-6 mb-6 items-start">
-            <div
-              className="
-  bg-white dark:bg-zinc-900
-  border dark:border-zinc-800
-  rounded-2xl
-  p-8
-  "
-            >
-              <p className="text-sm text-gray-500 dark:text-gray-400">
-                Available Balance
-              </p>
-
-              <h2 className="text-4xl font-bold mt-3 text-gray-900 dark:text-white">
-                ₹{safeToSpend.toLocaleString("en-IN")}
-              </h2>
-
-              <p className="text-sm text-gray-500 dark:text-gray-400 mt-6">
-                After expenses, tax reserve and GST obligations.
-              </p>
-            </div>
-
-            <div
-              className="
-    bg-white dark:bg-zinc-900
-    border border-gray-200 dark:border-zinc-800
-    rounded-2xl
-    p-6
-    "
-            >
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-5">
-                Business Insights
-              </h3>
-
-              <div className="space-y-3">
-                {insights.map((insight, index) => (
-                  <div
-                    key={index}
-                    className="
-          flex items-start gap-3
-          text-gray-700 dark:text-gray-300
-          "
-                  >
-                    <div
-                      className="
-  w-2 h-2
-  rounded-full
-  bg-gray-400
-  dark:bg-zinc-500
-  mt-2
-  shrink-0
-  "
-                    />
-
-                    <p
-                      className={
-                        insight.includes("Financial Health")
-                          ? "font-medium text-emerald-600 dark:text-emerald-400"
-                          : ""
-                      }
-                    >
-                      {insight}
-                    </p>
-                  </div>
-                ))}
+    <main className="ml-64 min-h-screen bg-slate-50 dark:bg-zinc-950 p-6 md:p-10">
+      <div className="space-y-8">
+        <section className="grid gap-6">
+          <div className="flex flex-col gap-6 xl:flex-row xl:items-end xl:justify-between">
+            <div className="space-y-3">
+              <p className="text-sm font-semibold uppercase tracking-[0.3em] text-emerald-600 dark:text-emerald-400">Command Center</p>
+              <div className="space-y-2">
+                <h1 className="text-4xl font-semibold tracking-tight text-slate-950 dark:text-white">Dashboard</h1>
+                <p className="max-w-2xl text-sm text-slate-600 dark:text-slate-400">Good morning, here’s your premium business overview for today. Review cash flow, tax readiness, and recurring obligations in one place.</p>
               </div>
             </div>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-4 mb-6">
-          <div className="rounded-2xl border border-emerald-500/20 bg-emerald-50 dark:bg-emerald-950/30 p-5">
-            <p className="text-xs uppercase tracking-wide text-emerald-700 dark:text-emerald-400">
-              Revenue
-            </p>
-
-            <p className="text-2xl font-bold mt-3 text-emerald-800 dark:text-emerald-300">
-              ₹{monthlyIncome.toLocaleString("en-IN")}
-            </p>
-          </div>
-
-          <div className="rounded-2xl border border-red-500/20 bg-red-50 dark:bg-red-950/30 p-5">
-            <p className="text-xs uppercase tracking-wide text-red-700 dark:text-red-400">
-              Expenses
-            </p>
-
-            <p className="text-2xl font-bold mt-3 text-red-800 dark:text-red-300">
-              ₹{monthlyExpenses.toLocaleString("en-IN")}
-            </p>
-          </div>
-
-          <div className="rounded-2xl border border-blue-500/20 bg-blue-50 dark:bg-blue-950/30 p-5">
-            <p className="text-xs uppercase tracking-wide text-blue-700 dark:text-blue-400">
-              Profit
-            </p>
-
-            <p className="text-2xl font-bold mt-3 text-blue-800 dark:text-blue-300">
-              ₹{monthlyProfit.toLocaleString("en-IN")}
-            </p>
-          </div>
-
-          <div className="rounded-2xl border border-amber-500/20 bg-amber-50 dark:bg-amber-950/30 p-5">
-            <p className="text-xs uppercase tracking-wide text-amber-700 dark:text-amber-400">
-              Recommended Tax Reserve
-            </p>
-
-            <p className="text-2xl font-bold mt-3 text-amber-800 dark:text-amber-300">
-              ₹{taxReserve.toLocaleString("en-IN")}
-            </p>
-          </div>
-        </div>
-
-        <div className="mb-6 w-full hiddenscrollbar">
-          <RevenueExpenseChart data={monthlyChartData} />
-          <ExpensePieChart data={expenseData} />
-        </div>
-
-        <div className="grid md:grid-cols-2 gap-6 mb-6">
-          {/* Top Clients */}
-          <div
-            className="
-    bg-white dark:bg-zinc-900
-    border border-gray-200 dark:border-zinc-800
-    rounded-2xl
-    p-6
-    "
-          >
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-5">
-              Top Clients
-            </h3>
-
-            {topClients.length === 0 ? (
-              <p className="text-gray-500">No client data available.</p>
-            ) : (
-              <div className="space-y-4">
-                {topClients.map(([client, amount]: any, index) => (
-                  <div
-                    key={`${client}-${index}`}
-                    className="flex items-center justify-between"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div
-                        className="
-                  w-8 h-8
-                  rounded-full
-                  bg-emerald-500/10
-                  text-emerald-500
-                  flex items-center justify-center
-                  text-sm font-semibold
-                  "
-                      >
-                        {index + 1}
-                      </div>
-
-                      <span className="font-medium">{client}</span>
-                    </div>
-
-                    <span className="font-semibold">
-                      ₹{Number(amount).toLocaleString("en-IN")}
-                    </span>
-                  </div>
-                ))}
+            <div className="grid gap-3 sm:grid-cols-[1fr_auto] xl:grid-cols-[1fr_auto_auto] items-center">
+              <div className="relative w-full max-w-xl">
+                <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                <Input className="pl-10" placeholder="Search dashboard..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
               </div>
-            )}
+              <Button variant="secondary" size="sm" onClick={() => router.push("/income")}>Add Income</Button>
+              <Button size="sm" onClick={() => router.push("/expenses")}>Add Expense</Button>
+            </div>
           </div>
-
-          {/* Top Vendors */}
-          <div
-            className="
-    bg-white dark:bg-zinc-900
-    border border-gray-200 dark:border-zinc-800
-    rounded-2xl
-    p-6
-    "
-          >
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-5">
-              Top Vendors
-            </h3>
-
-            {topVendors.length === 0 ? (
-              <p className="text-gray-500">No vendor data available.</p>
-            ) : (
-              <div className="space-y-4">
-                {topVendors.map(([vendor, amount]: any, index) => (
-                  <div
-                    key={`${vendor}-${index}`}
-                    className="flex items-center justify-between"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div
-                        className="
-                  w-8 h-8
-                  rounded-full
-                  bg-red-500/10
-                  text-red-500
-                  flex items-center justify-center
-                  text-sm font-semibold
-                  "
-                      >
-                        {index + 1}
-                      </div>
-
-                      <span className="font-medium">{vendor}</span>
-                    </div>
-
-                    <span className="font-semibold">
-                      ₹{Number(amount).toLocaleString("en-IN")}
-                    </span>
-                  </div>
-                ))}
+          <div className="grid gap-4 xl:grid-cols-3">
+            <div className="rounded-[2rem] border border-slate-200/80 bg-white/95 shadow-sm shadow-slate-200/40 dark:border-zinc-800 dark:bg-zinc-950 dark:shadow-none p-6">
+              <div className="flex items-center justify-between gap-4">
+                <div>
+                  <p className="text-xs uppercase tracking-[0.25em] text-slate-400 dark:text-slate-500">Revenue</p>
+                  <p className="mt-3 text-3xl font-semibold text-slate-950 dark:text-white">₹{cashFlowIn.toLocaleString("en-IN")}</p>
+                </div>
+                <div className="rounded-2xl bg-emerald-50 p-3 text-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-300"><TrendingUp className="h-5 w-5" /></div>
               </div>
-            )}
+              <p className="mt-4 text-sm text-slate-500 dark:text-slate-400">Total income recorded for the current reporting period.</p>
+            </div>
+            <div className="rounded-[2rem] border border-slate-200/80 bg-white/95 shadow-sm shadow-slate-200/40 dark:border-zinc-800 dark:bg-zinc-950 dark:shadow-none p-6">
+              <div className="flex items-center justify-between gap-4">
+                <div>
+                  <p className="text-xs uppercase tracking-[0.25em] text-slate-400 dark:text-slate-500">Expenses</p>
+                  <p className="mt-3 text-3xl font-semibold text-slate-950 dark:text-white">₹{cashFlowOut.toLocaleString("en-IN")}</p>
+                </div>
+                <div className="rounded-2xl bg-red-50 p-3 text-red-600 dark:bg-red-950/30 dark:text-red-400"><TrendingDown className="h-5 w-5" /></div>
+              </div>
+              <p className="mt-4 text-sm text-slate-500 dark:text-slate-400">Expenses captured in the current period across vendors and categories.</p>
+            </div>
+            <div className="rounded-[2rem] border border-slate-200/80 bg-white/95 shadow-sm shadow-slate-200/40 dark:border-zinc-800 dark:bg-zinc-950 dark:shadow-none p-6">
+              <div className="flex items-center justify-between gap-4">
+                <div>
+                  <p className="text-xs uppercase tracking-[0.25em] text-slate-400 dark:text-slate-500">Net Profit</p>
+                  <p className="mt-3 text-3xl font-semibold text-slate-950 dark:text-white">₹{netProfit.toLocaleString("en-IN")}</p>
+                </div>
+                <div className="rounded-2xl bg-blue-50 p-3 text-blue-600 dark:bg-blue-950/30 dark:text-blue-300"><ArrowUpRight className="h-5 w-5" /></div>
+              </div>
+              <p className="mt-4 text-sm text-slate-500 dark:text-slate-400">Revenue minus expenses for the current reporting window.</p>
+            </div>
           </div>
-        </div>
-        <div
-          className="
-  bg-white dark:bg-zinc-900
-  border border-gray-200 dark:border-zinc-800
-  rounded-2xl
-  p-6
-  mb-6
-  "
-        >
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-5">
-            Upcoming Obligations
-          </h3>
-
-          {upcomingExpenses.length === 0 ? (
-            <p className="text-gray-500 dark:text-gray-400">
-              No recurring expenses scheduled.
-            </p>
-          ) : (
-            <div className="space-y-4">
-              {upcomingExpenses.map((expense) => (
-                <div
-                  key={expense.id}
-                  className="
-          flex items-center
-          justify-between
-          border-b border-gray-100
-          dark:border-zinc-800
-          pb-3
-          "
-                >
+        </section>
+        <section className="grid gap-6 xl:grid-cols-[1.8fr_1fr]">
+          <div className="space-y-6">
+            <div className="grid gap-4 md:grid-cols-2">
+              <Card className="overflow-hidden rounded-[1.75rem] border-slate-200/80 bg-white/95 shadow-sm shadow-slate-200/40 dark:border-zinc-800 dark:bg-zinc-950 dark:shadow-none p-6">
+                <CardHeader className="flex flex-col gap-4 border-b border-slate-200/80 pb-4 dark:border-zinc-800">
+                  <div className="flex items-center justify-between gap-3">
+                    <div>
+                      <CardTitle className="text-lg font-semibold text-slate-950 dark:text-white">Revenue vs Expenses</CardTitle>
+                      <CardDescription className="text-slate-500 dark:text-slate-400">Monthly comparison for the selected period.</CardDescription>
+                    </div>
+                    <Badge variant="secondary" className="text-xs uppercase tracking-[0.2em]">{activeFilterLabel}</Badge>
+                  </div>
+                </CardHeader>
+                <CardContent className="h-80 pt-6"><RevenueExpenseChart data={monthlyChartData} /></CardContent>
+              </Card>
+              <Card className="overflow-hidden rounded-[1.75rem] border-slate-200/80 bg-white/95 shadow-sm shadow-slate-200/40 dark:border-zinc-800 dark:bg-zinc-950 dark:shadow-none p-6">
+                <CardHeader className="flex items-center justify-between gap-3 border-b border-slate-200/80 pb-4 dark:border-zinc-800">
                   <div>
-                    <p className="font-medium text-gray-900 dark:text-white">
-                      {expense.description}
-                    </p>
-
-                    <p className="text-sm text-gray-500 dark:text-gray-400">
-                      ₹{Number(expense.amount).toLocaleString("en-IN")}
-                    </p>
+                    <CardTitle className="text-lg font-semibold text-slate-950 dark:text-white">Financial Health</CardTitle>
+                    <CardDescription className="text-slate-500 dark:text-slate-400">Cash flow, tax readiness, and profitability score.</CardDescription>
                   </div>
-
-                  <div className="text-right">
-                    <p className="font-medium text-emerald-600">
-                      {getDaysUntil(expense.next_due_date)} days
-                    </p>
-
-                    <p className="text-xs text-gray-500 dark:text-gray-400">
-                      Due{" "}
-                      {new Date(expense.next_due_date).toLocaleDateString(
-                        "en-IN",
-                      )}
-                    </p>
+                  <div className="rounded-2xl bg-emerald-50 px-3 py-1 text-sm font-semibold text-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-300">{`${Math.round(breakdown.safeToSpend / Math.max(monthlyIncome, 1) * 100)}%`}</div>
+                </CardHeader>
+                <CardContent className="space-y-5 pt-6">
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <div className="rounded-3xl bg-slate-50 p-4 dark:bg-zinc-900">
+                      <p className="text-xs uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">Cash Flow</p>
+                      <p className="mt-2 text-xl font-semibold text-slate-950 dark:text-white">₹{cashFlowIn.toLocaleString("en-IN")}</p>
+                    </div>
+                    <div className="rounded-3xl bg-slate-50 p-4 dark:bg-zinc-900">
+                      <p className="text-xs uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">Tax Ready</p>
+                      <p className="mt-2 text-xl font-semibold text-slate-950 dark:text-white">₹{taxReserve.toLocaleString("en-IN")}</p>
+                    </div>
+                  </div>
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between text-sm text-slate-500 dark:text-slate-400">
+                      <span>Profitability</span>
+                      <span>{monthlyProfit >= 0 ? "Positive" : "Negative"}</span>
+                    </div>
+                    <div className="h-3 overflow-hidden rounded-full bg-slate-200 dark:bg-zinc-800">
+                      <div className="h-full rounded-full bg-emerald-500" style={{ width: `${Math.min(100, Math.max(0, savingsRate))}%` }} />
+                    </div>
+                    <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+                      <span>Savings Rate</span>
+                      <span>{savingsRate.toFixed(0)}%</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+            <div className="grid gap-4 lg:grid-cols-2">
+              <Card className="rounded-[1.75rem] border-slate-200/80 bg-white/95 shadow-sm shadow-slate-200/40 dark:border-zinc-800 dark:bg-zinc-950 dark:shadow-none p-6">
+                <CardHeader className="flex items-center justify-between gap-3 border-b border-slate-200/80 pb-4 dark:border-zinc-800">
+                  <div>
+                    <CardTitle className="text-lg font-semibold text-slate-950 dark:text-white">Cash Flow Overview</CardTitle>
+                    <CardDescription className="text-slate-500 dark:text-slate-400">Money in, money out, and net profit.</CardDescription>
+                  </div>
+                </CardHeader>
+                <CardContent className="space-y-4 pt-6">
+                  <div className="rounded-3xl bg-slate-50 p-5 dark:bg-zinc-900">
+                    <div className="flex items-center justify-between text-sm text-slate-500 dark:text-slate-400">
+                      <span>Money In</span>
+                      <span className="font-semibold text-slate-950 dark:text-white">₹{cashFlowIn.toLocaleString("en-IN")}</span>
+                    </div>
+                  </div>
+                  <div className="rounded-3xl bg-slate-50 p-5 dark:bg-zinc-900">
+                    <div className="flex items-center justify-between text-sm text-slate-500 dark:text-slate-400">
+                      <span>Money Out</span>
+                      <span className="font-semibold text-slate-950 dark:text-white">₹{cashFlowOut.toLocaleString("en-IN")}</span>
+                    </div>
+                  </div>
+                  <div className="rounded-3xl bg-slate-50 p-5 dark:bg-zinc-900">
+                    <div className="flex items-center justify-between text-sm text-slate-500 dark:text-slate-400">
+                      <span>Net Profit</span>
+                      <span className="font-semibold text-slate-950 dark:text-white">₹{netProfit.toLocaleString("en-IN")}</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+              <Card className="rounded-[1.75rem] border-slate-200/80 bg-white/95 shadow-sm shadow-slate-200/40 dark:border-zinc-800 dark:bg-zinc-950 dark:shadow-none p-6">
+                <CardHeader className="flex items-center justify-between gap-3 border-b border-slate-200/80 pb-4 dark:border-zinc-800">
+                  <div>
+                    <CardTitle className="text-lg font-semibold text-slate-950 dark:text-white">Quick Actions</CardTitle>
+                    <CardDescription className="text-slate-500 dark:text-slate-400">Jump directly to common workflows.</CardDescription>
+                  </div>
+                </CardHeader>
+                <CardContent className="grid gap-3 pt-6">
+                  <Button variant="outline" size="sm" onClick={() => router.push("/income")}>Record Income</Button>
+                  <Button variant="outline" size="sm" onClick={() => router.push("/expenses")}>Log Expense</Button>
+                  <Button variant="outline" size="sm" onClick={() => router.push("/invoices/new")}>Create Invoice</Button>
+                  <Button variant="outline" size="sm" onClick={() => router.push("/investments")}>View Investments</Button>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+          <div className="space-y-6">
+            <Card className="rounded-[1.75rem] border-slate-200/80 bg-white/95 shadow-sm shadow-slate-200/40 dark:border-zinc-800 dark:bg-zinc-950 dark:shadow-none p-6">
+              <CardHeader className="flex items-center justify-between gap-3 border-b border-slate-200/80 pb-4 dark:border-zinc-800">
+                <div>
+                  <CardTitle className="text-lg font-semibold text-slate-950 dark:text-white">Upcoming Obligations</CardTitle>
+                  <CardDescription className="text-slate-500 dark:text-slate-400">Recurring expenses due soon and near-term obligations.</CardDescription>
+                </div>
+                <Badge variant="secondary" className="text-xs uppercase tracking-[0.2em]">{upcomingExpenses.length} items</Badge>
+              </CardHeader>
+              <CardContent className="space-y-4 pt-6">
+                {upcomingExpenses.length === 0 ? (
+                  <div className="rounded-3xl border border-dashed border-slate-200 p-8 text-center text-slate-500 dark:border-zinc-800 dark:text-slate-400">No recurring expenses scheduled.</div>
+                ) : (
+                  <div className="space-y-3">
+                    {upcomingExpenses.map((expense) => (
+                      <div key={expense.id} className="flex items-center justify-between gap-4 rounded-3xl border border-slate-200 bg-slate-50 p-4 dark:border-zinc-800 dark:bg-zinc-900">
+                        <div className="space-y-1">
+                          <p className="font-semibold text-slate-950 dark:text-white">{expense.description}</p>
+                          <p className="text-sm text-slate-500 dark:text-slate-400">{new Date(expense.next_due_date).toLocaleDateString("en-IN")}</p>
+                        </div>
+                        <div className="text-right">
+                          <p className="font-semibold text-emerald-600">{getDaysUntil(expense.next_due_date)}d</p>
+                          <p className="text-xs text-slate-500 dark:text-slate-400">₹{Number(expense.amount).toLocaleString("en-IN")}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+            <Card className="rounded-[1.75rem] border-slate-200/80 bg-white/95 shadow-sm shadow-slate-200/40 dark:border-zinc-800 dark:bg-zinc-950 dark:shadow-none p-6">
+              <CardHeader className="flex items-center justify-between gap-3 border-b border-slate-200/80 pb-4 dark:border-zinc-800">
+                <div>
+                  <CardTitle className="text-lg font-semibold text-slate-950 dark:text-white">Budget Overview</CardTitle>
+                  <CardDescription className="text-slate-500 dark:text-slate-400">Monthly budget allocation and spend.</CardDescription>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-4 pt-6">
+                <div className="rounded-3xl bg-slate-50 p-5 dark:bg-zinc-900">
+                  <div className="flex items-center justify-between text-sm text-slate-500 dark:text-slate-400">
+                    <span>Budget</span>
+                    <span>₹{monthlyIncome.toLocaleString("en-IN")}</span>
                   </div>
                 </div>
-              ))}
-            </div>
-          )}
-        </div>
+                <div className="rounded-3xl bg-slate-50 p-5 dark:bg-zinc-900">
+                  <div className="flex items-center justify-between text-sm text-slate-500 dark:text-slate-400">
+                    <span>Spent</span>
+                    <span>₹{monthlyExpenses.toLocaleString("en-IN")}</span>
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between text-sm text-slate-500 dark:text-slate-400">
+                    <span>Remaining</span>
+                    <span>₹{Math.max(0, monthlyIncome - monthlyExpenses).toLocaleString("en-IN")}</span>
+                  </div>
+                  <div className="h-3 overflow-hidden rounded-full bg-slate-200 dark:bg-zinc-800">
+                    <div className="h-full rounded-full bg-emerald-500" style={{ width: `${100 - budgetUsed}%` }} />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
+        <section className="grid gap-6 xl:grid-cols-3">
+          <Card className="rounded-[1.75rem] border-slate-200/80 bg-white/95 shadow-sm shadow-slate-200/40 dark:border-zinc-800 dark:bg-zinc-950 dark:shadow-none p-6">
+            <CardHeader className="flex items-center justify-between gap-3 border-b border-slate-200/80 pb-4 dark:border-zinc-800">
+              <div>
+                <CardTitle className="text-lg font-semibold text-slate-950 dark:text-white">Expense Breakdown</CardTitle>
+                <CardDescription className="text-slate-500 dark:text-slate-400">Top categories by spend.</CardDescription>
+              </div>
+            </CardHeader>
+            <CardContent className="pt-6"><div className="h-72"><ExpensePieChart data={expenseData} /></div></CardContent>
+          </Card>
+          <Card className="rounded-[1.75rem] border-slate-200/80 bg-white/95 shadow-sm shadow-slate-200/40 dark:border-zinc-800 dark:bg-zinc-950 dark:shadow-none p-6">
+            <CardHeader className="flex items-center justify-between gap-3 border-b border-slate-200/80 pb-4 dark:border-zinc-800">
+              <div>
+                <CardTitle className="text-lg font-semibold text-slate-950 dark:text-white">Top Clients</CardTitle>
+                <CardDescription className="text-slate-500 dark:text-slate-400">Highest paying clients this period.</CardDescription>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-4 pt-6">
+              {topClients.length === 0 ? (
+                <p className="text-slate-500 dark:text-slate-400">No client data available.</p>
+              ) : (
+                <div className="space-y-3">
+                  {topClients.map(([client, amount]: any, index) => (
+                    <div key={`${client}-${index}`} className="flex items-center justify-between rounded-3xl bg-slate-50 p-4 dark:bg-zinc-900">
+                      <div>
+                        <p className="font-semibold text-slate-950 dark:text-white">{client}</p>
+                        <p className="text-sm text-slate-500 dark:text-slate-400">Rank {index + 1}</p>
+                      </div>
+                      <p className="font-semibold text-slate-900 dark:text-white">₹{Number(amount).toLocaleString("en-IN")}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+          <Card className="rounded-[1.75rem] border-slate-200/80 bg-white/95 shadow-sm shadow-slate-200/40 dark:border-zinc-800 dark:bg-zinc-950 dark:shadow-none p-6">
+            <CardHeader className="flex items-center justify-between gap-3 border-b border-slate-200/80 pb-4 dark:border-zinc-800">
+              <div>
+                <CardTitle className="text-lg font-semibold text-slate-950 dark:text-white">Latest Activity</CardTitle>
+                <CardDescription className="text-slate-500 dark:text-slate-400">Recent income, expense, and recurring updates.</CardDescription>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-4 pt-6">
+              <div className="space-y-3">
+                <div className="rounded-3xl bg-slate-50 p-4 dark:bg-zinc-900">
+                  <div className="flex items-center justify-between gap-3">
+                    <p className="text-sm text-slate-500 dark:text-slate-400">Largest client</p>
+                    <Badge variant="secondary" className="text-xs">Client</Badge>
+                  </div>
+                  <p className="mt-2 font-medium text-slate-950 dark:text-white">{topClient ? `${topClient[0]} • ₹${topClient[1].toLocaleString("en-IN")}` : "No client data"}</p>
+                </div>
+                <div className="rounded-3xl bg-slate-50 p-4 dark:bg-zinc-900">
+                  <div className="flex items-center justify-between gap-3">
+                    <p className="text-sm text-slate-500 dark:text-slate-400">Largest vendor</p>
+                    <Badge variant="secondary" className="text-xs">Vendor</Badge>
+                  </div>
+                  <p className="mt-2 font-medium text-slate-950 dark:text-white">{topVendor ? `${topVendor[0]} • ₹${topVendor[1].toLocaleString("en-IN")}` : "No vendor data"}</p>
+                </div>
+                <div className="rounded-3xl bg-slate-50 p-4 dark:bg-zinc-900">
+                  <div className="flex items-center justify-between gap-3">
+                    <p className="text-sm text-slate-500 dark:text-slate-400">Next recurring due</p>
+                    <Badge variant="secondary" className="text-xs">Schedule</Badge>
+                  </div>
+                  <p className="mt-2 font-medium text-slate-950 dark:text-white">{upcomingExpenses[0] ? `${upcomingExpenses[0].description} in ${getDaysUntil(upcomingExpenses[0].next_due_date)}d` : "No upcoming obligations"}</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </section>
         <TaxDisclaimer />
       </div>
     </main>

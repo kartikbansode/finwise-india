@@ -279,6 +279,8 @@ export default function SettingsPage() {
         profile_image_url: profileImageUrl || undefined, // only update if new upload
         business_logo_url: businessLogoUrl || undefined,
         updated_at: new Date().toISOString(),
+        notifications: notificationsEnabled,
+        dark_mode: "system", // or make it dynamic if you add toggle
       });
 
       if (error) throw error;
@@ -299,20 +301,31 @@ export default function SettingsPage() {
 
   const handleProfilePicChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      const url = URL.createObjectURL(file);
-      setProfilePic(url);
-      setUnsavedChanges(true);
+    if (!file) return;
+
+    if (file.size > 2 * 1024 * 1024) {
+      // 2MB limit
+      alert("Image size must be less than 2MB");
+      return;
     }
+
+    const url = URL.createObjectURL(file);
+    setProfilePic(url);
+    setUnsavedChanges(true);
   };
 
   const handleBusinessLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      const url = URL.createObjectURL(file);
-      setBusinessLogo(url);
-      setUnsavedChanges(true);
+    if (!file) return;
+
+    if (file.size > 2 * 1024 * 1024) {
+      alert("Logo size must be less than 2MB");
+      return;
     }
+
+    const url = URL.createObjectURL(file);
+    setBusinessLogo(url);
+    setUnsavedChanges(true);
   };
 
   const handleDeleteAccount = async () => {
@@ -351,11 +364,27 @@ export default function SettingsPage() {
     );
   }
 
-  const profileCompletion = Math.floor(
-    (Object.values(profile).filter((v) => v && v !== false && v !== "0")
-      .length /
-      18) *
-      100,
+  const profileCompletion = Math.min(
+    Math.floor(
+      [
+        profile.full_name,
+        profile.display_name,
+        profile.phone,
+        profile.bio,
+        profile.company_name,
+        profile.designation,
+        profile.website,
+        profile.city,
+        profile.state,
+        profile.gst_number,
+        profile.pan_number,
+        profile.business_email,
+        profile.business_phone,
+        profile.profile_image_url || profilePic,
+        profile.business_logo_url || businessLogo,
+      ].filter(Boolean).length * 7.7, // ~13 important fields = 100%
+    ),
+    100,
   );
 
   return (

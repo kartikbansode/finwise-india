@@ -11,7 +11,13 @@ import MobileBlocker from "@/components/MobileBlocker";
 import { AnimatePresence, motion } from "framer-motion";
 import RevenueExpenseChart from "@/components/charts/RevenueExpenseChart";
 import { processRecurringExpenses } from "@/lib/processRecurringExpenses";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -102,7 +108,11 @@ export default function DashboardPage() {
       const now = new Date();
 
       const startDate = new Date(now.getFullYear(), now.getMonth(), 1);
-      const chartStartDate = new Date(now.getFullYear(), now.getMonth() - 11, 1);
+      const chartStartDate = new Date(
+        now.getFullYear(),
+        now.getMonth() - 11,
+        1,
+      );
 
       const { data: incomeData } = await supabase
         .from("income_entries")
@@ -396,15 +406,24 @@ export default function DashboardPage() {
   );
 
   const monthlyProfit = monthlyIncome - monthlyExpenses;
-  const safeToSpend = Math.max(0, monthlyIncome - monthlyExpenses - breakdown.incomeTax - breakdown.gstAmount);
+  const safeToSpend = Math.max(
+    0,
+    monthlyIncome - monthlyExpenses - breakdown.incomeTax - breakdown.gstAmount,
+  );
   const taxReserve = breakdown.incomeTax;
   const cashFlowIn = monthlyIncome;
   const cashFlowOut = monthlyExpenses;
   const netProfit = monthlyProfit;
-  const budgetUsed = monthlyIncome ? Math.min(100, (monthlyExpenses / monthlyIncome) * 100) : 0;
+  const budgetUsed = monthlyIncome
+    ? Math.min(100, (monthlyExpenses / monthlyIncome) * 100)
+    : 0;
   const budgetRemaining = Math.max(0, 100 - budgetUsed);
-  const savingsRate = monthlyIncome ? ((monthlyIncome - monthlyExpenses) / monthlyIncome) * 100 : 0;
-  const safeSpendPercent = monthlyIncome ? Math.round((safeToSpend / monthlyIncome) * 100) : 0;
+  const savingsRate = monthlyIncome
+    ? ((monthlyIncome - monthlyExpenses) / monthlyIncome) * 100
+    : 0;
+  const safeSpendPercent = monthlyIncome
+    ? Math.round((safeToSpend / monthlyIncome) * 100)
+    : 0;
   const topClient = topClients[0];
   const topVendor = topVendors[0];
   const filterOptions = [
@@ -414,7 +433,9 @@ export default function DashboardPage() {
     { value: "this_year", label: "This Year" },
     { value: "all_time", label: "All Time" },
   ];
-  const activeFilterLabel = filterOptions.find((option) => option.value === activeFilter)?.label || "This Month";
+  const activeFilterLabel =
+    filterOptions.find((option) => option.value === activeFilter)?.label ||
+    "This Month";
 
   return (
     <main className="ml-64 min-h-screen bg-slate-50 dark:bg-zinc-950 p-6 md:p-10">
@@ -422,39 +443,80 @@ export default function DashboardPage() {
         <section className="grid gap-6">
           <div className="flex flex-col gap-6 xl:flex-row xl:items-end xl:justify-between">
             <div className="space-y-3 max-w-3xl">
-              <p className="text-sm font-semibold uppercase tracking-[0.3em] text-emerald-600 dark:text-emerald-400">Business Dashboard</p>
-              <h1 className="text-4xl font-semibold tracking-tight text-slate-950 dark:text-white">Premium financial snapshot</h1>
-              <p className="text-sm text-slate-600 dark:text-slate-400">Review cash flow, reserves, and upcoming obligations in a clean, modern view.</p>
+              <p className="text-sm font-semibold uppercase tracking-[0.3em] text-emerald-600 dark:text-emerald-400">
+                Dashboard
+              </p>
+
+              <h1 className="text-4xl font-semibold tracking-tight text-slate-950 dark:text-white">
+                Financial Overview
+              </h1>
+
+              <p className="text-sm text-slate-600 dark:text-slate-400">
+                Monitor your business performance, cash flow, and key financial
+                metrics in one place.
+              </p>
             </div>
             <div className="grid gap-3 sm:grid-cols-[1fr_auto] xl:grid-cols-[1fr_auto_auto] items-center">
               {/*<div className="relative w-full max-w-xl">
                 <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
                 <Input className="pl-10" placeholder="Search dashboard..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
               </div>*/}
-              <Button variant="secondary" size="sm" onClick={() => router.push("/income")}>Add Income</Button>
-              <Button size="sm" onClick={() => router.push("/expenses")}>Add Expense</Button>
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={() => router.push("/income")}
+              >
+                Add Income
+              </Button>
+              <Button size="sm" onClick={() => router.push("/expenses")}>
+                Add Expense
+              </Button>
             </div>
           </div>
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
             <div className="rounded-[1.75rem] border border-slate-200/80 bg-white/95 shadow-sm shadow-slate-200/40 dark:border-zinc-800 dark:bg-zinc-950 dark:shadow-none p-6">
-              <p className="text-xs uppercase tracking-[0.25em] text-slate-400 dark:text-slate-500">Revenue</p>
-              <p className="mt-3 text-3xl font-semibold text-slate-950 dark:text-white">₹{cashFlowIn.toLocaleString("en-IN")}</p>
-              <p className="mt-4 text-sm text-slate-500 dark:text-slate-400">Income recorded this month.</p>
+              <p className="text-xs uppercase tracking-[0.25em] text-slate-400 dark:text-slate-500">
+                Revenue
+              </p>
+              <p className="mt-3 text-3xl font-semibold text-slate-950 dark:text-white">
+                ₹{cashFlowIn.toLocaleString("en-IN")}
+              </p>
+              <p className="mt-4 text-sm text-slate-500 dark:text-slate-400">
+                Income recorded this month.
+              </p>
             </div>
             <div className="rounded-[1.75rem] border border-slate-200/80 bg-white/95 shadow-sm shadow-slate-200/40 dark:border-zinc-800 dark:bg-zinc-950 dark:shadow-none p-6">
-              <p className="text-xs uppercase tracking-[0.25em] text-slate-400 dark:text-slate-500">Expenses</p>
-              <p className="mt-3 text-3xl font-semibold text-slate-950 dark:text-white">₹{cashFlowOut.toLocaleString("en-IN")}</p>
-              <p className="mt-4 text-sm text-slate-500 dark:text-slate-400">Total expenses this month.</p>
+              <p className="text-xs uppercase tracking-[0.25em] text-slate-400 dark:text-slate-500">
+                Expenses
+              </p>
+              <p className="mt-3 text-3xl font-semibold text-slate-950 dark:text-white">
+                ₹{cashFlowOut.toLocaleString("en-IN")}
+              </p>
+              <p className="mt-4 text-sm text-slate-500 dark:text-slate-400">
+                Total expenses this month.
+              </p>
             </div>
             <div className="rounded-[1.75rem] border border-slate-200/80 bg-white/95 shadow-sm shadow-slate-200/40 dark:border-zinc-800 dark:bg-zinc-950 dark:shadow-none p-6">
-              <p className="text-xs uppercase tracking-[0.25em] text-slate-400 dark:text-slate-500">Net Profit</p>
-              <p className="mt-3 text-3xl font-semibold text-slate-950 dark:text-white">₹{netProfit.toLocaleString("en-IN")}</p>
-              <p className="mt-4 text-sm text-slate-500 dark:text-slate-400">Revenue minus expenses.</p>
+              <p className="text-xs uppercase tracking-[0.25em] text-slate-400 dark:text-slate-500">
+                Net Profit
+              </p>
+              <p className="mt-3 text-3xl font-semibold text-slate-950 dark:text-white">
+                ₹{netProfit.toLocaleString("en-IN")}
+              </p>
+              <p className="mt-4 text-sm text-slate-500 dark:text-slate-400">
+                Revenue minus expenses.
+              </p>
             </div>
             <div className="rounded-[1.75rem] border border-slate-200/80 bg-white/95 shadow-sm shadow-slate-200/40 dark:border-zinc-800 dark:bg-zinc-950 dark:shadow-none p-6">
-              <p className="text-xs uppercase tracking-[0.25em] text-slate-400 dark:text-slate-500">Available Cash</p>
-              <p className="mt-3 text-3xl font-semibold text-slate-950 dark:text-white">₹{safeToSpend.toLocaleString("en-IN")}</p>
-              <p className="mt-4 text-sm text-slate-500 dark:text-slate-400">After tax and GST reserve.</p>
+              <p className="text-xs uppercase tracking-[0.25em] text-slate-400 dark:text-slate-500">
+                Available Cash
+              </p>
+              <p className="mt-3 text-3xl font-semibold text-slate-950 dark:text-white">
+                ₹{safeToSpend.toLocaleString("en-IN")}
+              </p>
+              <p className="mt-4 text-sm text-slate-500 dark:text-slate-400">
+                After tax and GST reserve.
+              </p>
             </div>
           </div>
         </section>
@@ -465,40 +527,70 @@ export default function DashboardPage() {
                 <CardHeader className="flex flex-col gap-4 border-b border-slate-200/80 pb-4 dark:border-zinc-800">
                   <div className="flex items-center justify-between gap-3">
                     <div>
-                      <CardTitle className="text-lg font-semibold text-slate-950 dark:text-white">Revenue vs Expenses</CardTitle>
-                      <CardDescription className="text-slate-500 dark:text-slate-400">Monthly comparison for the selected period.</CardDescription>
+                      <CardTitle className="text-lg font-semibold text-slate-950 dark:text-white">
+                        Revenue vs Expenses
+                      </CardTitle>
+                      <CardDescription className="text-slate-500 dark:text-slate-400">
+                        Monthly comparison for the selected period.
+                      </CardDescription>
                     </div>
-                    <Badge variant="secondary" className="text-xs uppercase tracking-[0.2em]">{activeFilterLabel}</Badge>
+                    <Badge
+                      variant="secondary"
+                      className="text-xs uppercase tracking-[0.2em]"
+                    >
+                      {activeFilterLabel}
+                    </Badge>
                   </div>
                 </CardHeader>
-                <CardContent className="h-80 pt-6"><RevenueExpenseChart data={monthlyChartData} /></CardContent>
+                <CardContent className="h-80 pt-6">
+                  <RevenueExpenseChart data={monthlyChartData} />
+                </CardContent>
               </Card>
               <Card className="overflow-hidden rounded-[1.75rem] border-slate-200/80 bg-white/95 shadow-sm shadow-slate-200/40 dark:border-zinc-800 dark:bg-zinc-950 dark:shadow-none p-6">
                 <CardHeader className="flex items-center justify-between gap-3 border-b border-slate-200/80 pb-4 dark:border-zinc-800">
                   <div>
-                    <CardTitle className="text-lg font-semibold text-slate-950 dark:text-white">Financial Health</CardTitle>
-                    <CardDescription className="text-slate-500 dark:text-slate-400">Cash flow, tax readiness, and profitability score.</CardDescription>
+                    <CardTitle className="text-lg font-semibold text-slate-950 dark:text-white">
+                      Financial Health
+                    </CardTitle>
+                    <CardDescription className="text-slate-500 dark:text-slate-400">
+                      Cash flow, tax readiness, and profitability score.
+                    </CardDescription>
                   </div>
-                  <div className="rounded-2xl bg-emerald-50 px-3 py-1 text-sm font-semibold text-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-300">{`${Math.round(breakdown.safeToSpend / Math.max(monthlyIncome, 1) * 100)}%`}</div>
+                  <div className="rounded-2xl bg-emerald-50 px-3 py-1 text-sm font-semibold text-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-300">{`${Math.round((breakdown.safeToSpend / Math.max(monthlyIncome, 1)) * 100)}%`}</div>
                 </CardHeader>
                 <CardContent className="space-y-5 pt-6">
                   <div className="grid gap-4 sm:grid-cols-2">
                     <div className="rounded-3xl bg-slate-50 p-4 dark:bg-zinc-900">
-                      <p className="text-xs uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">Cash Flow</p>
-                      <p className="mt-2 text-xl font-semibold text-slate-950 dark:text-white">₹{cashFlowIn.toLocaleString("en-IN")}</p>
+                      <p className="text-xs uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">
+                        Cash Flow
+                      </p>
+                      <p className="mt-2 text-xl font-semibold text-slate-950 dark:text-white">
+                        ₹{cashFlowIn.toLocaleString("en-IN")}
+                      </p>
                     </div>
                     <div className="rounded-3xl bg-slate-50 p-4 dark:bg-zinc-900">
-                      <p className="text-xs uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">Tax Ready</p>
-                      <p className="mt-2 text-xl font-semibold text-slate-950 dark:text-white">₹{taxReserve.toLocaleString("en-IN")}</p>
+                      <p className="text-xs uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">
+                        Tax Ready
+                      </p>
+                      <p className="mt-2 text-xl font-semibold text-slate-950 dark:text-white">
+                        ₹{taxReserve.toLocaleString("en-IN")}
+                      </p>
                     </div>
                   </div>
                   <div className="space-y-3">
                     <div className="flex items-center justify-between text-sm text-slate-500 dark:text-slate-400">
                       <span>Profitability</span>
-                      <span>{monthlyProfit >= 0 ? "Positive" : "Negative"}</span>
+                      <span>
+                        {monthlyProfit >= 0 ? "Positive" : "Negative"}
+                      </span>
                     </div>
                     <div className="h-3 overflow-hidden rounded-full bg-slate-200 dark:bg-zinc-800">
-                      <div className="h-full rounded-full bg-emerald-500" style={{ width: `${Math.min(100, Math.max(0, savingsRate))}%` }} />
+                      <div
+                        className="h-full rounded-full bg-emerald-500"
+                        style={{
+                          width: `${Math.min(100, Math.max(0, savingsRate))}%`,
+                        }}
+                      />
                     </div>
                     <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
                       <span>Savings Rate</span>
@@ -512,27 +604,37 @@ export default function DashboardPage() {
               <Card className="rounded-[1.75rem] border-slate-200/80 bg-white/95 shadow-sm shadow-slate-200/40 dark:border-zinc-800 dark:bg-zinc-950 dark:shadow-none p-6">
                 <CardHeader className="flex items-center justify-between gap-3 border-b border-slate-200/80 pb-4 dark:border-zinc-800">
                   <div>
-                    <CardTitle className="text-lg font-semibold text-slate-950 dark:text-white">Cash Flow Overview</CardTitle>
-                    <CardDescription className="text-slate-500 dark:text-slate-400">Money in, money out, and net profit.</CardDescription>
+                    <CardTitle className="text-lg font-semibold text-slate-950 dark:text-white">
+                      Cash Flow Overview
+                    </CardTitle>
+                    <CardDescription className="text-slate-500 dark:text-slate-400">
+                      Money in, money out, and net profit.
+                    </CardDescription>
                   </div>
                 </CardHeader>
                 <CardContent className="space-y-4 pt-6">
                   <div className="rounded-3xl bg-slate-50 p-5 dark:bg-zinc-900">
                     <div className="flex items-center justify-between text-sm text-slate-500 dark:text-slate-400">
                       <span>Money In</span>
-                      <span className="font-semibold text-slate-950 dark:text-white">₹{cashFlowIn.toLocaleString("en-IN")}</span>
+                      <span className="font-semibold text-slate-950 dark:text-white">
+                        ₹{cashFlowIn.toLocaleString("en-IN")}
+                      </span>
                     </div>
                   </div>
                   <div className="rounded-3xl bg-slate-50 p-5 dark:bg-zinc-900">
                     <div className="flex items-center justify-between text-sm text-slate-500 dark:text-slate-400">
                       <span>Money Out</span>
-                      <span className="font-semibold text-slate-950 dark:text-white">₹{cashFlowOut.toLocaleString("en-IN")}</span>
+                      <span className="font-semibold text-slate-950 dark:text-white">
+                        ₹{cashFlowOut.toLocaleString("en-IN")}
+                      </span>
                     </div>
                   </div>
                   <div className="rounded-3xl bg-slate-50 p-5 dark:bg-zinc-900">
                     <div className="flex items-center justify-between text-sm text-slate-500 dark:text-slate-400">
                       <span>Net Profit</span>
-                      <span className="font-semibold text-slate-950 dark:text-white">₹{netProfit.toLocaleString("en-IN")}</span>
+                      <span className="font-semibold text-slate-950 dark:text-white">
+                        ₹{netProfit.toLocaleString("en-IN")}
+                      </span>
                     </div>
                   </div>
                 </CardContent>
@@ -540,15 +642,43 @@ export default function DashboardPage() {
               <Card className="rounded-[1.75rem] border-slate-200/80 bg-white/95 shadow-sm shadow-slate-200/40 dark:border-zinc-800 dark:bg-zinc-950 dark:shadow-none p-6">
                 <CardHeader className="flex items-center justify-between gap-3 border-b border-slate-200/80 pb-4 dark:border-zinc-800">
                   <div>
-                    <CardTitle className="text-lg font-semibold text-slate-950 dark:text-white">Quick Actions</CardTitle>
-                    <CardDescription className="text-slate-500 dark:text-slate-400">Jump directly to common workflows.</CardDescription>
+                    <CardTitle className="text-lg font-semibold text-slate-950 dark:text-white">
+                      Quick Actions
+                    </CardTitle>
+                    <CardDescription className="text-slate-500 dark:text-slate-400">
+                      Jump directly to common workflows.
+                    </CardDescription>
                   </div>
                 </CardHeader>
                 <CardContent className="grid gap-3 pt-6">
-                  <Button variant="outline" size="sm" onClick={() => router.push("/income")}>Record Income</Button>
-                  <Button variant="outline" size="sm" onClick={() => router.push("/expenses")}>Log Expense</Button>
-                  <Button variant="outline" size="sm" onClick={() => router.push("/invoices/new")}>Create Invoice</Button>
-                  <Button variant="outline" size="sm" onClick={() => router.push("/investments")}>View Investments</Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => router.push("/income")}
+                  >
+                    Record Income
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => router.push("/expenses")}
+                  >
+                    Log Expense
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => router.push("/invoices/new")}
+                  >
+                    Create Invoice
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => router.push("/investments")}
+                  >
+                    View Investments
+                  </Button>
                 </CardContent>
               </Card>
             </div>
@@ -557,25 +687,49 @@ export default function DashboardPage() {
             <Card className="rounded-[1.75rem] border-slate-200/80 bg-white/95 shadow-sm shadow-slate-200/40 dark:border-zinc-800 dark:bg-zinc-950 dark:shadow-none p-6">
               <CardHeader className="flex items-center justify-between gap-3 border-b border-slate-200/80 pb-4 dark:border-zinc-800">
                 <div>
-                  <CardTitle className="text-lg font-semibold text-slate-950 dark:text-white">Upcoming Obligations</CardTitle>
-                  <CardDescription className="text-slate-500 dark:text-slate-400">Recurring expenses due soon and near-term obligations.</CardDescription>
+                  <CardTitle className="text-lg font-semibold text-slate-950 dark:text-white">
+                    Upcoming Obligations
+                  </CardTitle>
+                  <CardDescription className="text-slate-500 dark:text-slate-400">
+                    Recurring expenses due soon and near-term obligations.
+                  </CardDescription>
                 </div>
-                <Badge variant="secondary" className="text-xs uppercase tracking-[0.2em]">{upcomingExpenses.length} items</Badge>
+                <Badge
+                  variant="secondary"
+                  className="text-xs uppercase tracking-[0.2em]"
+                >
+                  {upcomingExpenses.length} items
+                </Badge>
               </CardHeader>
               <CardContent className="space-y-4 pt-6">
                 {upcomingExpenses.length === 0 ? (
-                  <div className="rounded-3xl border border-dashed border-slate-200 p-8 text-center text-slate-500 dark:border-zinc-800 dark:text-slate-400">No recurring expenses scheduled.</div>
+                  <div className="rounded-3xl border border-dashed border-slate-200 p-8 text-center text-slate-500 dark:border-zinc-800 dark:text-slate-400">
+                    No recurring expenses scheduled.
+                  </div>
                 ) : (
                   <div className="space-y-3">
                     {upcomingExpenses.map((expense) => (
-                      <div key={expense.id} className="flex items-center justify-between gap-4 rounded-3xl border border-slate-200 bg-slate-50 p-4 dark:border-zinc-800 dark:bg-zinc-900">
+                      <div
+                        key={expense.id}
+                        className="flex items-center justify-between gap-4 rounded-3xl border border-slate-200 bg-slate-50 p-4 dark:border-zinc-800 dark:bg-zinc-900"
+                      >
                         <div className="space-y-1">
-                          <p className="font-semibold text-slate-950 dark:text-white">{expense.description}</p>
-                          <p className="text-sm text-slate-500 dark:text-slate-400">{new Date(expense.next_due_date).toLocaleDateString("en-IN")}</p>
+                          <p className="font-semibold text-slate-950 dark:text-white">
+                            {expense.description}
+                          </p>
+                          <p className="text-sm text-slate-500 dark:text-slate-400">
+                            {new Date(expense.next_due_date).toLocaleDateString(
+                              "en-IN",
+                            )}
+                          </p>
                         </div>
                         <div className="text-right">
-                          <p className="font-semibold text-emerald-600">{getDaysUntil(expense.next_due_date)}d</p>
-                          <p className="text-xs text-slate-500 dark:text-slate-400">₹{Number(expense.amount).toLocaleString("en-IN")}</p>
+                          <p className="font-semibold text-emerald-600">
+                            {getDaysUntil(expense.next_due_date)}d
+                          </p>
+                          <p className="text-xs text-slate-500 dark:text-slate-400">
+                            ₹{Number(expense.amount).toLocaleString("en-IN")}
+                          </p>
                         </div>
                       </div>
                     ))}
@@ -586,8 +740,12 @@ export default function DashboardPage() {
             <Card className="rounded-[1.75rem] border-slate-200/80 bg-white/95 shadow-sm shadow-slate-200/40 dark:border-zinc-800 dark:bg-zinc-950 dark:shadow-none p-6">
               <CardHeader className="flex items-center justify-between gap-3 border-b border-slate-200/80 pb-4 dark:border-zinc-800">
                 <div>
-                  <CardTitle className="text-lg font-semibold text-slate-950 dark:text-white">Budget Overview</CardTitle>
-                  <CardDescription className="text-slate-500 dark:text-slate-400">Monthly budget allocation and spend.</CardDescription>
+                  <CardTitle className="text-lg font-semibold text-slate-950 dark:text-white">
+                    Budget Overview
+                  </CardTitle>
+                  <CardDescription className="text-slate-500 dark:text-slate-400">
+                    Monthly budget allocation and spend.
+                  </CardDescription>
                 </div>
               </CardHeader>
               <CardContent className="space-y-4 pt-6">
@@ -606,10 +764,19 @@ export default function DashboardPage() {
                 <div className="space-y-2">
                   <div className="flex items-center justify-between text-sm text-slate-500 dark:text-slate-400">
                     <span>Remaining</span>
-                    <span>₹{Math.max(0, monthlyIncome - monthlyExpenses).toLocaleString("en-IN")}</span>
+                    <span>
+                      ₹
+                      {Math.max(
+                        0,
+                        monthlyIncome - monthlyExpenses,
+                      ).toLocaleString("en-IN")}
+                    </span>
                   </div>
                   <div className="h-3 overflow-hidden rounded-full bg-slate-200 dark:bg-zinc-800">
-                    <div className="h-full rounded-full bg-emerald-500" style={{ width: `${100 - budgetUsed}%` }} />
+                    <div
+                      className="h-full rounded-full bg-emerald-500"
+                      style={{ width: `${100 - budgetUsed}%` }}
+                    />
                   </div>
                 </div>
               </CardContent>
@@ -620,31 +787,54 @@ export default function DashboardPage() {
           <Card className="rounded-[1.75rem] border-slate-200/80 bg-white/95 shadow-sm shadow-slate-200/40 dark:border-zinc-800 dark:bg-zinc-950 dark:shadow-none p-6">
             <CardHeader className="flex items-center justify-between gap-3 border-b border-slate-200/80 pb-4 dark:border-zinc-800">
               <div>
-                <CardTitle className="text-lg font-semibold text-slate-950 dark:text-white">Expense Breakdown</CardTitle>
-                <CardDescription className="text-slate-500 dark:text-slate-400">Top categories by spend.</CardDescription>
+                <CardTitle className="text-lg font-semibold text-slate-950 dark:text-white">
+                  Expense Breakdown
+                </CardTitle>
+                <CardDescription className="text-slate-500 dark:text-slate-400">
+                  Top categories by spend.
+                </CardDescription>
               </div>
             </CardHeader>
-            <CardContent className="pt-6"><div className="h-72"><ExpensePieChart data={expenseData} /></div></CardContent>
+            <CardContent className="pt-6">
+              <div className="h-72">
+                <ExpensePieChart data={expenseData} />
+              </div>
+            </CardContent>
           </Card>
           <Card className="rounded-[1.75rem] border-slate-200/80 bg-white/95 shadow-sm shadow-slate-200/40 dark:border-zinc-800 dark:bg-zinc-950 dark:shadow-none p-6">
             <CardHeader className="flex items-center justify-between gap-3 border-b border-slate-200/80 pb-4 dark:border-zinc-800">
               <div>
-                <CardTitle className="text-lg font-semibold text-slate-950 dark:text-white">Top Clients</CardTitle>
-                <CardDescription className="text-slate-500 dark:text-slate-400">Highest paying clients this period.</CardDescription>
+                <CardTitle className="text-lg font-semibold text-slate-950 dark:text-white">
+                  Top Clients
+                </CardTitle>
+                <CardDescription className="text-slate-500 dark:text-slate-400">
+                  Highest paying clients this period.
+                </CardDescription>
               </div>
             </CardHeader>
             <CardContent className="space-y-4 pt-6">
               {topClients.length === 0 ? (
-                <p className="text-slate-500 dark:text-slate-400">No client data available.</p>
+                <p className="text-slate-500 dark:text-slate-400">
+                  No client data available.
+                </p>
               ) : (
                 <div className="space-y-3">
                   {topClients.map(([client, amount]: any, index) => (
-                    <div key={`${client}-${index}`} className="flex items-center justify-between rounded-3xl bg-slate-50 p-4 dark:bg-zinc-900">
+                    <div
+                      key={`${client}-${index}`}
+                      className="flex items-center justify-between rounded-3xl bg-slate-50 p-4 dark:bg-zinc-900"
+                    >
                       <div>
-                        <p className="font-semibold text-slate-950 dark:text-white">{client}</p>
-                        <p className="text-sm text-slate-500 dark:text-slate-400">Rank {index + 1}</p>
+                        <p className="font-semibold text-slate-950 dark:text-white">
+                          {client}
+                        </p>
+                        <p className="text-sm text-slate-500 dark:text-slate-400">
+                          Rank {index + 1}
+                        </p>
                       </div>
-                      <p className="font-semibold text-slate-900 dark:text-white">₹{Number(amount).toLocaleString("en-IN")}</p>
+                      <p className="font-semibold text-slate-900 dark:text-white">
+                        ₹{Number(amount).toLocaleString("en-IN")}
+                      </p>
                     </div>
                   ))}
                 </div>
@@ -654,32 +844,60 @@ export default function DashboardPage() {
           <Card className="rounded-[1.75rem] border-slate-200/80 bg-white/95 shadow-sm shadow-slate-200/40 dark:border-zinc-800 dark:bg-zinc-950 dark:shadow-none p-6">
             <CardHeader className="flex items-center justify-between gap-3 border-b border-slate-200/80 pb-4 dark:border-zinc-800">
               <div>
-                <CardTitle className="text-lg font-semibold text-slate-950 dark:text-white">Latest Activity</CardTitle>
-                <CardDescription className="text-slate-500 dark:text-slate-400">Recent income, expense, and recurring updates.</CardDescription>
+                <CardTitle className="text-lg font-semibold text-slate-950 dark:text-white">
+                  Latest Activity
+                </CardTitle>
+                <CardDescription className="text-slate-500 dark:text-slate-400">
+                  Recent income, expense, and recurring updates.
+                </CardDescription>
               </div>
             </CardHeader>
             <CardContent className="space-y-4 pt-6">
               <div className="space-y-3">
                 <div className="rounded-3xl bg-slate-50 p-4 dark:bg-zinc-900">
                   <div className="flex items-center justify-between gap-3">
-                    <p className="text-sm text-slate-500 dark:text-slate-400">Largest client</p>
-                    <Badge variant="secondary" className="text-xs">Client</Badge>
+                    <p className="text-sm text-slate-500 dark:text-slate-400">
+                      Largest client
+                    </p>
+                    <Badge variant="secondary" className="text-xs">
+                      Client
+                    </Badge>
                   </div>
-                  <p className="mt-2 font-medium text-slate-950 dark:text-white">{topClient ? `${topClient[0]} • ₹${topClient[1].toLocaleString("en-IN")}` : "No client data"}</p>
+                  <p className="mt-2 font-medium text-slate-950 dark:text-white">
+                    {topClient
+                      ? `${topClient[0]} • ₹${topClient[1].toLocaleString("en-IN")}`
+                      : "No client data"}
+                  </p>
                 </div>
                 <div className="rounded-3xl bg-slate-50 p-4 dark:bg-zinc-900">
                   <div className="flex items-center justify-between gap-3">
-                    <p className="text-sm text-slate-500 dark:text-slate-400">Largest vendor</p>
-                    <Badge variant="secondary" className="text-xs">Vendor</Badge>
+                    <p className="text-sm text-slate-500 dark:text-slate-400">
+                      Largest vendor
+                    </p>
+                    <Badge variant="secondary" className="text-xs">
+                      Vendor
+                    </Badge>
                   </div>
-                  <p className="mt-2 font-medium text-slate-950 dark:text-white">{topVendor ? `${topVendor[0]} • ₹${topVendor[1].toLocaleString("en-IN")}` : "No vendor data"}</p>
+                  <p className="mt-2 font-medium text-slate-950 dark:text-white">
+                    {topVendor
+                      ? `${topVendor[0]} • ₹${topVendor[1].toLocaleString("en-IN")}`
+                      : "No vendor data"}
+                  </p>
                 </div>
                 <div className="rounded-3xl bg-slate-50 p-4 dark:bg-zinc-900">
                   <div className="flex items-center justify-between gap-3">
-                    <p className="text-sm text-slate-500 dark:text-slate-400">Next recurring due</p>
-                    <Badge variant="secondary" className="text-xs">Schedule</Badge>
+                    <p className="text-sm text-slate-500 dark:text-slate-400">
+                      Next recurring due
+                    </p>
+                    <Badge variant="secondary" className="text-xs">
+                      Schedule
+                    </Badge>
                   </div>
-                  <p className="mt-2 font-medium text-slate-950 dark:text-white">{upcomingExpenses[0] ? `${upcomingExpenses[0].description} in ${getDaysUntil(upcomingExpenses[0].next_due_date)}d` : "No upcoming obligations"}</p>
+                  <p className="mt-2 font-medium text-slate-950 dark:text-white">
+                    {upcomingExpenses[0]
+                      ? `${upcomingExpenses[0].description} in ${getDaysUntil(upcomingExpenses[0].next_due_date)}d`
+                      : "No upcoming obligations"}
+                  </p>
                 </div>
               </div>
             </CardContent>

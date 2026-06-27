@@ -16,23 +16,41 @@ import { cn } from "@/lib/utils";
 
 interface ExpenseEntry {
   id: string;
+  user_id: string;
   description: string;
-  vendor: string | null;
   amount: number;
+  category: string;
+  entry_date: string;
+  created_at: string;
+  vendor: string | null;
+  expense_type: string | null;
+  gst_paid: boolean | null;
+  payment_method: string | null;
+  recurring: boolean;
+  business_personal: string | null;
+  notes: string | null;
+  recurring_frequency: string | null;
+  next_due_date: string | null;
+  recurrence_end_date: string | null;
+  auto_generated: boolean;
+  parent_recurring_id: string | null;
+}
+
+interface ExpenseFormData {
+  description: string;
+  vendor: string;
+  amount: string;
   category: string;
   expense_type: string;
   payment_method: string;
-  payment_status: string;
   gst_paid: boolean;
   business_personal: string;
-  notes: string | null;
+  notes: string;
   entry_date: string;
   recurring: boolean;
   recurring_frequency: string;
   next_due_date: string | null;
-  auto_generated: boolean;
-  parent_recurring_id: string | null;
-  created_at: string;
+  recurrence_end_date: string | null;
 }
 
 const EXPENSE_CATEGORIES = [
@@ -53,15 +71,19 @@ const PAYMENT_METHODS = [
   { value: "cheque", label: "Cheque" },
 ];
 
-const PAYMENT_STATUS = [
-  { value: "paid", label: "Paid" },
-  { value: "pending", label: "Pending" },
-  { value: "overdue", label: "Overdue" },
-];
-
 const EXPENSE_TYPES = [
   { value: "fixed", label: "Fixed Expense" },
   { value: "variable", label: "Variable Expense" },
+];
+
+const RECURRENCE_FREQUENCIES = [
+  { value: "one_time", label: "One-time" },
+  { value: "daily", label: "Daily" },
+  { value: "weekly", label: "Weekly" },
+  { value: "monthly", label: "Monthly" },
+  { value: "quarterly", label: "Quarterly" },
+  { value: "half_yearly", label: "Half Yearly" },
+  { value: "yearly", label: "Yearly" },
 ];
 
 const CURRENCY_FORMAT = new Intl.NumberFormat("en-IN", {
@@ -69,6 +91,46 @@ const CURRENCY_FORMAT = new Intl.NumberFormat("en-IN", {
   currency: "INR",
   maximumFractionDigits: 0,
 });
+
+function formatMonth(dateString: string) {
+  return new Date(dateString).toLocaleString("en-IN", {
+    month: "short",
+    year: "2-digit",
+  });
+}
+
+function calculateNextDueDate(currentDate: string, frequency: string | null) {
+  if (!frequency || frequency === "one_time") {
+    return null;
+  }
+
+  const date = new Date(currentDate);
+
+  switch (frequency) {
+    case "daily":
+      date.setDate(date.getDate() + 1);
+      break;
+    case "weekly":
+      date.setDate(date.getDate() + 7);
+      break;
+    case "monthly":
+      date.setMonth(date.getMonth() + 1);
+      break;
+    case "quarterly":
+      date.setMonth(date.getMonth() + 3);
+      break;
+    case "half_yearly":
+      date.setMonth(date.getMonth() + 6);
+      break;
+    case "yearly":
+      date.setFullYear(date.getFullYear() + 1);
+      break;
+    default:
+      return null;
+  }
+
+  return date.toISOString().split("T")[0];
+}
 
 export default function ExpensesPage() {
   const supabase = createClient();
@@ -86,18 +148,21 @@ export default function ExpensesPage() {
   const [isMobile, setIsMobile] = useState<boolean | null>(null);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<ExpenseFormData>({
     description: "",
     vendor: "",
     amount: "",
     category: "other",
     expense_type: "variable",
     payment_method: "bank_transfer",
-    payment_status: "paid",
-    entry_date: new Date().toISOString().split("T")[0],
     gst_paid: false,
     business_personal: "business",
     notes: "",
+    entry_date: new Date().toISOString().split("T")[0],
+    recurring: false,
+    recurring_frequency: "one_time",
+    next_due_date: null,
+    recurrence_end_date: null,
   });
 
   useEffect(() => {
@@ -111,7 +176,10 @@ export default function ExpensesPage() {
 
   async function loadEntries() {
     const { data: userData } = await supabase.auth.getUser();
-    if (!userData.user) return;
+    if (!userData.user) {
+      setLoading(false);
+      return;
+    }
 
     const { data, error } = await supabase
       .from("expense_entries")
@@ -145,11 +213,14 @@ export default function ExpensesPage() {
       category: "other",
       expense_type: "variable",
       payment_method: "bank_transfer",
-      payment_status: "paid",
-      entry_date: new Date().toISOString().split("T")[0],
       gst_paid: false,
       business_personal: "business",
       notes: "",
+      entry_date: new Date().toISOString().split("T")[0],
+      recurring: false,
+      recurring_frequency: "one_time",
+      next_due_date: null,
+      recurrence_end_date: null,
     });
   };
 
@@ -160,13 +231,16 @@ export default function ExpensesPage() {
       vendor: entry.vendor || "",
       amount: entry.amount.toString(),
       category: entry.category,
-      expense_type: entry.expense_type,
-      payment_method: entry.payment_method,
-      payment_status: entry.payment_status || "paid",
-      entry_date: entry.entry_date,
-      gst_paid: entry.gst_paid,
-      business_personal: entry.business_personal,
+      expense_type: entry.expense_type || "variable",
+      payment_method: entry.payment_method || "bank_transfer",
+      gst_paid: Boolean(entry.gst_paid),
+      business_personal: entry.business_personal || "business",
       notes: entry.notes || "",
+      entry_date: entry.entry_date,
+      recurring: entry.recurring,
+      recurring_frequency: entry.recurring_frequency || "one_time",
+      next_due_date: entry.next_due_date ?? null,
+      recurrence_end_date: entry.recurrence_end_date ?? null,
     });
     setShowAddModal(true);
   };
@@ -194,6 +268,10 @@ export default function ExpensesPage() {
       return;
     }
 
+    const nextDueDate = formData.recurring
+      ? formData.next_due_date || calculateNextDueDate(formData.entry_date, formData.recurring_frequency)
+      : null;
+
     const payload = {
       user_id: userData.user.id,
       description: formData.description.trim(),
@@ -202,14 +280,14 @@ export default function ExpensesPage() {
       category: formData.category,
       expense_type: formData.expense_type,
       payment_method: formData.payment_method,
-      payment_status: formData.payment_status,
       gst_paid: formData.gst_paid,
       business_personal: formData.business_personal,
       notes: formData.notes || null,
       entry_date: formData.entry_date,
-      recurring: false,
-      recurring_frequency: "one_time",
-      next_due_date: null,
+      recurring: formData.recurring,
+      recurring_frequency: formData.recurring ? formData.recurring_frequency : "one_time",
+      next_due_date: nextDueDate,
+      recurrence_end_date: formData.recurring ? formData.recurrence_end_date : null,
       auto_generated: false,
       parent_recurring_id: null,
     };
@@ -248,7 +326,7 @@ export default function ExpensesPage() {
             entryDate.getFullYear() === now.getFullYear()
           );
         case "last_month": {
-          const lastMonth = new Date();
+          const lastMonth = new Date(now);
           lastMonth.setMonth(lastMonth.getMonth() - 1);
           return (
             entryDate.getMonth() === lastMonth.getMonth() &&
@@ -256,7 +334,7 @@ export default function ExpensesPage() {
           );
         }
         case "last_3_months": {
-          const threeMonthsAgo = new Date();
+          const threeMonthsAgo = new Date(now);
           threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
           return entryDate >= threeMonthsAgo;
         }
@@ -277,7 +355,14 @@ export default function ExpensesPage() {
 
     if (searchQuery) {
       filtered = filtered.filter((entry) =>
-        [entry.description, entry.vendor, entry.category, entry.payment_method, entry.payment_status]
+        [
+          entry.description,
+          entry.vendor,
+          entry.category,
+          entry.payment_method,
+          entry.expense_type,
+          entry.business_personal,
+        ]
           .filter(Boolean)
           .some((value) =>
             value?.toString().toLowerCase().includes(searchQuery.toLowerCase()),
@@ -307,10 +392,7 @@ export default function ExpensesPage() {
 
   const totalExpenses = useMemo(
     () =>
-      dateFilteredEntries.reduce(
-        (sum, entry) => sum + Number(entry.amount),
-        0,
-      ),
+      dateFilteredEntries.reduce((sum, entry) => sum + Number(entry.amount), 0),
     [dateFilteredEntries],
   );
 
@@ -337,19 +419,14 @@ export default function ExpensesPage() {
 
   const topCategory = useMemo(
     () =>
-      Object.entries(categoryTotals)
-        .sort((a, b) => b[1] - a[1])[0]?.[0] || "-",
+      Object.entries(categoryTotals).sort((a, b) => b[1] - a[1])[0]?.[0] || "-",
     [categoryTotals],
   );
 
   const expenseByMonth = useMemo(
     () =>
       dateFilteredEntries.reduce((acc, entry) => {
-        const date = new Date(entry.entry_date);
-        const month = date.toLocaleString("en-IN", {
-          month: "short",
-          year: "2-digit",
-        });
+        const month = formatMonth(entry.entry_date);
         acc[month] = (acc[month] || 0) + Number(entry.amount);
         return acc;
       }, {} as Record<string, number>),
@@ -360,61 +437,6 @@ export default function ExpensesPage() {
     () =>
       Object.entries(expenseByMonth).map(([month, amount]) => ({ month, amount })),
     [expenseByMonth],
-  );
-
-  const monthlyEntries = Object.entries(expenseByMonth);
-
-  const highestExpenseMonth = monthlyEntries.length > 0
-    ? monthlyEntries.reduce((a, b) => (a[1] > b[1] ? a : b))
-    : null;
-
-  const currentMonthExpense = useMemo(() => {
-    const now = new Date();
-    return entries
-      .filter((entry) => {
-        const date = new Date(entry.entry_date);
-        return (
-          date.getMonth() === now.getMonth() &&
-          date.getFullYear() === now.getFullYear()
-        );
-      })
-      .reduce((sum, entry) => sum + Number(entry.amount), 0);
-  }, [entries]);
-
-  const previousMonthExpense = useMemo(() => {
-    const previousMonth = new Date();
-    previousMonth.setMonth(previousMonth.getMonth() - 1);
-
-    return entries
-      .filter((entry) => {
-        const date = new Date(entry.entry_date);
-        return (
-          date.getMonth() === previousMonth.getMonth() &&
-          date.getFullYear() === previousMonth.getFullYear()
-        );
-      })
-      .reduce((sum, entry) => sum + Number(entry.amount), 0);
-  }, [entries]);
-
-  const expenseGrowth = useMemo(
-    () =>
-      previousMonthExpense === 0
-        ? 100
-        : (
-            ((currentMonthExpense - previousMonthExpense) /
-              previousMonthExpense) *
-            100
-          ).toFixed(1),
-    [currentMonthExpense, previousMonthExpense],
-  );
-
-  const categoryData = useMemo(
-    () =>
-      Object.entries(categoryTotals).map(([name, value]) => ({
-        name,
-        value,
-      })),
-    [categoryTotals],
   );
 
   const topVendors = useMemo(
@@ -456,15 +478,6 @@ export default function ExpensesPage() {
         .filter((entry) => entry.business_personal === "personal")
         .reduce((sum, entry) => sum + Number(entry.amount), 0),
     [dateFilteredEntries],
-  );
-
-  const paymentStatusTotals = useMemo(
-    () =>
-      entries.reduce((acc, entry) => {
-        acc[entry.payment_status] = (acc[entry.payment_status] || 0) + Number(entry.amount);
-        return acc;
-      }, {} as Record<string, number>),
-    [entries],
   );
 
   useEffect(() => {
@@ -557,17 +570,12 @@ export default function ExpensesPage() {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Expense Growth</CardTitle>
+            <CardTitle className="text-sm font-medium">Recurring Spend</CardTitle>
             <ArrowUpRight className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className={cn(
-              "text-2xl font-bold",
-              Number(expenseGrowth) >= 0 ? "text-emerald-500" : "text-red-500",
-            )}>
-              {Number(expenseGrowth) >= 0 ? "+" : ""}{expenseGrowth}%
-            </div>
-            <p className="text-xs text-muted-foreground">Vs last month</p>
+            <div className="text-2xl font-bold">{CURRENCY_FORMAT.format(recurringAmount)}</div>
+            <p className="text-xs text-muted-foreground">Ongoing recurring expenses</p>
           </CardContent>
         </Card>
       </div>
@@ -588,11 +596,11 @@ export default function ExpensesPage() {
                 <CardDescription>Category distribution</CardDescription>
               </CardHeader>
               <CardContent>
-                {categoryData.length > 0 ? (
+                {Object.keys(categoryTotals).length > 0 ? (
                   <ResponsiveContainer width="100%" height={300}>
                     <RechartsPie>
                       <Pie
-                        data={categoryData}
+                        data={Object.entries(categoryTotals).map(([name, value]) => ({ name, value }))}
                         cx="50%"
                         cy="50%"
                         innerRadius={60}
@@ -600,8 +608,11 @@ export default function ExpensesPage() {
                         paddingAngle={2}
                         dataKey="value"
                       >
-                        {categoryData.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={["#10b981", "#3b82f6", "#f59e0b", "#ef4444", "#8b5cf6", "#14b8a6"][index % 6]} />
+                        {Object.entries(categoryTotals).map((entry, index) => (
+                          <Cell
+                            key={`cell-${index}`}
+                            fill={["#10b981", "#3b82f6", "#f59e0b", "#ef4444", "#8b5cf6", "#14b8a6"][index % 6]}
+                          />
                         ))}
                       </Pie>
                       <Tooltip
@@ -615,7 +626,7 @@ export default function ExpensesPage() {
                     </RechartsPie>
                   </ResponsiveContainer>
                 ) : (
-                  <div className="flex items-center justify-center h-75 text-muted-foreground">
+                  <div className="flex items-center justify-center h-72 text-muted-foreground">
                     No expense categories to display
                   </div>
                 )}
@@ -631,7 +642,7 @@ export default function ExpensesPage() {
                 <div className="space-y-4">
                   {topVendors.length > 0 ? (
                     topVendors.map(([vendor, amount], index) => (
-                      <div key={vendor} className="flex items-center justify-between">
+                      <div key={`${vendor}-${index}`} className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
                           <div className="p-2 rounded-lg bg-red-500/10 text-red-500 text-sm font-semibold w-8 h-8 flex items-center justify-center">
                             {index + 1}
@@ -656,7 +667,7 @@ export default function ExpensesPage() {
         <TabsContent value="all" className="space-y-4">
           <Card>
             <CardContent className="pt-6">
-              <div className="flex flex-col sm:flex-row gap-4">
+              <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
                 <Input
                   placeholder="Search expenses..."
                   value={searchQuery}
@@ -696,7 +707,6 @@ export default function ExpensesPage() {
                   <th className="px-4 py-3 font-medium">Vendor</th>
                   <th className="px-4 py-3 font-medium">Category</th>
                   <th className="px-4 py-3 font-medium">Payment Method</th>
-                  <th className="px-4 py-3 font-medium">Payment Status</th>
                   <th className="px-4 py-3 font-medium">Expense Date</th>
                   <th className="px-4 py-3 font-medium text-right">Amount</th>
                   <th className="px-4 py-3 font-medium text-right">Actions</th>
@@ -705,25 +715,12 @@ export default function ExpensesPage() {
               <tbody>
                 {filteredEntries.map((entry) => (
                   <tr key={entry.id} className="border-t border-gray-100 dark:border-zinc-800 hover:bg-gray-50 dark:hover:bg-zinc-800/50">
-                    <td className="px-4 py-3 font-medium text-gray-900 dark:text-white">
-                      <div className="max-w-65 truncate">{entry.description}</div>
+                    <td className="px-4 py-3 font-medium text-gray-900 dark:text-white max-w-[18rem] truncate">
+                      {entry.description}
                     </td>
                     <td className="px-4 py-3 text-gray-500 dark:text-gray-400">{entry.vendor || "-"}</td>
                     <td className="px-4 py-3 capitalize text-gray-500 dark:text-gray-400">{entry.category}</td>
-                    <td className="px-4 py-3 capitalize text-gray-500 dark:text-gray-400">{entry.payment_method.replace("_", " ")}</td>
-                    <td className="px-4 py-3">
-                      <Badge
-                        variant={
-                          entry.payment_status === "paid"
-                            ? "secondary"
-                            : entry.payment_status === "pending"
-                            ? "outline"
-                            : "destructive"
-                        }
-                      >
-                        {entry.payment_status.charAt(0).toUpperCase() + entry.payment_status.slice(1)}
-                      </Badge>
-                    </td>
+                    <td className="px-4 py-3 capitalize text-gray-500 dark:text-gray-400">{entry.payment_method?.replace("_", " ") || "-"}</td>
                     <td className="px-4 py-3 text-gray-500 dark:text-gray-400">{new Date(entry.entry_date).toLocaleDateString("en-IN")}</td>
                     <td className="px-4 py-3 text-right font-semibold text-gray-900 dark:text-white">{CURRENCY_FORMAT.format(entry.amount)}</td>
                     <td className="px-4 py-3 text-right space-x-2">
@@ -738,7 +735,7 @@ export default function ExpensesPage() {
                 ))}
                 {filteredEntries.length === 0 && (
                   <tr>
-                    <td colSpan={8} className="px-4 py-8 text-center text-gray-500 dark:text-gray-400">
+                    <td colSpan={7} className="px-4 py-8 text-center text-gray-500 dark:text-gray-400">
                       No expense entries match your search and filters.
                     </td>
                   </tr>
@@ -790,23 +787,6 @@ export default function ExpensesPage() {
           <div className="grid gap-4 md:grid-cols-2">
             <Card>
               <CardHeader>
-                <CardTitle>Payment Status</CardTitle>
-                <CardDescription>Paid, pending, and overdue</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {PAYMENT_STATUS.map((status) => (
-                    <div key={status.value} className="flex items-center justify-between gap-4">
-                      <span className="text-sm text-muted-foreground">{status.label}</span>
-                      <span className="font-medium">{CURRENCY_FORMAT.format(paymentStatusTotals[status.value] || 0)}</span>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
                 <CardTitle>GST Paid</CardTitle>
                 <CardDescription>Expenses with GST paid</CardDescription>
               </CardHeader>
@@ -819,6 +799,24 @@ export default function ExpensesPage() {
                   )}
                 </div>
                 <p className="text-sm text-muted-foreground">Total GST paid expenses</p>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Business vs Personal</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between gap-3">
+                    <span className="text-sm text-muted-foreground">Business</span>
+                    <span className="font-semibold">{CURRENCY_FORMAT.format(businessExpense)}</span>
+                  </div>
+                  <div className="flex items-center justify-between gap-3">
+                    <span className="text-sm text-muted-foreground">Personal</span>
+                    <span className="font-semibold">{CURRENCY_FORMAT.format(personalExpense)}</span>
+                  </div>
+                </div>
               </CardContent>
             </Card>
           </div>
@@ -863,46 +861,18 @@ export default function ExpensesPage() {
                   <div className="flex items-center gap-3 p-3 rounded-lg border">
                     <Calendar className="h-5 w-5 text-muted-foreground" />
                     <div className="flex-1">
-                      <p className="font-medium">Quarterly GST Filing</p>
-                      <p className="text-sm text-muted-foreground">July 31, October 31, January 31, April 30</p>
+                      <p className="font-medium">Monthly Reconciliation</p>
+                      <p className="text-sm text-muted-foreground">Review vendor bills before month-end</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-3 p-3 rounded-lg border">
                     <Calendar className="h-5 w-5 text-muted-foreground" />
                     <div className="flex-1">
-                      <p className="font-medium">Expense Reconciliation</p>
-                      <p className="text-sm text-muted-foreground">Review vendor bills weekly</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-3 p-3 rounded-lg border">
-                    <Calendar className="h-5 w-5 text-muted-foreground" />
-                    <div className="flex-1">
-                      <p className="font-medium">Tax Deduction Prep</p>
-                      <p className="text-sm text-muted-foreground">Collect GST invoices monthly</p>
+                      <p className="font-medium">Recurring Expense Review</p>
+                      <p className="text-sm text-muted-foreground">Confirm recurring entries are accurate</p>
                     </div>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-4">
-            <Card>
-              <CardHeader>
-                <CardTitle>Business Expenses</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-emerald-500">{CURRENCY_FORMAT.format(businessExpense)}</div>
-                <p className="text-sm text-muted-foreground">Total business spend</p>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader>
-                <CardTitle>Personal Expenses</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-blue-500">{CURRENCY_FORMAT.format(personalExpense)}</div>
-                <p className="text-sm text-muted-foreground">Total personal spend</p>
               </CardContent>
             </Card>
           </div>
@@ -1022,21 +992,6 @@ export default function ExpensesPage() {
                       </div>
 
                       <div>
-                        <label className="text-sm font-medium mb-2 block">Payment Status</label>
-                        <select
-                          value={formData.payment_status}
-                          onChange={(e) => setFormData({ ...formData, payment_status: e.target.value })}
-                          className="w-full px-3 py-2 rounded-md border border-input bg-background text-sm"
-                        >
-                          {PAYMENT_STATUS.map((status) => (
-                            <option key={status.value} value={status.value}>
-                              {status.label}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-
-                      <div>
                         <label className="text-sm font-medium mb-2 block">Expense Date</label>
                         <Input
                           type="date"
@@ -1044,47 +999,97 @@ export default function ExpensesPage() {
                           onChange={(e) => setFormData({ ...formData, entry_date: e.target.value })}
                         />
                       </div>
-                    </div>
 
-                    <div className="grid gap-4 sm:grid-cols-2">
-                      <div className="flex items-center justify-between rounded-xl border border-gray-200 dark:border-zinc-800 p-3">
-                        <label className="text-sm font-medium text-gray-700 dark:text-gray-300">GST Paid</label>
-                        <button
-                          type="button"
-                          onClick={() => setFormData((prev) => ({ ...prev, gst_paid: !prev.gst_paid }))}
-                          className={`w-12 h-6 rounded-full relative transition ${
-                            formData.gst_paid ? "bg-emerald-600" : "bg-gray-300 dark:bg-zinc-700"
-                          }`}
-                        >
-                          <span
-                            className={`absolute top-1 left-1 w-4 h-4 bg-white rounded-full transition ${
-                              formData.gst_paid ? "translate-x-6" : ""
+                      <div className="sm:col-span-2 grid gap-4 sm:grid-cols-2">
+                        <div className="flex items-center justify-between rounded-xl border border-gray-200 dark:border-zinc-800 p-3">
+                          <label className="text-sm font-medium text-gray-700 dark:text-gray-300">GST Paid</label>
+                          <button
+                            type="button"
+                            onClick={() => setFormData((prev) => ({ ...prev, gst_paid: !prev.gst_paid }))}
+                            className={`w-12 h-6 rounded-full relative transition ${
+                              formData.gst_paid ? "bg-emerald-600" : "bg-gray-300 dark:bg-zinc-700"
                             }`}
-                          />
-                        </button>
+                          >
+                            <span
+                              className={`absolute top-1 left-1 w-4 h-4 bg-white rounded-full transition ${
+                                formData.gst_paid ? "translate-x-6" : ""
+                              }`}
+                            />
+                          </button>
+                        </div>
+
+                        <div className="flex items-center justify-between rounded-xl border border-gray-200 dark:border-zinc-800 p-3">
+                          <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Business / Personal</label>
+                          <select
+                            value={formData.business_personal}
+                            onChange={(e) => setFormData({ ...formData, business_personal: e.target.value })}
+                            className="w-36 px-3 py-2 rounded-md border border-input bg-background text-sm"
+                          >
+                            <option value="business">Business</option>
+                            <option value="personal">Personal</option>
+                          </select>
+                        </div>
                       </div>
 
-                      <div className="flex items-center justify-between rounded-xl border border-gray-200 dark:border-zinc-800 p-3">
-                        <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Business / Personal</label>
-                        <select
-                          value={formData.business_personal}
-                          onChange={(e) => setFormData({ ...formData, business_personal: e.target.value })}
-                          className="w-36 px-3 py-2 rounded-md border border-input bg-background text-sm"
-                        >
-                          <option value="business">Business</option>
-                          <option value="personal">Personal</option>
-                        </select>
+                      <div className="sm:col-span-2">
+                        <div className="flex items-center justify-between gap-4">
+                          <div>
+                            <label className="text-sm font-medium mb-2 block">Recurring Expense</label>
+                            <p className="text-xs text-muted-foreground">Enable recurrence schedule</p>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => setFormData((prev) => ({ ...prev, recurring: !prev.recurring }))}
+                            className={`w-12 h-6 rounded-full relative transition ${
+                              formData.recurring ? "bg-emerald-600" : "bg-gray-300 dark:bg-zinc-700"
+                            }`}
+                          >
+                            <span
+                              className={`absolute top-1 left-1 w-4 h-4 bg-white rounded-full transition ${
+                                formData.recurring ? "translate-x-6" : ""
+                              }`}
+                            />
+                          </button>
+                        </div>
                       </div>
-                    </div>
 
-                    <div>
-                      <label className="text-sm font-medium mb-2 block">Notes</label>
-                      <textarea
-                        className="w-full px-3 py-2 rounded-md border border-input bg-background text-sm min-h-20"
-                        placeholder="Optional notes..."
-                        value={formData.notes}
-                        onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-                      />
+                      {formData.recurring && (
+                        <>
+                          <div>
+                            <label className="text-sm font-medium mb-2 block">Recurrence</label>
+                            <select
+                              value={formData.recurring_frequency}
+                              onChange={(e) => setFormData({ ...formData, recurring_frequency: e.target.value })}
+                              className="w-full px-3 py-2 rounded-md border border-input bg-background text-sm"
+                            >
+                              {RECURRENCE_FREQUENCIES.map((option) => (
+                                <option key={option.value} value={option.value}>
+                                  {option.label}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+
+                          <div>
+                            <label className="text-sm font-medium mb-2 block">Recurrence End</label>
+                            <Input
+                              type="date"
+                              value={formData.recurrence_end_date || ""}
+                              onChange={(e) => setFormData({ ...formData, recurrence_end_date: e.target.value ? e.target.value : null })}
+                            />
+                          </div>
+                        </>
+                      )}
+
+                      <div className="sm:col-span-2">
+                        <label className="text-sm font-medium mb-2 block">Notes</label>
+                        <textarea
+                          className="w-full px-3 py-2 rounded-md border border-input bg-background text-sm min-h-20"
+                          placeholder="Optional notes..."
+                          value={formData.notes}
+                          onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+                        />
+                      </div>
                     </div>
 
                     {error && <p className="text-sm text-red-600">{error}</p>}

@@ -74,6 +74,8 @@ interface ProfileData {
   company_address: string;
   business_email?: string;
   business_phone?: string;
+  profile_image_url?: string;
+  business_logo_url?: string;
 }
 
 export default function SettingsPage() {
@@ -181,6 +183,8 @@ export default function SettingsPage() {
             company_address: data.company_address || "",
             business_email: data.business_email || user.email || "",
             business_phone: data.business_phone || "",
+            profile_image_url: data.profile_image_url || null,
+            business_logo_url: data.business_logo_url || null,
           });
         }
       } catch (error) {
@@ -197,7 +201,7 @@ export default function SettingsPage() {
     setUnsavedChanges(true);
   };
 
-  const handleSave = async (e?: React.FormEvent) => {
+  async function handleSave(e?: React.FormEvent) {
     if (e) e.preventDefault();
 
     setSaving(true);
@@ -205,8 +209,49 @@ export default function SettingsPage() {
       const {
         data: { user },
       } = await supabase.auth.getUser();
-      if (!user) return;
+      if (!user) throw new Error("User not authenticated");
 
+      let profileImageUrl = null;
+      let businessLogoUrl = null;
+
+      // Upload Profile Picture
+      if (profilePic && profilePic.startsWith("blob:")) {
+        const file = await fetch(profilePic).then((res) => res.blob());
+        const fileExt = "png"; // or extract from original file
+        const fileName = `profile-${user.id}-${Date.now()}.${fileExt}`;
+
+        const { data: uploadData, error: uploadError } = await supabase.storage
+          .from("profile-images")
+          .upload(fileName, file, { upsert: true });
+
+        if (uploadError) throw uploadError;
+
+        const {
+          data: { publicUrl },
+        } = supabase.storage.from("profile-images").getPublicUrl(fileName);
+
+        profileImageUrl = publicUrl;
+      }
+
+      // Upload Business Logo
+      if (businessLogo && businessLogo.startsWith("blob:")) {
+        const file = await fetch(businessLogo).then((res) => res.blob());
+        const fileName = `logo-${user.id}-${Date.now()}.png`;
+
+        const { error: uploadError } = await supabase.storage
+          .from("business-logos")
+          .upload(fileName, file, { upsert: true });
+
+        if (uploadError) throw uploadError;
+
+        const {
+          data: { publicUrl },
+        } = supabase.storage.from("business-logos").getPublicUrl(fileName);
+
+        businessLogoUrl = publicUrl;
+      }
+
+      // Save to profiles table
       const { error } = await supabase.from("profiles").upsert({
         id: user.id,
         full_name: profile.full_name,
@@ -231,6 +276,8 @@ export default function SettingsPage() {
         company_address: profile.company_address,
         business_email: profile.business_email,
         business_phone: profile.business_phone,
+        profile_image_url: profileImageUrl || undefined, // only update if new upload
+        business_logo_url: businessLogoUrl || undefined,
         updated_at: new Date().toISOString(),
       });
 
@@ -239,15 +286,16 @@ export default function SettingsPage() {
       setUnsavedChanges(false);
       setSaved(true);
       setShowSuccess(true);
+
       setTimeout(() => setShowSuccess(false), 2500);
       setTimeout(() => setSaved(false), 2000);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error saving settings:", error);
-      alert("Failed to save settings. Please try again.");
+      alert(`Failed to save settings: ${error.message || "Please try again."}`);
     } finally {
       setSaving(false);
     }
-  };
+  }
 
   const handleProfilePicChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];

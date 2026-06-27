@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { createClient } from "@/lib/supabase";
-import { ChevronDown, Settings, LogOut, User } from "lucide-react";
+import { ChevronDown, Settings, LogOut } from "lucide-react";
 
 interface Props {
   name: string;
@@ -24,6 +24,7 @@ export default function UserDropdown({
   const [open, setOpen] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [loggingOut, setLoggingOut] = useState(false);
+  const [cacheBuster, setCacheBuster] = useState(0);
 
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -37,14 +38,20 @@ export default function UserDropdown({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // Update cache buster when profileImageUrl changes
+  useEffect(() => {
+    if (profileImageUrl) {
+      setCacheBuster(Date.now());
+    }
+  }, [profileImageUrl]);
+
   async function logout() {
     await supabase.auth.signOut();
     router.replace("/login");
   }
 
-  // Add cache buster to avoid cached old image
   const imageSrc = profileImageUrl 
-    ? `${profileImageUrl}?t=${Date.now()}` 
+    ? `${profileImageUrl}?t=${cacheBuster}` 
     : null;
 
   return (
@@ -63,10 +70,15 @@ export default function UserDropdown({
               height={40}
               className="w-10 h-10 rounded-full object-cover border border-gray-200 dark:border-zinc-700"
               onError={(e) => {
-                // Fallback if image fails to load
                 e.currentTarget.style.display = 'none';
                 const parent = e.currentTarget.parentElement;
-                if (parent) parent.innerHTML = `<div class="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-700 text-white flex items-center justify-center font-semibold shadow"> ${name?.charAt(0)?.toUpperCase() || "U"} </div>`;
+                if (parent) {
+                  parent.innerHTML = `
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-700 text-white flex items-center justify-center font-semibold shadow">
+                      ${name?.charAt(0)?.toUpperCase() || "U"}
+                    </div>
+                  `;
+                }
               }}
             />
           ) : (
@@ -118,7 +130,7 @@ export default function UserDropdown({
         </div>
       )}
 
-      {/* Logout Modal */}
+      {/* Logout Confirmation Modal */}
       {showLogoutModal && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[9999]">
           <div className="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-2xl p-6 w-full max-w-md">
@@ -126,8 +138,17 @@ export default function UserDropdown({
             <p className="text-gray-500 dark:text-gray-400 mb-6">Are you sure you want to logout from FinWise?</p>
 
             <div className="flex justify-end gap-3">
-              <button onClick={() => setShowLogoutModal(false)} className="px-4 py-2 rounded-xl border border-gray-300 dark:border-zinc-700">Cancel</button>
-              <button disabled={loggingOut} onClick={logout} className="px-4 py-2 rounded-xl bg-red-600 hover:bg-red-700 disabled:opacity-50 text-white">
+              <button 
+                onClick={() => setShowLogoutModal(false)} 
+                className="px-4 py-2 rounded-xl border border-gray-300 dark:border-zinc-700"
+              >
+                Cancel
+              </button>
+              <button 
+                disabled={loggingOut} 
+                onClick={logout} 
+                className="px-4 py-2 rounded-xl bg-red-600 hover:bg-red-700 disabled:opacity-50 text-white"
+              >
                 {loggingOut ? "Logging out..." : "Logout"}
               </button>
             </div>

@@ -359,7 +359,7 @@ export default function SettingsPage() {
   );
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-zinc-950 p-8">
+    <div className="ml-64 min-h-screen bg-gray-50 dark:bg-zinc-950 p-8">
       <div className="max-w-7xl mx-auto">
         {" "}
         {/* Increased width + better spacing */}

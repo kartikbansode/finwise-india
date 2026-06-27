@@ -427,10 +427,10 @@ export default function DashboardPage() {
               <p className="text-sm text-slate-600 dark:text-slate-400">Review cash flow, reserves, and upcoming obligations in a clean, modern view.</p>
             </div>
             <div className="grid gap-3 sm:grid-cols-[1fr_auto] xl:grid-cols-[1fr_auto_auto] items-center">
-              <div className="relative w-full max-w-xl">
+              {/*<div className="relative w-full max-w-xl">
                 <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
                 <Input className="pl-10" placeholder="Search dashboard..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
-              </div>
+              </div>*/}
               <Button variant="secondary" size="sm" onClick={() => router.push("/income")}>Add Income</Button>
               <Button size="sm" onClick={() => router.push("/expenses")}>Add Expense</Button>
             </div>
